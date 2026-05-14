@@ -1,0 +1,49 @@
+services:
+  laravel_app:
+    build: .
+    container_name: errortracker_container
+    restart: unless-stopped
+    depends_on:
+      - pgsql_db
+    volumes:
+      - .:/var/www
+    expose:
+      - 9000
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/health"]
+      interval: 50s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
+  nginx_server:
+    image: nginx
+    container_name: nginx_container
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    depends_on:
+      - laravel_app
+    volumes:
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - .:/var/www
+
+  pgsql_db:
+    image: postgres:18
+    container_name: pgsql_container
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=test
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=rootpassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgsql_data:/var/lib/postgresql
+  
+volumes:
+  pgsql_data:
+  pgadmin_data:
+
+ 
+
