@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "36793882908b6cbdd344b5a4840231db",
+    "content-hash": "2662cd018bd6d291cc8af14f4e663806",
     "packages": [
         {
             "name": "brick/math",
@@ -3299,6 +3299,61 @@
                 "source": "https://github.com/ramsey/uuid/tree/4.9.2"
             },
             "time": "2025-12-14T04:43:48+00:00"
+        },
+        {
+            "name": "rohanadhikari/nepali-date",
+            "version": "0.05",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/rohanAdhikari1/NepalIDatePHP.git",
+                "reference": "ab65f1cf5c8c4b803a0ad46e2052a900137fa1f9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/rohanAdhikari1/NepalIDatePHP/zipball/ab65f1cf5c8c4b803a0ad46e2052a900137fa1f9",
+                "reference": "ab65f1cf5c8c4b803a0ad46e2052a900137fa1f9",
+                "shasum": ""
+            },
+            "require-dev": {
+                "laravel/pint": "^1.25",
+                "pestphp/pest": "^3.8",
+                "phpstan/phpstan": "^2.1"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "RohanAdhikari\\NepaliDate\\Laravel\\ServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "RohanAdhikari\\NepaliDate\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Rohan Adhikari",
+                    "email": "official@rohanadhikari.com.np"
+                }
+            ],
+            "description": "A PHP package for handling Nepali Date and Time (Bikram Sambat - BS).",
+            "support": {
+                "issues": "https://github.com/rohanAdhikari1/NepalIDatePHP/issues",
+                "source": "https://github.com/rohanAdhikari1/NepalIDatePHP/tree/0.05"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/rohanadhikari1",
+                    "type": "github"
+                }
+            ],
+            "time": "2026-03-05T14:44:36+00:00"
         },
         {
             "name": "symfony/clock",
