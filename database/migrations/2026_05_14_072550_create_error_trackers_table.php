@@ -18,12 +18,12 @@ return new class extends Migration
             $table->string('region');
             $table->string('branch');
             $table->integer('application_id')->nullable();
-            $table->string('issuse');
+            $table->string('issue');
             $table->string('impact')->nullable();
             $table->text('root_cause')->nullable();
             $table->time('estimated_down')->nullable();
-            $table->dateTime('start_time');
-            $table->dateTime('end_time');
+            $table->string('start_time')->nullable();
+            $table->string('end_time')->nullable();
             $table->text('issue_triggered_by')->nullable();
             $table->string('error_message')->nullable();
             $table->string('severity');
