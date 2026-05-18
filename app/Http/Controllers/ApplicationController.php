@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ErrorTracker;
-use App\Http\Requests\ErrorTrackerRequest;
+use App\Models\Application;
 use Illuminate\Http\Request;
 
-class ErrorTrackerController extends Controller
+class ApplicationController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,17 +26,15 @@ class ErrorTrackerController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(ErrorTrackerRequest $request)
+    public function store(Request $request)
     {
-        $validated = $request->validated();
-        ErrorTracker::create($validated);
-        return redirect('/');
+        //
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(ErrorTracker $errorTracker)
+    public function show(Application $application)
     {
         //
     }
@@ -45,7 +42,7 @@ class ErrorTrackerController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(ErrorTracker $errorTracker)
+    public function edit(Application $application)
     {
         //
     }
@@ -53,7 +50,7 @@ class ErrorTrackerController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, ErrorTracker $errorTracker)
+    public function update(Request $request, Application $application)
     {
         //
     }
@@ -61,7 +58,7 @@ class ErrorTrackerController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ErrorTracker $errorTracker)
+    public function destroy(Application $application)
     {
         //
     }
