@@ -33,11 +33,11 @@ services:
     container_name: pgsql_container
     restart: unless-stopped
     environment:
-      - POSTGRES_DB=test
+      - POSTGRES_DB=postgres
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=rootpassword
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - pgsql_data:/var/lib/postgresql
   
