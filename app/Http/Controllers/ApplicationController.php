@@ -2,20 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ErrorTracker;
-use App\Http\Requests\ErrorTrackerRequest;
+use App\Http\Requests\ApplicationRequest;
+use App\Models\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
-class ErrorTrackerController extends Controller
+class ApplicationController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index() : View
     {
-        $now = ErrorTracker::latest()->first();
-        return view('welcome', compact('now'));
+        $applications = Application::all();
+        return view('applications.index', compact('applications'));
     }
 
     /**
@@ -29,17 +30,17 @@ class ErrorTrackerController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(ErrorTrackerRequest $request) : RedirectResponse
+    public function store(ApplicationRequest $request) : RedirectResponse
     {
         $validated = $request->validated();
-        ErrorTracker::create($validated);
-        return redirect('/');
+        Application::create($validated);
+        return redirect()->route('applications');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(ErrorTracker $errorTracker)
+    public function show(Application $application)
     {
         //
     }
@@ -47,7 +48,7 @@ class ErrorTrackerController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(ErrorTracker $errorTracker)
+    public function edit(Application $application)
     {
         //
     }
@@ -55,7 +56,7 @@ class ErrorTrackerController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, ErrorTracker $errorTracker)
+    public function update(Request $request, Application $application)
     {
         //
     }
@@ -63,7 +64,7 @@ class ErrorTrackerController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ErrorTracker $errorTracker)
+    public function destroy(Application $application)
     {
         //
     }

@@ -6,7 +6,7 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
     plugins: [
         laravel({
-            input: ['resources/css/app.css', 'resources/js/app.js'],
+            input: ['resources/css/app.css', 'resources/js/app.js', 'resources/css/nepali.datepicker.v5.0.6.min.css', 'resources/js/nepali.datepicker.v5.0.6.min.js'],
             refresh: true,
             fonts: [
                 bunny('Instrument Sans', {
@@ -17,6 +17,15 @@ export default defineConfig({
         tailwindcss(),
     ],
     server: {
+        host: '0.0.0.0',
+        port: 5173,
+        cors: {
+            origin: 'errors.wlink.com.np',
+        },
+        hmr: {
+            host: 'errors.wlink.com.np',
+            port: 5173,
+        },
         watch: {
             ignored: ['**/storage/framework/views/**'],
         },
