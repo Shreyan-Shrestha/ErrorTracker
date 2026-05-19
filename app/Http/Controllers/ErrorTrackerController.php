@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ErrorTracker;
 use App\Http\Requests\ErrorTrackerRequest;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class ErrorTrackerController extends Controller
@@ -13,7 +14,8 @@ class ErrorTrackerController extends Controller
      */
     public function index()
     {
-        //
+        $now = ErrorTracker::latest()->first();
+        return view('welcome', compact('now'));
     }
 
     /**
@@ -27,7 +29,7 @@ class ErrorTrackerController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(ErrorTrackerRequest $request)
+    public function store(ErrorTrackerRequest $request) : RedirectResponse
     {
         $validated = $request->validated();
         ErrorTracker::create($validated);

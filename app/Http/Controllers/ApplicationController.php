@@ -2,17 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ApplicationRequest;
 use App\Models\Application;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class ApplicationController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index() : View
     {
-        //
+        $applications = Application::all();
+        return view('applications.index', compact('applications'));
     }
 
     /**
@@ -26,9 +30,11 @@ class ApplicationController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ApplicationRequest $request) : RedirectResponse
     {
-        //
+        $validated = $request->validated();
+        Application::create($validated);
+        return redirect()->route('applications');
     }
 
     /**

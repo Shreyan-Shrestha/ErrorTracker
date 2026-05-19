@@ -17,6 +17,15 @@ export default defineConfig({
         tailwindcss(),
     ],
     server: {
+        host: '0.0.0.0',
+        port: 5173,
+        cors: {
+            origin: 'errors.wlink.com.np',
+        },
+        hmr: {
+            host: 'errors.wlink.com.np',
+            port: 5173,
+        },
         watch: {
             ignored: ['**/storage/framework/views/**'],
         },
