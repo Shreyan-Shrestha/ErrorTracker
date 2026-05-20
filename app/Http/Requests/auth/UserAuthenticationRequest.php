@@ -26,7 +26,7 @@ class UserAuthenticationRequest extends FormRequest
         return [
             "name" => [ 'nullable','string', 'max: 50'],
             "email" => ['required', 'email:dns', 'max:100'],
-            "password" => ['required', 'min:8']
+            "password" => ['required', 'min:8', 'confirmed']
         ];
     }
 
@@ -34,7 +34,7 @@ class UserAuthenticationRequest extends FormRequest
     {
         return [
             "email.required" => "Email is required",
-            "email.dns" => "Please enter a valid emial address",
+            "email.dns" => "Please enter a valid email address",
             "password.required" => "Please enter password",
             "password.min" => "Password needs to be atleast 8 characters"
         ];

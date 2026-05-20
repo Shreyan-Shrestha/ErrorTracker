@@ -14,10 +14,6 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'login' => \App\Http\Middleware\UserAuthentication::class,
         ]);
-
-        $middleware->appendtogroup('web',[
-            \Illuminate\Session\Middleware\AuthenticateSession::class,
-        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
