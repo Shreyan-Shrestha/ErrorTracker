@@ -20,7 +20,7 @@ export default defineConfig({
         host: '0.0.0.0',
         port: 5173,
         cors: {
-            origin: 'errors.wlink.com.np',
+            origin: 'http://errors.wlink.com.np:8000',
         },
         hmr: {
             host: 'errors.wlink.com.np',

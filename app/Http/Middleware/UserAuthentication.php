@@ -18,7 +18,7 @@ class UserAuthentication
     public function handle(Request $request, Closure $next): Response|RedirectResponse
     {
         if(!Auth::guard('login')->check()){
-            return redirect(route('application.index'));
+            return redirect(route('login'));
         }
         return $next($request);
     }
