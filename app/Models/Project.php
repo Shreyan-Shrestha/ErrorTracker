@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ProjectStatus;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -11,4 +12,8 @@ class Project extends Model
 {
     use SoftDeletes;
     protected $table = 'projects';
+
+    public $casts = [
+        'status' => ProjectStatus::class,
+    ];
 }

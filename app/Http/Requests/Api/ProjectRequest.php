@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests\Api;
 
+use App\Enums\ProjectStatus;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ProjectRequest extends FormRequest
 {
@@ -35,7 +37,7 @@ class ProjectRequest extends FormRequest
         return [
             "gitlab_id" => "required|int",
             "project_name" => "required|string|max:100",
-            "status" => "required|string|max:20",
+            "status" => "required", Rule::enum(ProjectStatus::class),
         ];
     }
 
@@ -44,14 +46,14 @@ class ProjectRequest extends FormRequest
         return [
             "gitlab_id" => "sometimes|int",
             "project_name" => "sometimes|string|max:100",
-            "status" => "sometimes|string|max:20",
+            "status" => "sometimes|", Rule::enum(ProjectStatus::class),
         ];
     }
 
     private function updateStatusRules() : array
     {
         return [
-            "status" => "required|string|max:20",
+            "status" => "required|", Rule::enum(ProjectStatus::class),
         ];
     }
 
