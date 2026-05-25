@@ -4,6 +4,7 @@ namespace App\Repositories\Api;
 
 use App\Models\Project;
 use App\Repositories\Interfaces\ProjectRepositoryInterface;
+use Override;
 
 class ProjectRepository implements ProjectRepositoryInterface
 {
@@ -12,15 +13,15 @@ class ProjectRepository implements ProjectRepositoryInterface
         return Project::all();
     }
 
-    public function getById( int $id)
-    {
-        return Project::findOrFail($id);
-    }
-
     public function create(array $data)
     {
         Project::create($data);
         return 'Project created successfully';
+    }
+
+    public function show(int $id)
+    {
+        return Project::findOrFail($id);
     }
 
     public function update(int $id, array $data)

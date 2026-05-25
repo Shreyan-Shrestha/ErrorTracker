@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('gitlab_id');
             $table->string('project_name');
-            $table->enum('status', ['completed', 'ongoing', 'onhold']);
+            $table->string('status');
             $table->timestamps();
             $table->softDeletes();
         });
