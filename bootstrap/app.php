@@ -14,7 +14,6 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'login' => \App\Http\Middleware\UserAuthentication::class,
-            'token.throttle' => \App\Http\Middleware\RateLimitByToken::class,
         ]);
         $middleware->throttleApi('api');
     })
