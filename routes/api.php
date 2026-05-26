@@ -1,22 +1,16 @@
 <?php
+
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\auth\api\Register;
 use App\Http\Controllers\Auth\Login;
-use App\Models\Application;
 use App\Models\User;
 use Illuminate\Validation\ValidationException;
 
-Route::prefix('v1')->group(base_path('routes/project/project_v1.php'));
-Route::prefix('v2')->group(base_path('routes/project/project_v2.php'));
+Route::middleware('requestlogger')->prefix('v1')->group(base_path('routes/project/project_v1.php'));
 
-Route::prefix('v1')->group(base_path('routes/application/application_v1.php'));
-
-Route::middleware('throttle:api')->get('/throttle', function(){
-    return 'Not Rate limited';
-});
-
+Route::middleware('requestlogger')->prefix('v1')->group(base_path('routes/application/application_v1.php'));
 
 Route::get('/user', function (Request $request) {
     return $request->user();
