@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\ProjectRequest;
 use App\Models\Project;
 use App\Repositories\Interfaces\ProjectRepositoryInterface;
+use Illuminate\Http\JsonResponse;
 
 class ProjectController extends Controller
 {
@@ -27,7 +28,7 @@ class ProjectController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(ProjectRequest $request)
+    public function store(ProjectRequest $request) : JsonResponse
     {
         $validated = $request->validated();
         $validated['status'] = strtolower($validated['status']);
@@ -37,7 +38,7 @@ class ProjectController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(int $id)
+    public function show(int $id) : JsonResponse 
     {
         return response()->json($this->projectRepository->show($id));
     }
@@ -45,7 +46,7 @@ class ProjectController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(ProjectRequest $request, int $id)
+    public function update(ProjectRequest $request, int $id) : JsonResponse
     {
         $validated = $request->validated();
         $validated['status'] = strtolower($validated['status']);
@@ -54,7 +55,7 @@ class ProjectController extends Controller
 
     /**     * Update the specified resource in storage.
      */
-    public function updateStatus(ProjectRequest $request, int $id)
+    public function updateStatus(ProjectRequest $request, int $id) : JsonResponse
     {
         $validated = $request->validated();
 
@@ -68,7 +69,7 @@ class ProjectController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Project $project)
+    public function destroy(Project $project) : JsonResponse
     {
         $this->projectRepository->delete($project->id);
         return response()->json(['message' => 'Project deleted successfully']);
