@@ -8,6 +8,6 @@ Route::get('/version', function () {
 });
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::patch('/updateStatus/{id}', [ProjectController::class, 'updateStatus'])->name('project.updateStatus');
+    Route::patch('project/updateStatus/{id}', [ProjectController::class, 'updateStatus'])->name('project.updateStatus');
     Route::apiResource('project', ProjectController::class);
 });

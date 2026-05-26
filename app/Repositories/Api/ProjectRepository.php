@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Api;
 
+use App\Enums\ProjectStatus;
 use App\Models\Project;
 use App\Repositories\Interfaces\ProjectRepositoryInterface;
 use Override;
@@ -33,7 +34,7 @@ class ProjectRepository implements ProjectRepositoryInterface
 
     public function updateStatus(int $id, string $status){
         $project = Project::findOrFail($id);
-        if($status !== $project->status){
+        if($status !== $project->enum('status',ProjectStatus::class)){
             $project->status = $status;
             $project->save();
         }

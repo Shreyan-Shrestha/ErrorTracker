@@ -4,16 +4,16 @@ namespace App\Enums;
 
 enum ProjectStatus : string
 {
-    case COMPLETED = 'completed';
-    case ONGOING = 'ongoing';
-    case ABANDONED = 'abandoned';
+    case Completed = 'completed';
+    case Ongoing = 'ongoing';
+    case Abandoned = 'abandoned';
 
     public function label() : string
     {
         return match($this){
-            ProjectStatus::COMPLETED  => 'completed',
-            ProjectStatus::ONGOING    => 'ongoing',
-            ProjectStatus::ABANDONED  => 'abandooned',
+            ProjectStatus::Completed  => 'completed',
+            ProjectStatus::Ongoing    => 'ongoing',
+            ProjectStatus::Abandoned  => 'abandooned',
         };
     }
 }

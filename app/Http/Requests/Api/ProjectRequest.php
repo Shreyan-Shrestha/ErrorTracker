@@ -65,9 +65,8 @@ class ProjectRequest extends FormRequest
             "project_name.string" => "Project name must be a string",
             "project_name.required" => "Project name is required",
             "project_name.max" => "Project name must not exceed 100 characters",
-            "status.string" => "Status must be a string",
+            "status.enum" => "Status must be one of ['completed', 'ongoing', 'abandoned']",
             "status.required" => "Status is required",
-            "status.max" => "Status must not exceed 20 characters",
         ];
     }
 }
