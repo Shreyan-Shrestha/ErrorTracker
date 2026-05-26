@@ -28,6 +28,16 @@ class ErrorTrackerRepository implements ErrorTrackerRepositoryInterface
         return 'Updated Successfully';
     }
 
+    public function markFixed(int $id){
+        $err = ErrorTracker::findorfail($id);
+        $end_time = now();
+        $start_time = $err->start_time;
+        
+        $err->end_time = $end_time;
+        $err->estimated_down = $end_time->diffForHumans($start_time);
+        return 'Error marked fixed';
+    }
+
     public function delete(int $id){
         $err = ErrorTracker::findorfail($id);
         $err->delete();
