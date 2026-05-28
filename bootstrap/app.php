@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\LogApiRequests;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -14,8 +15,8 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'login' => \App\Http\Middleware\UserAuthentication::class,
-            'requestlogger' => \App\Http\Middleware\LogApiRequests::class,
         ]);
+        $middleware->append(LogApiRequests::class);
         $middleware->throttleApi('api');
     })
     ->withExceptions(function (Exceptions $exceptions): void {
