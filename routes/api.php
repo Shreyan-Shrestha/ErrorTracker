@@ -8,9 +8,11 @@ use App\Http\Controllers\Auth\Login;
 use App\Models\User;
 use Illuminate\Validation\ValidationException;
 
-Route::middleware('requestlogger')->prefix('v1')->group(base_path('routes/project/project_v1.php'));
+Route::middleware('requestlogger')->prefix('v1')->group(base_path('routes/Project/project_v1.php'));
 
-Route::middleware('requestlogger')->prefix('v1')->group(base_path('routes/application/application_v1.php'));
+Route::middleware('requestlogger')->prefix('v1')->group(base_path('routes/Application/application_v1.php'));
+
+Route::middleware('requestlogger')->prefix('v1')->group(base_path('routes/ErrorTracker/errortracker_v1.php'));
 
 Route::get('/user', function (Request $request) {
     return $request->user();

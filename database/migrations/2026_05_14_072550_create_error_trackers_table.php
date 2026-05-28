@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('issue');
             $table->string('impact')->nullable();
             $table->text('root_cause')->nullable();
-            $table->time('estimated_down')->nullable();
+            $table->string('estimated_down')->nullable();
             $table->string('start_time')->nullable();
             $table->string('end_time')->nullable();
             $table->text('issue_triggered_by')->nullable();
