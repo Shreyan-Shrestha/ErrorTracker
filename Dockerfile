@@ -33,11 +33,15 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
 # Install Composer globally
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+# Copy only composer files first (for better caching)
+COPY composer.json composer.lock ./
+
+# Install PHP dependencies via Composer
+RUN composer install --no-interaction --prefer-dist --no-dev --optimize-autoloader --no-scripts
+
 # Copy Laravel project files
 COPY . .
 
-# Install PHP dependencies via Composer
-RUN composer install --no-interaction --prefer-dist
-
 # Set permissions for Laravel storage and bootstrap cache directories
-RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
+RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache && \
+    chmod -R 775 /var/www/storage /var/www/bootstrap/cache /var/www/storage/logs
