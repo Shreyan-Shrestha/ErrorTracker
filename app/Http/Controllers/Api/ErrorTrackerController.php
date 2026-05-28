@@ -35,20 +35,20 @@ class ErrorTrackerController extends Controller
         return response()->json($this->error_tracker_repository->show($id));
     }
 
-    public function update(ErrorTrackerRequest $request, string $id)
+    public function update(ErrorTrackerRequest $request, string $id) : JsonResponse
     {
         $validated = $request->validated();
         response()->json($this->error_tracker_repository->update($id, $validated));
         return response()->json('Error Report updated successfully');
     }
 
-    public function markFixed(int $id)
+    public function markFixed(int $id) : JsonResponse
     {
         $this->error_tracker_repository->markFixed($id);
         return response()->json(['message' => 'Error marked fixed']);
     }
 
-    public function destroy(string $id)
+    public function destroy(string $id) : JsonResponse
     {
 
         $this->error_tracker_repository->delete($id);
