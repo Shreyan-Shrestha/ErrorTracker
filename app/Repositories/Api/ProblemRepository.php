@@ -4,20 +4,22 @@ namespace App\Repositories\Api;
 
 use App\Models\Problem;
 use App\Repositories\Interfaces\ProblemRepositoryInterface;
+use Illuminate\Support\Collection;
+
 class ProblemRepository implements ProblemRepositoryInterface
 {
-    public function getAll()
+    public function getAll() : Collection
     {
         return Problem::all();
     }
 
-    public function show(int $id)
+    public function show(int $id) : Problem
     {
-        $problem = Problem::findOrFail($id);
-        return $problem;
+        return Problem::findOrFail($id);
+    
     }
 
-    public function create(array $data)
+    public function create(array $data) : void
     {
         Problem::create($data);
     }

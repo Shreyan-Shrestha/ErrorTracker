@@ -5,44 +5,42 @@ namespace App\Repositories\Api;
 use App\Enums\ProjectStatus;
 use App\Models\Project;
 use App\Repositories\Interfaces\ProjectRepositoryInterface;
+use Illuminate\Support\Collection;
 
 class ProjectRepository implements ProjectRepositoryInterface
 {
-    public function getAll()
+    public function getAll(): Collection
     {
         return Project::all();
     }
 
-    public function create(array $data)
+    public function create(array $data): void
     {
         Project::create($data);
-        return 'Project created successfully';
     }
 
-    public function show(int $id)
+    public function show(int $id): Project
     {
         return Project::findOrFail($id);
     }
 
-    public function update(int $id, array $data)
+    public function update(int $id, array $data): void
     {
         $project = Project::findOrFail($id);
         $project->update($data);
-        return 'Project updated successfully';
     }
 
-    public function updateStatus(int $id, string $status){
+    public function updateStatus(int $id, string $status): void
+    {
         $project = Project::findOrFail($id);
-        if($status !== $project->enum('status',ProjectStatus::class)){
+        if ($status !== $project->enum('status', ProjectStatus::class)) {
             $project->status = $status;
             $project->save();
         }
-        return 'Status updated successfully';
     }
 
-    public function delete(int $id)
+    public function delete(int $id): void
     {
         Project::destroy($id);
-        return 'Project deleted successfully';
     }
 }
