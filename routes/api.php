@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Api\ApplicationController;
+use App\Http\Controllers\Api\ErrorTrackerController;
+use App\Http\Controllers\Api\ProjectController;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -8,11 +11,15 @@ use App\Http\Controllers\Auth\Login;
 use App\Models\User;
 use Illuminate\Validation\ValidationException;
 
-Route::middleware('requestlogger')->prefix('v1')->group(base_path('routes/Project/project_v1.php'));
+Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
+    Route::apiResource('application', ApplicationController::class);
 
-Route::middleware('requestlogger')->prefix('v1')->group(base_path('routes/Application/application_v1.php'));
+    Route::patch('project/updateStatus/{id}', [ProjectController::class, 'updateStatus'])->name('project.updateStatus');
+    Route::apiResource('project', ProjectController::class);
 
-Route::middleware('requestlogger')->prefix('v1')->group(base_path('routes/ErrorTracker/errortracker_v1.php'));
+    Route::post('/error/markfixed/{id}', [ErrorTrackerController::class, 'markFixed'])->name('errortracker.markfixed');
+    Route::apiResource('ErrorReport', ErrorTrackerController::class);
+});
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -44,4 +51,3 @@ Route::post('/issue', function (Request $request): \Illuminate\Http\JsonResponse
         'expires_at' => $tokenExpiration,
     ]);
 });
-
