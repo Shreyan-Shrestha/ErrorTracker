@@ -10,7 +10,7 @@ class Project extends Model
 {
     use SoftDeletes;
     protected $table = 'projects';
-    protected $fillable = ['git_lab', 'project_name', 'status'];
+    protected $fillable = ['gitlab_id', 'project_name', 'status'];
 
     public $casts = [
         'status' => ProjectStatus::class,
