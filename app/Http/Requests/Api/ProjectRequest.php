@@ -53,7 +53,7 @@ class ProjectRequest extends FormRequest
     private function updateStatusRules() : array
     {
         return [
-            "status" => "required|", Rule::enum(ProjectStatus::class),
+            "status" => "required", Rule::enum(ProjectStatus::class),
         ];
     }
 
