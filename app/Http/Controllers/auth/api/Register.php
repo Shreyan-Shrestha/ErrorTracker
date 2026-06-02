@@ -16,19 +16,23 @@ class Register extends Controller
     public function __invoke(Request $request)
     {
         $validated = $request->validate([
-            'name'  => 'required|string|max:30', 
+            'name'  => 'required|string|max:30',
             'email' => 'required|email:dns|unique:users',
             'password' => 'required|min:8'
         ]);
-       $user = User::create([
-        'name' => $validated['name'],
-        'email' => $validated['email'],
-        'password' => Hash::make($validated['password'],)
-       ]);
+        if (User::find('email', $validated['email'])) {
+            return response()->json(['message' => 'User already exists']);
+        }
+        $user = User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password'],)
+        ]);
+
         $accesstokenexpiration = now()->addDays(7);
         $accesstoken = $user->createToken('access_token', ['*'], $accesstokenexpiration)->plainTextToken;
-        
-        $refresh_token = $user->createToken('refresh_token', ['refresh'], $accesstokenexpiration)->plainTextToken;
+        $refreshTokenExpiration = now()->addDays(30);
+        $refresh_token = $user->createToken('refresh_token', ['refresh'], $refreshTokenExpiration)->plainTextToken;
         return response()->json([
             'message' => 'User added successfully, save the token',
             'access_token' => $accesstoken,
@@ -36,6 +40,5 @@ class Register extends Controller
             'refresh_token' => $refresh_token,
             'refresh_token_expires_at' => $accesstokenexpiration,
         ]);
-
     }
 }
