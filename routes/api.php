@@ -3,11 +3,11 @@
 use App\Http\Controllers\Api\ApplicationController;
 use App\Http\Controllers\Api\ErrorTrackerController;
 use App\Http\Controllers\Api\ProjectController;
+use App\Http\Controllers\Auth\api\Login;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\auth\api\Register;
-use App\Http\Controllers\Auth\Login;
 use App\Models\User;
 use Illuminate\Validation\ValidationException;
 

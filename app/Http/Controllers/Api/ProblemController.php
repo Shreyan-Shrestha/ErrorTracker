@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\ProblemRequest;
 use App\Repositories\Interfaces\ProblemRepositoryInterface;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ProblemController extends Controller
@@ -18,7 +19,7 @@ class ProblemController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index() : JsonResponse
     {
         return response()->json($this->problemRepository->getAll());
     }
@@ -26,7 +27,7 @@ class ProblemController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(ProblemRequest $request)
+    public function store(ProblemRequest $request) : JsonResponse
     {
         $validated = $request->validated();
         $this->problemRepository->create($validated);
