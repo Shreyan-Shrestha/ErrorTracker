@@ -25,9 +25,9 @@ class ErrorTrackerRequest extends FormRequest
     public function rules(): array
     {
         return match(true){
-            $this->routeIs('errortracker.store') =>$this->storeRules(),
-            $this->routeIs('errortracker.update') => $this->updateRules(),
-            $this->routeIs('errortracker.markfixed') => $this->markfixedRules(),
+            $this->routeIs('error.store') =>$this->storeRules(),
+            $this->routeIs('error.update') => $this->updateRules(),
+            $this->routeIs('error.markfixed') => $this->markfixedRules(),
         };
     }
 

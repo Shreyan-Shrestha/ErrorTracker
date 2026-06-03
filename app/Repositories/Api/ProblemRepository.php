@@ -26,7 +26,8 @@ class ProblemRepository implements ProblemRepositoryInterface
     public function update(int $id, array $data) : array
     {
         $problem = Problem::findorfail($id);
-        return $problem->update($data)->toArray;
+        $problem->update($data);
+        return $problem->toArray();
     }
 
     public function destroy(int $id) : array

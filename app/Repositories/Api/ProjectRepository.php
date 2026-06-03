@@ -26,7 +26,8 @@ class ProjectRepository implements ProjectRepositoryInterface
     public function update(int $id, array $data): array
     {
         $project = Project::findOrFail($id);
-        return $project->update($data)->toArray();
+        $project->update($data);
+        return $project->toArray();
     }
 
     public function updateStatus(int $id, string $status): array

@@ -41,7 +41,7 @@ class ProjectController extends Controller
      */
     public function show(int $id): JsonResponse
     {
-        return ApiResponse::success( 'Project record retrieved successfully' , 200, $this->projectRepository->show($id));
+        return ApiResponse::success('Project record retrieved successfully', 200, $this->projectRepository->show($id));
     }
 
     /**
