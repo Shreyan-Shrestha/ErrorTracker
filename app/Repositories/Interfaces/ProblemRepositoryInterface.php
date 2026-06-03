@@ -2,8 +2,6 @@
 
 namespace App\Repositories\Interfaces;
 
-use App\Models\Problem;
-
 interface ProblemRepositoryInterface
 {
     public function getAll() : array ;

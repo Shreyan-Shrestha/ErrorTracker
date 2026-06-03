@@ -4,7 +4,6 @@ namespace App\Repositories\Api;
 
 use App\Models\Problem;
 use App\Repositories\Interfaces\ProblemRepositoryInterface;
-use Illuminate\Support\Collection;
 
 class ProblemRepository implements ProblemRepositoryInterface
 {
