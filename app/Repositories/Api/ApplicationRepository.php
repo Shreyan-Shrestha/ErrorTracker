@@ -4,7 +4,6 @@ namespace App\Repositories\Api;
 
 use App\Models\Application;
 use App\Repositories\Interfaces\ApplicationRepositoryInterface;
-use Illuminate\Support\Collection;
 
 class ApplicationRepository implements ApplicationRepositoryInterface
 {
