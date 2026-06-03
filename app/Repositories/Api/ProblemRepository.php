@@ -8,31 +8,32 @@ use Illuminate\Support\Collection;
 
 class ProblemRepository implements ProblemRepositoryInterface
 {
-    public function getAll() : Collection
+    public function getAll() : array
     {
-        return Problem::all();
+        return Problem::all()->toArray();
     }
 
-    public function show(int $id) : Problem
+    public function getById(int $id) : array
     {
-        return Problem::findOrFail($id);
+        return Problem::findOrFail($id)->toArray;
     
     }
 
-    public function create(array $data) : void
+    public function create(array $data) : array
     {
-        Problem::create($data);
+        return Problem::create($data)->toArray();
     }
 
-    public function update(int $id, array $data) : void
+    public function update(int $id, array $data) : array
     {
         $problem = Problem::findorfail($id);
-        $problem->update($data);
+        return $problem->update($data)->toArray;
     }
 
-    public function destroy(int $id) : void
+    public function destroy(int $id) : array
     {
         $problem = Problem::findorfail($id);
         $problem->delete;
+        return $problem->toArray();
     }
 }

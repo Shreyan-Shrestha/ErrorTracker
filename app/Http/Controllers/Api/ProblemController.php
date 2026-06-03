@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\ProblemRequest;
 use App\Repositories\Interfaces\ProblemRepositoryInterface;
@@ -21,7 +22,7 @@ class ProblemController extends Controller
      */
     public function index() : JsonResponse
     {
-        return response()->json($this->problemRepository->getAll());
+        return ApiResponse::success( 'Problem records retrieved successfully' , 200, $this->problemRepository->getAll());
     }
 
     /**
@@ -30,24 +31,15 @@ class ProblemController extends Controller
     public function store(ProblemRequest $request) : JsonResponse
     {
         $validated = $request->validated();
-        $this->problemRepository->create($validated);
-        return response()->json('Stored successfully');
+        return ApiResponse::success('Problem record created successfully', 201 , $this->problemRepository->create($validated));
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(int $id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+        return ApiResponse::success('Problem record retrieved successfully', 200, $this->problemRepository->getById($id));
     }
 
     /**
@@ -55,7 +47,8 @@ class ProblemController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validated = $request->validated();
+        return ApiResponse::success('Problem record id: ' . $id . ' updated successfully', 200, $this->problemRepository->update($id, $validated));
     }
 
     /**
@@ -63,6 +56,6 @@ class ProblemController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        return ApiResponse::success('Problem record ' . $id . ' deleted successfully', 200, $this->problemRepository->destroy($id));
     }
 }
