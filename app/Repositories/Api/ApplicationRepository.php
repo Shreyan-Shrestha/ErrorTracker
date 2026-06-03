@@ -8,29 +8,33 @@ use Illuminate\Support\Collection;
 
 class ApplicationRepository implements ApplicationRepositoryInterface
 {
-    public function getAll(): Collection
+    public function getAll(): array
     {
-        return Application::all();
+        return Application::all()->toArray();
     }
 
-    public function getById(int $id): Application
+    public function getById(int $id): array
     {
-        return Application::findOrFail($id);
+        return  Application::findOrFail($id)->toArray();
     }
 
-    public function create(array $data): void
+    public function create(array $data): array
     {
-        Application::create($data);
+        $app = Application::create($data);
+        return $app->toArray();
     }
 
-    public function update(int $id, array $data): void
+    public function update(int $id, array $data): array
     {
         $application = Application::findOrFail($id);
         $application->update($data);
+        return $application->toArray();
     }
 
-    public function delete(int $id): void
+    public function delete(int $id): array
     {
-        Application::destroy($id);
+        $application = Application::findOrFail($id);
+        $application->delete();
+        return $application->toArray();
     }
 }
