@@ -5,42 +5,40 @@ namespace App\Repositories\Api;
 use App\Models\ErrorTracker;
 use App\Repositories\Interfaces\ErrorTrackerRepositoryInterface;
 use App\Helpers\DateHelper;
+use Illuminate\Support\Collection;
 use RohanAdhikari\NepaliDate\NepaliDate;
 use RohanAdhikari\NepaliDate\NepaliDateInterface;
 
 class ErrorTrackerRepository implements ErrorTrackerRepositoryInterface
 {
-    public function getall()
+    public function getall(): Collection
     {
-        $err =  ErrorTracker::all();
-        if ($err) {
-            return $err;
-        }
+        return ErrorTracker::all();
     }
 
-    public function show(int $id)
+    public function show(int $id): ErrorTracker
     {
         return ErrorTracker::findorfail($id);
     }
 
-    public function create(array $data)
+    public function create(array $data): void
     {
         ErrorTracker::create($data);
     }
 
-    public function update(int $id, array $data)
+    public function update(int $id, array $data): void
     {
         $err = ErrorTracker::where('id', $id);
         $err->update($data);
     }
 
-    public function markFixed(int $id)
+    public function markFixed(int $id): void
     {
         $err = ErrorTracker::findorfail($id);
 
         $end_time = NepaliDate::now();
-        $start_time = NepaliDate::createFromFormat(NepaliDate::FORMAT_DATETIME_12_SHORT,$err->start_time);
-    
+        $start_time = NepaliDate::createFromFormat(NepaliDate::FORMAT_DATETIME_12_SHORT, $err->start_time);
+
         $interval = $end_time->diffAsDateInterval($start_time);
         $estimated_down = DateHelper::formatDateInterval($interval);
         $err->update([
@@ -49,7 +47,7 @@ class ErrorTrackerRepository implements ErrorTrackerRepositoryInterface
         ]);
     }
 
-    public function delete(int $id)
+    public function delete(int $id): void
     {
         $err = ErrorTracker::findorfail($id);
         $err->delete();

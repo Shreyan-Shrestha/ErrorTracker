@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Auth\api;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class Login extends Controller
 {
@@ -19,10 +20,11 @@ class Login extends Controller
             'password' => 'required|min:8',
         ]);
 
-        if (!Auth::attempt($credentials)) {
+        $user = User::where('email', $credentials['email'])->first();
+
+        if (!$user || !Hash::check($credentials['password'], $user->password)) {
             return response()->json(['error' => 'Wrong email or password'], 401);
         }
-        $user = $request->user();
 
         $accessTokenExpiration = now()->addDays(7);
         $accessToken = $user->createToken('access_token', ['*'], $accessTokenExpiration)->plainTextToken;

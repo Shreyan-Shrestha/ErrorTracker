@@ -22,14 +22,17 @@ class LogApiRequests
             'url'    => $request->fullUrl(),
             'ip'     => $request->ip(),
             'headers'=> $this->sanitizeHeaders($request->headers->all()),
-            'body'   => $request->all(), // Avoid logging sensitive data in production
+            'body'   => $request->all(),
         ];
 
         Log::info('API Request', $requestData);
 
         try {
             $response = $next($request);
-
+            if(str_contains($response->headers->get('Content-type', ''), 'text/html')){
+                Log::info('Returned a Webpage Response');
+                return $response;
+            }
             $responseData = [
                 'status'  => $response->getStatusCode(),
                 'content' => $this->safeJsonDecode($response->getContent()),

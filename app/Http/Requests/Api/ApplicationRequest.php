@@ -22,26 +22,38 @@ class ApplicationRequest extends FormRequest
      */
     public function rules(): array
     {
-        return match(true){
+        return match (true) {
             $this->routeIs('application.store') => $this->storeRules(),
             $this->routeIs('application.update') => $this->updateRules(),
             default => $this->storeRules()
         };
     }
 
-     private function storeRules() : array
-        {
-            return [
-                'name' => 'required|string|max:100',
-                'gitlab_id' => 'required|integer|unique:applications',
-            ];
-        }
+    private function storeRules() : array
+    {
+        return [
+            'name' => 'required|string|max:100',
+            'gitlab_id' => 'required|integer|unique:applications',
+        ];
+    }
 
-        private function updateRules() : array
-        {
-            return [
-                'name' => 'sometimes|required|string|max:100',
-                'gitlab_id' => 'sometimes|required|integer|unique:applications',
-            ];
-        }
+    private function updateRules(): array
+    {
+        return [
+            'name' => 'sometimes|string|max:100',
+            'gitlab_id' => 'sometimes|integer|unique:applications',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'Name field required',
+            'name.string' => 'Name must be of type string',
+            'name.max' => 'Name cannot be more than 100 characters',
+            'gitlab_id.required' => 'gitlab_id required',
+            'gitlab_id.integer' => 'gitlab_id must be an integer',
+            'gitlab_id.unique' => 'gitlab_id already exits. It must be unique',
+        ];
+    }
 }

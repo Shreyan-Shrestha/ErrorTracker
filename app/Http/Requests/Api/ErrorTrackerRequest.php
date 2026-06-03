@@ -28,7 +28,6 @@ class ErrorTrackerRequest extends FormRequest
             $this->routeIs('errortracker.store') =>$this->storeRules(),
             $this->routeIs('errortracker.update') => $this->updateRules(),
             $this->routeIs('errortracker.markfixed') => $this->markfixedRules(),
-            default => $this->storeRules()
         };
     }
 

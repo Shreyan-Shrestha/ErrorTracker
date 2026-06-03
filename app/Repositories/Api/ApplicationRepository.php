@@ -1,41 +1,40 @@
 <?php
 
 namespace App\Repositories\Api;
+
 use App\Models\Application;
 use App\Repositories\Interfaces\ApplicationRepositoryInterface;
+use Illuminate\Support\Collection;
 
 class ApplicationRepository implements ApplicationRepositoryInterface
 {
-    public function getAll()
+    public function getAll(): array
     {
-        $applications = Application::all();
-        if($applications->isEmpty()){
-            return 'No application added yet';
-        }
-        return $applications;
+        return Application::all()->toArray();
     }
 
-    public function getById( int $id)
+    public function getById(int $id): array
     {
-        return Application::findOrFail($id);
+        return  Application::findOrFail($id)->toArray();
     }
 
-    public function create(array $data)
+    public function create(array $data): array
     {
-        Application::create($data);
-        return 'Application created successfully';
+        $app = Application::create($data);
+        return $app->toArray();
     }
 
-    public function update(int $id, array $data)
+    public function update(int $id, array $data): array
     {
         $application = Application::findOrFail($id);
         $application->update($data);
-        return 'Application updated successfully';
+        return $application->toArray();
     }
 
-    public function delete(int $id)
+    public function delete(int $id): array
     {
-        Application::destroy($id);
-        return 'Application deleted successfully';
+        $application = Application::findOrFail($id);
+        $application->delete();
+        return $application->toArray();
     }
 }
