@@ -5,34 +5,33 @@ namespace App\Repositories\Api;
 use App\Models\ErrorTracker;
 use App\Repositories\Interfaces\ErrorTrackerRepositoryInterface;
 use App\Helpers\DateHelper;
-use Illuminate\Support\Collection;
 use RohanAdhikari\NepaliDate\NepaliDate;
 use RohanAdhikari\NepaliDate\NepaliDateInterface;
 
 class ErrorTrackerRepository implements ErrorTrackerRepositoryInterface
 {
-    public function getall(): Collection
+    public function getall(): array
     {
-        return ErrorTracker::all();
+        return ErrorTracker::all()->toArray();
     }
 
-    public function show(int $id): ErrorTracker
+    public function show(int $id): array
     {
-        return ErrorTracker::findorfail($id);
+        return ErrorTracker::findorfail($id)->toArray();
     }
 
-    public function create(array $data): void
+    public function create(array $data): array
     {
-        ErrorTracker::create($data);
+        return ErrorTracker::create($data)->toArray();
     }
 
-    public function update(int $id, array $data): void
+    public function update(int $id, array $data): array
     {
-        $err = ErrorTracker::where('id', $id);
-        $err->update($data);
+        $err = ErrorTracker::findorfail($id);
+        return $err->update($data)->toArray();
     }
 
-    public function markFixed(int $id): void
+    public function markFixed(int $id): array
     {
         $err = ErrorTracker::findorfail($id);
 
@@ -45,11 +44,12 @@ class ErrorTrackerRepository implements ErrorTrackerRepositoryInterface
             'end_time' => $end_time->format(NepaliDateInterface::FORMAT_DATETIME_12_SHORT),
             'estimated_down' => $estimated_down,
         ]);
+        return $err->toArray();
     }
 
-    public function delete(int $id): void
+    public function delete(int $id): array
     {
         $err = ErrorTracker::findorfail($id);
-        $err->delete();
+        return $err->delete()->toArray();
     }
 }
