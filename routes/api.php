@@ -18,7 +18,7 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
     Route::apiResource('project', ProjectController::class);
 
     Route::post('/error/markfixed/{id}', [ErrorTrackerController::class, 'markFixed'])->name('errortracker.markfixed');
-    Route::apiResource('ErrorReport', ErrorTrackerController::class);
+    Route::apiResource('/error', ErrorTrackerController::class);
 });
 
 Route::get('/user', function (Request $request) {

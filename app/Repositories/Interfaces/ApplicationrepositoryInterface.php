@@ -2,11 +2,15 @@
 
 namespace App\Repositories\Interfaces;
 
+use App\Models\Application;
+use Illuminate\Http\Response;
+use Illuminate\Support\Collection;
+
 interface ApplicationRepositoryInterface
 {
-    public function getAll();
-    public function getById(int $id);
-    public function create(array $data);
-    public function update(int $id, array $data);
-    public function delete(int $id);
+    public function getAll(): Collection;
+    public function getById(int $id): Application;
+    public function create(array $data): Application;
+    public function update(int $id, array $data): Application;
+    public function delete(int $id): Response;
 }

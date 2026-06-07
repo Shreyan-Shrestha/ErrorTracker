@@ -4,36 +4,38 @@ namespace App\Repositories\Api;
 
 use App\Models\Problem;
 use App\Repositories\Interfaces\ProblemRepositoryInterface;
+use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 
 class ProblemRepository implements ProblemRepositoryInterface
 {
-    public function getAll() : array
+    public function getAll() : Collection
     {
-        return Problem::all()->toArray();
+        return Problem::all();
     }
 
-    public function getById(int $id) : array
+    public function getById(int $id) : Problem
     {
-        return Problem::findOrFail($id)->toArray;
+        return Problem::findOrFail($id);
     
     }
 
-    public function create(array $data) : array
+    public function create(array $data) : Problem
     {
-        return Problem::create($data)->toArray();
+        return Problem::create($data);
     }
 
-    public function update(int $id, array $data) : array
+    public function update(int $id, array $data) : Problem
     {
         $problem = Problem::findorfail($id);
-        return $problem->update($data)->toArray;
+        $problem->update($data);
+        return $problem;
     }
 
-    public function destroy(int $id) : array
+    public function destroy(int $id) : Response
     {
         $problem = Problem::findorfail($id);
         $problem->delete;
-        return $problem->toArray();
+        return response()->noContent();
     }
 }

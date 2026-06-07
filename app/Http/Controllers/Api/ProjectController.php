@@ -7,6 +7,7 @@ use App\Http\Requests\Api\ProjectRequest;
 use App\Models\Project;
 use App\Repositories\Interfaces\ProjectRepositoryInterface;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Response;
 
 class ProjectController extends Controller
 {
@@ -19,59 +20,54 @@ class ProjectController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index() : JsonResponse
+    public function index(): JsonResponse
     {
-        return response()->json($this->projectRepository->getAll());
+        return Response::success($this->projectRepository->getAll());
     }
 
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(ProjectRequest $request) : JsonResponse
+    public function store(ProjectRequest $request): JsonResponse
     {
         $validated = $request->validated();
         $validated['status'] = strtolower($validated['status']);
-        return response()->json($this->projectRepository->create($validated));
+        return Response::success($this->projectRepository->create($validated));
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(int $id) : JsonResponse 
+    public function show(int $id): JsonResponse
     {
-        return response()->json($this->projectRepository->show($id));
+        return Response::success($this->projectRepository->show($id));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(ProjectRequest $request, int $id) : JsonResponse
+    public function update(ProjectRequest $request, int $id): JsonResponse
     {
         $validated = $request->validated();
         $validated['status'] = strtolower($validated['status']);
-        return response()->json($this->projectRepository->update($id, $validated));
+        return Response::success($this->projectRepository->update($id, $validated));
     }
 
     /**     * Update the specified resource in storage.
      */
-    public function updateStatus(ProjectRequest $request, int $id) : JsonResponse
+    public function updateStatus(ProjectRequest $request, int $id): JsonResponse
     {
         $validated = $request->validated();
 
-        if (isset($validated['status'])) {
-            $validated['status'] = strtolower($validated['status']);
-        }
-
-        return response()->json($this->projectRepository->updateStatus($id, $validated['status'] ?? ''));
+        return Response::success($this->projectRepository->updateStatus($id, $validated['status'] ?? ''));
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Project $project) : JsonResponse
+    public function destroy(Project $project): JsonResponse
     {
-        $this->projectRepository->delete($project->id);
-        return response()->json(['message' => 'Project deleted successfully']);
+        return Response::success($this->projectRepository->delete($project->id));
     }
 }
