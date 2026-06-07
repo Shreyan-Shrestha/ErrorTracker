@@ -21,12 +21,13 @@ class ResponseMacroServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Response::macro('success',function (
-            mixed $data, 
-            ?string $message = 'Request completed successfully', 
-            $status = 200
-            ): JsonResponse 
-            {
+        Response::macro(
+            'success',
+            function (
+                mixed $data,
+                ?string $message = 'Request completed successfully',
+                $status = 200
+            ): JsonResponse {
                 return Response::json([
                     'success' => 'true',
                     'message' =>  $message,
@@ -37,7 +38,7 @@ class ResponseMacroServiceProvider extends ServiceProvider
             }
         );
 
-        Response::macro('error', function (string $message = 'Error!', int $status = 400, mixed $errors = null): JsonResponse {
+        Response::macro('error', function (mixed $errors = null, string $message = 'Error!', int $status = 400): JsonResponse {
             return Response::json([
                 'success' => 'false',
                 'message' => $message,
