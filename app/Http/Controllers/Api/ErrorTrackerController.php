@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\ErrorTrackerRequest;
 use App\Repositories\Interfaces\ErrorTrackerRepositoryInterface;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Response;
 
 class ErrorTrackerController extends Controller
 {
@@ -19,33 +19,34 @@ class ErrorTrackerController extends Controller
 
     public function index(): JsonResponse
     {
-        return ApiResponse::success('Error Reports retireved successfully', 200, $this->error_tracker_repository->getall());
+        return Response::success($this->error_tracker_repository->getall());
     }
 
     public function store(ErrorTrackerRequest $request): JsonResponse
     {
         $validated = $request->validated();
-        return ApiResponse::success('Error Reported Successfully', 201, $this->error_tracker_repository->create($validated));
+        return Response::success($this->error_tracker_repository->create($validated));
     }
 
     public function show(string $id): JsonResponse
     {
-        return ApiResponse::success('Error Report retrieved successfully', 200, $this->error_tracker_repository->show($id));
+        return Response::success($this->error_tracker_repository->show($id));
     }
 
     public function update(ErrorTrackerRequest $request, string $id): JsonResponse
     {
         $validated = $request->validated();
-        return ApiResponse::success('Error Report updated successfully', 200, $this->error_tracker_repository->update($id, $validated));
+        return Response::success($this->error_tracker_repository->update($id, $validated));
     }
 
     public function markFixed(int $id): JsonResponse
     {
-        return ApiResponse::success('Error marked fixed', 200, $this->error_tracker_repository->markFixed($id));
+        return Response::success($this->error_tracker_repository->markFixed($id));
     }
 
     public function destroy(string $id): JsonResponse
     {
-        return ApiResponse::success('Report deleted successfully', 200, $this->error_tracker_repository->delete($id));
+        $this->error_tracker_repository->delete($id);
+        return Response::success();
     }
 }

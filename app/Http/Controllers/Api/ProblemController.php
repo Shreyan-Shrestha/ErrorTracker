@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\ProblemRequest;
 use App\Repositories\Interfaces\ProblemRepositoryInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response as HttpResponse;
+use Illuminate\Support\Facades\Response;
 
 class ProblemController extends Controller
 {
@@ -22,7 +23,7 @@ class ProblemController extends Controller
      */
     public function index(): JsonResponse
     {
-        return ApiResponse::success('Problem records retrieved successfully', 200, $this->problemRepository->getAll());
+        return Response::success('Problem records retrieved successfully', 200, $this->problemRepository->getAll());
     }
 
     /**
@@ -31,7 +32,7 @@ class ProblemController extends Controller
     public function store(ProblemRequest $request): JsonResponse
     {
         $validated = $request->validated();
-        return ApiResponse::success('Problem record created successfully', 201, $this->problemRepository->create($validated));
+        return Response::success($this->problemRepository->create($validated));
     }
 
     /**
@@ -39,7 +40,7 @@ class ProblemController extends Controller
      */
     public function show(int $id): JsonResponse
     {
-        return ApiResponse::success('Problem record retrieved successfully', 200, $this->problemRepository->getById($id));
+        return Response::success($this->problemRepository->getById($id));
     }
 
     /**
@@ -48,14 +49,15 @@ class ProblemController extends Controller
     public function update(Request $request, string $id): JsonResponse
     {
         $validated = $request->validated();
-        return ApiResponse::success('Problem record id: ' . $id . ' updated successfully', 200, $this->problemRepository->update($id, $validated));
+        return Response::success($this->problemRepository->update($id, $validated));
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id): JsonResponse
+    public function destroy(string $id): HttpResponse
     {
-        return ApiResponse::success('Problem record ' . $id . ' deleted successfully', 200, $this->problemRepository->destroy($id));
+        $this->problemRepository->destroy($id);
+        return Response::success('Problem record deleted successfully');
     }
 }

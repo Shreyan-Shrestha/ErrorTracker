@@ -5,58 +5,54 @@ namespace App\Repositories\Api;
 use App\Models\ErrorTracker;
 use App\Repositories\Interfaces\ErrorTrackerRepositoryInterface;
 use App\Helpers\DateHelper;
+use Illuminate\Http\Response;
+use Illuminate\Support\Collection;
+
 use RohanAdhikari\NepaliDate\NepaliDate;
 use RohanAdhikari\NepaliDate\NepaliDateInterface;
 
 class ErrorTrackerRepository implements ErrorTrackerRepositoryInterface
 {
-    public function getall(): array
+    public function getall(): Collection
     {
-        return ErrorTracker::all()->toArray();
+        return ErrorTracker::all();
     }
 
-    public function show(int $id): array
+    public function show(int $id): ErrorTracker
     {
-        return ErrorTracker::findorfail($id)->toArray();
+        return ErrorTracker::findorfail($id);
     }
 
-    public function create(array $data): array
+    public function create(array $data): ErrorTracker
     {
-        return ErrorTracker::create($data)->toArray();
+        return ErrorTracker::create($data);
     }
 
-    public function update(int $id, array $data): array
+    public function update(int $id, array $data): ErrorTracker
     {
         $err = ErrorTracker::findorfail($id);
-        $err->update($data);
-        return $err->toArray();
+        return $err->update($data);
     }
 
-    public function markFixed(int $id): array
+    public function markFixed(int $id): ErrorTracker
     {
         $err = ErrorTracker::findorfail($id);
+        $end_time = NepaliDate::now();
+        $start_time = NepaliDate::createFromFormat(NepaliDate::FORMAT_DATETIME_12_SHORT, $err->start_time);
 
-        if (!$err->end_time) {
-            $end_time = NepaliDate::now();
-            $start_time = NepaliDate::createFromFormat(NepaliDate::FORMAT_DATETIME_12_SHORT, $err->start_time);
+        $interval = $end_time->diffAsDateInterval($start_time);
+        $estimated_down = DateHelper::formatDateInterval($interval);
 
-            $interval = $end_time->diffAsDateInterval($start_time);
-            $estimated_down = DateHelper::formatDateInterval($interval);
-
-            $err->update([
-                'end_time' => $end_time->format(NepaliDateInterface::FORMAT_DATETIME_12_SHORT),
-                'estimated_down' => $estimated_down,
-            ]);
-
-            return $err->toArray();
-        }
-
-        return ['message' => 'Error already marked fixed'];
+        return $err->update([
+            'end_time' => $end_time->format(NepaliDateInterface::FORMAT_DATETIME_12_SHORT),
+            'estimated_down' => $estimated_down,
+        ]);
     }
 
-    public function delete(int $id): array
+    public function delete(int $id): Response
     {
         $err = ErrorTracker::findorfail($id);
-        return $err->delete()->toArray();
+        $err->delete();
+        return response()->noContent();
     }
 }

@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\ProjectRequest;
 use App\Models\Project;
 use App\Repositories\Interfaces\ProjectRepositoryInterface;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Response;
 
 class ProjectController extends Controller
 {
@@ -22,7 +22,7 @@ class ProjectController extends Controller
      */
     public function index(): JsonResponse
     {
-        return ApiResponse::success('Project records retrieved successfully', 200, $this->projectRepository->getAll());
+        return Response::success($this->projectRepository->getAll());
     }
 
 
@@ -33,7 +33,7 @@ class ProjectController extends Controller
     {
         $validated = $request->validated();
         $validated['status'] = strtolower($validated['status']);
-        return ApiResponse::success('Project added successfully', 201, $this->projectRepository->create($validated));
+        return Response::success($this->projectRepository->create($validated));
     }
 
     /**
@@ -41,7 +41,7 @@ class ProjectController extends Controller
      */
     public function show(int $id): JsonResponse
     {
-        return ApiResponse::success('Project record retrieved successfully', 200, $this->projectRepository->show($id));
+        return Response::success($this->projectRepository->show($id));
     }
 
     /**
@@ -51,7 +51,7 @@ class ProjectController extends Controller
     {
         $validated = $request->validated();
         $validated['status'] = strtolower($validated['status']);
-        return ApiResponse::success('Project record updated successfully', 200, $this->projectRepository->update($id, $validated));
+        return Response::success($this->projectRepository->update($id, $validated));
     }
 
     /**     * Update the specified resource in storage.
@@ -60,11 +60,7 @@ class ProjectController extends Controller
     {
         $validated = $request->validated();
 
-        if (isset($validated['status'])) {
-            $validated['status'] = strtolower($validated['status']);
-        }
-
-        return ApiResponse::success('Project status updated successfully', 200, $this->projectRepository->updateStatus($id, $validated['status'] ?? ''));
+        return Response::success($this->projectRepository->updateStatus($id, $validated['status'] ?? ''));
     }
 
     /**
@@ -72,6 +68,6 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project): JsonResponse
     {
-        return ApiResponse::success('Project deleted successfully', 200, $this->projectRepository->delete($project->id));
+        return Response::success($this->projectRepository->delete($project->id));
     }
 }

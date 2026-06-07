@@ -2,11 +2,15 @@
 
 namespace App\Repositories\Interfaces;
 
+use App\Models\Problem;
+use Illuminate\Http\Response;
+use Illuminate\Support\Collection;
+
 interface ProblemRepositoryInterface
 {
-    public function getAll(): array;
-    public function getById(int $id): array;
-    public function create(array $data): array;
-    public function update(int $id, array $data): array;
-    public function destroy(int $id): array;
+    public function getAll(): Collection;
+    public function getById(int $id): Problem;
+    public function create(array $data): Problem;
+    public function update(int $id, array $data): Problem;
+    public function destroy(int $id): Response;
 }
