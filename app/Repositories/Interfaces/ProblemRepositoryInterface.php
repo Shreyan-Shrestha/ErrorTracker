@@ -4,11 +4,11 @@ namespace App\Repositories\Interfaces;
 
 use App\Models\Problem;
 use Illuminate\Http\Response;
-use Illuminate\Support\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 interface ProblemRepositoryInterface
 {
-    public function getAll(): Collection;
+    public function getAll(): LengthAwarePaginator;
     public function getById(int $id): Problem;
     public function create(array $data): Problem;
     public function update(int $id, array $data): Problem;

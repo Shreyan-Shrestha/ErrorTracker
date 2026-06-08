@@ -30,7 +30,7 @@ class ErrorTrackerRequest extends FormRequest
             "impact"             => ['nullable', 'string', 'max:300'],
             "root_cause"         => ['nullable', 'string', 'max:300'],
             "estimated_down"     => ['nullable', 'time'],
-            "start_time"         => ['nullable', 'string'], //Changed from dateTime to string as per rohanAdhikari/NepaliDate/docs/Laravel.md
+            "start_time"         => ['nullable', 'string'], // Changed to string to handle NepaliDate
             "end_time"           => ['nullable', 'string'],   //Changed from dateTime to string 
             "issue_triggered_by" => ['nullable', 'string', 'max:500'],
             "error_message"      => ['nullable', 'string', 'max:200'],

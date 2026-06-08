@@ -38,7 +38,7 @@ class ExampleTest extends TestCase
         Sanctum::actingAs($user, ['*']);
         $data = ['gitlab_id' => 485, 'name' => 'Test app'];
         $this->postJson('api/v1/application', $data)
-            ->assertStatus(200);
+        ->assertStatus(200);
     }
 
     public function test_create_application_with_string_gitlab_id_returns_validation_error_for_gitlab_id(): void
@@ -49,19 +49,28 @@ class ExampleTest extends TestCase
         $this->postJson('/api/v1/application', $data)->assertJsonValidationErrorFor('gitlab_id');
     }
 
-    // public function test_can_delete_application(): void
-    // {
-    //     $user = User::factory()->create();
-    //     Sanctum::actingAs($user, ['*']);
-    //     $app = Application::factory()->create();
-    //     $this->deleteJson('app/v1/application/' . $app->id)->assertStatus(200);
-    // }
-
     public function test_get_all_application_returns_data(): void{
         $user = User::factory()->create();
         Sanctum::actingAs($user, ['*']);
         $response = $this->getJson('/api/v1/application')
         ->assertStatus(200)
         ->assertJsonStructure(['success', 'message', 'data']);
+    }
+
+    public function test_can_update_application() : void{
+        $user = User::factory()->create();
+        Sanctum::actingAs($user, ['*']);
+        $app = Application::factory(3)->create();
+        $response = $this->patchJson('api/v1/application/'.$app->first()->id, ['name' => 'Test name'])
+        ->assertStatus(200);
+    }
+    
+    public function test_can_delete_application_successfully(): void
+    {
+        $user = User::factory()->create();
+        Sanctum::actingAs($user, ['*']);
+        $app = Application::factory(3)->create();
+        $this->deleteJson('api/v1/application/' . $app->first()->id)
+        ->assertStatus(200);
     }
 }

@@ -5,13 +5,13 @@ namespace App\Repositories\Api;
 use App\Models\Application;
 use App\Repositories\Interfaces\ApplicationRepositoryInterface;
 use Illuminate\Http\Response;
-use Illuminate\Support\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ApplicationRepository implements ApplicationRepositoryInterface
 {
-    public function getAll(): Collection
+    public function getAll(): LengthAwarePaginator
     {
-        return Application::all();
+        return Application::latest()->paginate(10);
     }
 
     public function getById(int $id): Application
@@ -22,20 +22,20 @@ class ApplicationRepository implements ApplicationRepositoryInterface
     public function create(array $data): Application
     {
         $app = Application::create($data);
-        return $app->toArray();
+        return $app;
     }
 
     public function update(int $id, array $data): Application
     {
         $application = Application::findOrFail($id);
         $application->update($data);
-        return $application->toArray();
+        return $application;
     }
 
     public function delete(int $id): Response
     {
         $application = Application::findOrFail($id);
         $application->delete();
-        return $application->toArray();
+        return response()->noContent();
     }
 }

@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Providers;
+declare(strict_types=1);
+
+namespace App\Helpers\NepaliDate\src\Laravel;
 
 use App\Helpers\NepaliDate\src\NepaliDate;
-use Illuminate\Support\ServiceProvider;
 
-class AppServiceProvider extends ServiceProvider
+class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
     /**
      * Register any application services.
@@ -24,7 +25,7 @@ class AppServiceProvider extends ServiceProvider
         NepaliDate::setDefaultTimeZoneName($timezone);
         if (class_exists(\Carbon\Carbon::class)) {
             \Carbon\Carbon::macro('toNepaliDate', function (): string {
-                return NepaliDate::fromAd($this->toDateTime());
+                return NepaliDate::fromAd($this->toDateTime())->toDateTimeString();
             });
         }
     }

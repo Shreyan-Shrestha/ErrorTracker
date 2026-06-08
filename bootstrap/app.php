@@ -12,10 +12,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-use TypeError;
-use ValueError;
-use Throwable;
-
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__ . '/../routes/web.php',
@@ -89,6 +85,6 @@ return Application::configure(basePath: dirname(__DIR__))
                 return Response::error($error, 'Invalid argument provided', 400);
             }
 
-            return parent::render($req, $e);
+            return null;
         });
     })->create();

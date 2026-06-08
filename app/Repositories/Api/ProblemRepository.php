@@ -5,13 +5,13 @@ namespace App\Repositories\Api;
 use App\Models\Problem;
 use App\Repositories\Interfaces\ProblemRepositoryInterface;
 use Illuminate\Http\Response;
-use Illuminate\Support\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ProblemRepository implements ProblemRepositoryInterface
 {
-    public function getAll() : Collection
+    public function getAll() : LengthAwarePaginator
     {
-        return Problem::all();
+        return Problem::latest()->paginate();
     }
 
     public function getById(int $id) : Problem
