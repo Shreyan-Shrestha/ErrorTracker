@@ -2,17 +2,16 @@
 
 namespace App\Repositories\Api;
 
-use App\Enums\ProjectStatus;
 use App\Models\Project;
 use App\Repositories\Interfaces\ProjectRepositoryInterface;
 use Illuminate\Http\Response;
-use Illuminate\Support\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ProjectRepository implements ProjectRepositoryInterface
 {
-    public function getAll(): Collection
+    public function getAll(): LengthAwarePaginator
     {
-        return Project::all();
+        return Project::latest()->paginate();
     }
 
     public function create(array $data): Project

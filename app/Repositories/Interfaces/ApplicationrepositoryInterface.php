@@ -4,11 +4,11 @@ namespace App\Repositories\Interfaces;
 
 use App\Models\Application;
 use Illuminate\Http\Response;
-use Illuminate\Support\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 interface ApplicationRepositoryInterface
 {
-    public function getAll(): Collection;
+    public function getAll(): LengthAwarePaginator;
     public function getById(int $id): Application;
     public function create(array $data): Application;
     public function update(int $id, array $data): Application;

@@ -6,16 +6,15 @@ use App\Models\ErrorTracker;
 use App\Repositories\Interfaces\ErrorTrackerRepositoryInterface;
 use App\Helpers\DateHelper;
 use Illuminate\Http\Response;
-use Illuminate\Support\Collection;
 
-use RohanAdhikari\NepaliDate\NepaliDate;
-use RohanAdhikari\NepaliDate\NepaliDateInterface;
+use App\Helpers\NepaliDate\src\NepaliDate;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ErrorTrackerRepository implements ErrorTrackerRepositoryInterface
 {
-    public function getall(): Collection
+    public function getall(): LengthAwarePaginator
     {
-        return ErrorTracker::all();
+        return ErrorTracker::latest()->paginate();
     }
 
     public function show(int $id): ErrorTracker
@@ -43,10 +42,11 @@ class ErrorTrackerRepository implements ErrorTrackerRepositoryInterface
         $interval = $end_time->diffAsDateInterval($start_time);
         $estimated_down = DateHelper::formatDateInterval($interval);
 
-        return $err->update([
-            'end_time' => $end_time->format(NepaliDateInterface::FORMAT_DATETIME_12_SHORT),
+        $err->update([
+            'end_time' => $end_time->toDateTimeString(),
             'estimated_down' => $estimated_down,
         ]);
+        return $err->fresh();
     }
 
     public function delete(int $id): Response
