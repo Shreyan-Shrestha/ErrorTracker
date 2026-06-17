@@ -2,6 +2,8 @@
 
 namespace App\Repositories\Api;
 
+use App\Enums\ProjectStatus;
+use App\Http\Requests\Api\ProjectRequest;
 use App\Models\Project;
 use App\Repositories\Interfaces\ProjectRepositoryInterface;
 use Illuminate\Http\Response;
@@ -14,34 +16,30 @@ class ProjectRepository implements ProjectRepositoryInterface
         return Project::latest()->paginate();
     }
 
-    public function create(array $data): Project
+    public function create(ProjectRequest $request): void
     {
-        return Project::create($data);
+        $validated = $request->validated();
+        Project::create($validated);
     }
 
     public function show(int $id): Project
     {
-        return Project::findOrFail($id);
+        return Project::findorfail($id);
     }
 
-    public function update(int $id, array $data): Project
+    public function update(ProjectRequest $request, Project $project): void
     {
-        $project = Project::findOrFail($id);
-        $project->update($data);
-        return $project;
+        $validated = $request->validated();
+        $project->update($validated);
     }
 
-    public function updateStatus(int $id, string $status): Project
+    public function updateStatus(Project $project): void
     {
-        $project = Project::findOrFail($id);
-        $project->status = $status;
-        return $project;
+        $project->status = ProjectStatus::Completed;
     }
 
-    public function delete(int $id): Response
+    public function delete(Project $project): void
     {
-        $project = Project::findOrFail($id);
         $project->delete();
-        return response()->noContent();
     }
 }

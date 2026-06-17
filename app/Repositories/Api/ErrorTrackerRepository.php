@@ -5,9 +5,9 @@ namespace App\Repositories\Api;
 use App\Models\ErrorTracker;
 use App\Repositories\Interfaces\ErrorTrackerRepositoryInterface;
 use App\Helpers\DateHelper;
-use Illuminate\Http\Response;
 
 use App\Helpers\NepaliDate\src\NepaliDate;
+use App\Http\Requests\ErrorTrackerRequest;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class ErrorTrackerRepository implements ErrorTrackerRepositoryInterface
@@ -22,18 +22,19 @@ class ErrorTrackerRepository implements ErrorTrackerRepositoryInterface
         return ErrorTracker::findorfail($id);
     }
 
-    public function create(array $data): ErrorTracker
+    public function create(ErrorTrackerRequest $request): void
     {
-        return ErrorTracker::create($data);
+        $validated = $request->validated();
+        ErrorTracker::create($validated);
     }
 
-    public function update(int $id, array $data): ErrorTracker
+    public function update(ErrorTrackerRequest $request, ErrorTracker $error): void
     {
-        $err = ErrorTracker::findorfail($id);
-        return $err->update($data);
+        $validated = $request->validated();
+        $error->update($validated);
     }
 
-    public function markFixed(int $id): ErrorTracker
+    public function markFixed(int $id): void
     {
         $err = ErrorTracker::findorfail($id);
         $end_time = NepaliDate::now();
@@ -46,13 +47,10 @@ class ErrorTrackerRepository implements ErrorTrackerRepositoryInterface
             'end_time' => $end_time->toDateTimeString(),
             'estimated_down' => $estimated_down,
         ]);
-        return $err->fresh();
     }
 
-    public function delete(int $id): Response
+    public function delete(ErrorTracker $error): void
     {
-        $err = ErrorTracker::findorfail($id);
-        $err->delete();
-        return response()->noContent();
+        $error->delete();
     }
 }
