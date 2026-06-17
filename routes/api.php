@@ -1,9 +1,9 @@
 <?php
 
-use App\Http\Controllers\Api\ApplicationController;
-use App\Http\Controllers\Api\ErrorTrackerController;
-use App\Http\Controllers\Api\ProblemController;
-use App\Http\Controllers\Api\ProjectController;
+use App\Http\Controllers\Api\V1\ApplicationController;
+use App\Http\Controllers\Api\V1\ErrorTrackerController;
+use App\Http\Controllers\Api\V1\ProblemController;
+use App\Http\Controllers\Api\V1\ProjectController;
 use App\Http\Controllers\Auth\api\Login;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
