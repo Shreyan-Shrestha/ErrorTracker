@@ -1,28 +1,31 @@
 @props([
-'methodPatch' =>null,
+'methodPatch' => null,
+'creating' => null
 ])
 
 <dialog id="modal_create" class="modal">
-    <div class="modal-box">
+    <div class="modal-box w-md sm:w-full">
         <form method="dialog">
-            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-3">✕</button>
         </form>
-        <div class="w-full p-4 mt-6">
+
+        <div class="w-full border-b-2 border-b-gray-400 p-3 bg-base-300">
+            <p class="text-xl sm:text-2xl md:test-3xl font-semibold">{{ $creating }}</p>
+        </div>
+
+        <div class="w-full mt-6">
             <form id="create_form" action="" method="POST">
                 @csrf
-
                 @if($methodPatch)
                 @method('PATCH')
                 @endif
-
                 {{ $slot }}
-
-                <div class="flex gap-6 justify-center-safe mt-6 p-4">
-                    <button class="btn btn-primary" type="submit">
-                        Create
-                    </button>
-                </div>
             </form>
+
+            <div class="flex gap-6 justify-end-safe mt-6 p-3 border-t-2 border-gray-400 bg-base-300 modal-action">
+                <button class="btn btn-sm sm:btn-md shadow" onclick="modal_create.close()">Cancel</button>
+                <button class="btn btn-primary shadow" type="submit" form="create_form">Add Project</button>
+            </div>
         </div>
     </div>
     <form method="dialog" class="modal-backdrop">

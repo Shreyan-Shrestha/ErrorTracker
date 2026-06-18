@@ -1,13 +1,13 @@
-@extends('partials.layout', ['title', 'Project | ErrorTracker'])
+@extends('partials.layout', ['title', 'WorldLink ErrorTracker | Projects'])
 
 @section('content')
 <div class="w-full p-6">
     <x-buttons.primary onClick="OpenCreateModal(this.dataset.action)" dataAction="{{ route('projects.create')}}">
         Add Project
     </x-buttons.primary>
-    <p class="text-2xl lg:text-4xl">Projects</p>
+    <p class="text-2xl lg:text-4xl font-bold">Projects</p>
 
-    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-6 mt-6">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-6">
         <x-stat-card title="Active Projects" value="42" change=" +8%" iconBg="bg-blue-100" iconColor="text-primary">
             <x-slot:icon>
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-rocket-takeoff" viewBox="0 0 16 16">
@@ -47,23 +47,30 @@
     </div>
 
     @php
-    $headers = ['SN', 'Gitlab Id', 'Project Name', 'Status', 'Actions'];
+    $headers = ['Project Name', 'Assigned To', 'Gitlab Id', 'Status', 'Last Updated' ,'Actions'];
+    $count = count($headers);
     @endphp
 
     <x-table :headers="$headers" title='Current Projects'>
         @if(empty($projects))
         <tr class="bg-white hover:bg:base-300 p-4">
-            <td colspan="4" class="px-4 py-3 text-center text-gray-500">
+            <td colspan="{{ $count }}" class="px-4 py-3 text-center text-gray-500">
                 No projects added yet.
             </td>
         </tr>
         @else
         @foreach($projects as $project)
-        <tr class=" bg-white hover:bg-base-300 p-4">
-            <td>{{ $loop->iteration }}</td>
+        <tr class=" bg-white hover:bg-base-300 p-4 border-b-2 border-gray-400">
+            <td class="text-left justify-center text-primary font-semibold font-sans text-xl"> {{ $project->project_name }}</td>
+            <td></td>
             <td> {{ $project->gitlab_id }}</td>
-            <td> {{ $project->project_name }}</td>
-            <td> {{ $project->status }} </td>
+            <td>
+                <div class="badge capitalize badge-outline {{ $project->status->color() }}">
+                    <div aria-label="status" class="status {{ $project->status->status() }}"></div>
+                    {{ $project->status->label() }}
+                </div>
+            </td>
+            <td> {{ $project->updated_at }}</td>
             <td>
                 <div class="flex gap-4 items-center-safe justify-center-safe">
                     <a href="{{ route('projects.edit', $project->id)}}" class="link">
@@ -78,8 +85,42 @@
         </tr>
         @endforeach
         @endif
+        <tr class="bg-base-300">
+            <td colspan="{{ $count }}">{{ $projects->links() }} </td>
+        </tr>
     </x-table>
-    <x-modal.create></x-modal.create>
+    <x-modal.create creating="Add Project">
+        <div class="p-3 px-6 grid gap-4">
+            <label class="fieldset">
+                <span class="label">PROJECT NAME</span>
+                <input type="text" class="input input-sm sm:input-md validator" required name="project_name" placeholder="Enter Project Name">
+                <p class="validator-hint hidden">Required</p>
+            </label>
+
+            <label class="fieldset">
+                <span class="label">GITLAB ID</span>
+                <input type="number" class="input input-sm sm:input-md validator" required name="gitlab_id" placeholder="Enter Project Gitlab Id">
+                <p class="validator-hint hidden">Enter a valid gitlab id. Required</p>
+            </label>
+
+            <label class="fieldset">
+                <span class="label">STATUS</span>
+                <select class="select" required name="status">
+                    <option value="" disabled selected>Current Project Status</option>
+                    @foreach(App\Enums\ProjectStatus::cases() as $status)
+                        <option value="{{ $status->value }}"> {{ $status->label() }} </option>
+                    @endforeach
+                </select>
+                <p class="validator-hint hidden">Required</p>
+            </label>
+
+            <label class="fieldset">
+                <span class="label">PROJECT DESCRIPTION</span>
+                <textarea class="textarea" name="description" placeholder="Enter Project Infomation"></textarea>
+                <p class="validator-hint"></p>
+            </label>
+        </div>
+    </x-modal.create>
     <x-modal.delete toDelete="Project"></x-modal.delete>
 </div>
 @endsection
