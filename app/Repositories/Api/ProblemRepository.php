@@ -4,14 +4,13 @@ namespace App\Repositories\Api;
 
 use App\Models\Problem;
 use App\Repositories\Interfaces\ProblemRepositoryInterface;
-use Illuminate\Http\Response;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class ProblemRepository implements ProblemRepositoryInterface
 {
     public function getAll() : LengthAwarePaginator
     {
-        return Problem::latest()->paginate();
+        return Problem::latest()->paginate(10);
     }
 
     public function getById(int $id) : Problem
@@ -20,22 +19,18 @@ class ProblemRepository implements ProblemRepositoryInterface
     
     }
 
-    public function create(array $data) : Problem
+    public function create(array $data): void
     {
-        return Problem::create($data);
+        Problem::create($data);
     }
 
-    public function update(int $id, array $data) : Problem
+    public function update(array $data, Problem $problem) : void
     {
-        $problem = Problem::findorfail($id);
         $problem->update($data);
-        return $problem;
     }
 
-    public function destroy(int $id) : Response
+    public function destroy(Problem $problem) : void
     {
-        $problem = Problem::findorfail($id);
         $problem->delete;
-        return response()->noContent();
     }
 }
