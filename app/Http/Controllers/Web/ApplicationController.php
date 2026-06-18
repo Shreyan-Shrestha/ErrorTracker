@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\ApplicationRequest;
 use App\Models\Application;
 use Illuminate\Http\RedirectResponse;
