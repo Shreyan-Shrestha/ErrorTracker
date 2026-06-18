@@ -10,8 +10,8 @@ interface ProjectRepositoryInterface
 {
     public function getAll(): LengthAwarePaginator;
     public function show(int $id): Project;
-    public function create(ProjectRequest $request): void;
-    public function update(ProjectRequest $request, Project $project): void;
+    public function create(array $data): void;
+    public function update(array $data, Project $project): void;
     public function updateStatus(Project $project): void;
     public function delete(Project $project): void;
 }

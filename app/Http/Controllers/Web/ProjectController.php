@@ -40,7 +40,8 @@ class ProjectController extends Controller
      */
     public function store(ProjectRequest $request)
     {
-        $this->project_repository->create($request);
+        $validated = $request->validated();
+        $this->project_repository->create($validated);
         return redirect()->route('projects.index')->with('status','Project created successfully');
     }
 
@@ -66,7 +67,8 @@ class ProjectController extends Controller
      */
     public function update(ProjectRequest $request, Project $project): void
     {
-        $this->project_repository->update($request, $project);
+        $validated = $request->validated();
+        $this->project_repository->update($validated, $project);
     }
 
     /**

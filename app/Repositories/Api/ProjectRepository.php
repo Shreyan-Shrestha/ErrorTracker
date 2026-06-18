@@ -13,13 +13,12 @@ class ProjectRepository implements ProjectRepositoryInterface
 {
     public function getAll(): LengthAwarePaginator
     {
-        return Project::latest()->paginate();
+        return Project::latest()->paginate(2);
     }
 
-    public function create(ProjectRequest $request): void
+    public function create(array $data): void
     {
-        $validated = $request->validated();
-        Project::create($validated);
+        Project::create($data);
     }
 
     public function show(int $id): Project
@@ -27,10 +26,9 @@ class ProjectRepository implements ProjectRepositoryInterface
         return Project::findorfail($id);
     }
 
-    public function update(ProjectRequest $request, Project $project): void
+    public function update(array $data, Project $project): void
     {
-        $validated = $request->validated();
-        $project->update($validated);
+        $project->update($data);
     }
 
     public function updateStatus(Project $project): void
