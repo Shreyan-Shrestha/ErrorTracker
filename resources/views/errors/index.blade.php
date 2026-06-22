@@ -1,9 +1,12 @@
-@extends('partials.layout', ['title' => 'ErrorTracker | Errors'])
+@extends('partials.layout', ['title' => 'WorldLink ErrorTracker | Errors'])
 
 @section('content')
 <div class="w-full p-6">
-    <x-buttons.primary>Report Error</x-buttons.primary>
-    <p class="text-2xl lg:text-4xl">Errors</p>
+    <x-buttons.primary onClick="OpenCreateModal(this.dataset.action)" dataAction="{{ route('errors.create') }}">
+        Report Error
+    </x-buttons.primary>
+
+    <p class="text-2xl lg:text-4xl font-bold">Errors</p>
 
     <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-6">
         <x-stat-card class="border-s-4 border-s-blue-300" title="Errors Reported" value="4,129" change="+12%" desc="in last 24hrs" iconColor="text-primary" iconBg="bg-blue-100">
@@ -32,8 +35,8 @@
             </x-slot:icon>
         </x-stat-card>
 
-        <div class="stat border border-s-4 border-s-red-700 text-red-700 border-gray-400 bg-red-50 shadow rounded-md p-6">
-            <div class="stat-figure p-2 rounded bg-red-100 text-red-800">
+        <div class="stat border border-s-4 border-s-red-700 text-red-700 border-gray-400 bg-red-50 shadow rounded-md p-2 xl:p-6">
+            <div class="stat-figure [grid-row:1] p-2 rounded bg-red-100 text-red-800">
                 <span>
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-exclamation-diamond" viewBox="0 0 16 16">
                         <path d="M6.95.435c.58-.58 1.52-.58 2.1 0l6.515 6.516c.58.58.58 1.519 0 2.098L9.05 15.565c-.58.58-1.519.58-2.098 0L.435 9.05a1.48 1.48 0 0 1 0-2.098zm1.4.7a.495.495 0 0 0-.7 0L1.134 7.65a.495.495 0 0 0 0 .7l6.516 6.516a.495.495 0 0 0 .7 0l6.516-6.516a.495.495 0 0 0 0-.7L8.35 1.134z" />
@@ -43,7 +46,6 @@
             </div>
 
             <div class="stat-title text-red-700 uppercase font-bold">Critical Errors</div>
-
             <div class="flex items-baseline">
                 <div class="stat-value"> 07 </div>
             </div>
@@ -87,7 +89,7 @@
         @endif
     </x-table>
 
-    <x-modal.create></x-modal.create>
+    <x-modal.create creating="Report Error"></x-modal.create>
     <x-modal.delete></x-modal.delete>
 </div>
 @endsection
