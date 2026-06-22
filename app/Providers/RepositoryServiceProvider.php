@@ -4,9 +4,11 @@ namespace App\Providers;
 
 use App\Repositories\Api\ProjectRepository as ApiProjectRepository;
 use App\Repositories\Api\ApplicationRepository as ApiApplicationRepository;
+use App\Repositories\Api\CategoryRepository;
 use App\Repositories\Api\ErrorTrackerRepository;
 use App\Repositories\Api\ProblemRepository;
 use App\Repositories\Interfaces\ApplicationRepositoryInterface;
+use App\Repositories\Interfaces\CategoryRepositoryInterface;
 use App\Repositories\Interfaces\ErrorTrackerRepositoryInterface;
 use App\Repositories\Interfaces\ProblemRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
@@ -23,6 +25,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(ApplicationRepositoryInterface::class, ApiApplicationRepository::class);
         $this->app->bind(ErrorTrackerRepositoryInterface::class, ErrorTrackerRepository::class);
         $this->app->bind(ProblemRepositoryInterface::class, ProblemRepository::class);
+        $this->app->bind(CategoryRepositoryInterface::class, CategoryRepository::class);
     }
 
     /**

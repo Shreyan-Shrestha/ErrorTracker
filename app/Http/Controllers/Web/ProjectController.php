@@ -6,9 +6,8 @@ use App\Repositories\Interfaces\ProjectRepositoryInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\ProjectRequest;
 use App\Models\Project;
-use Http;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
+
 
 class ProjectController extends Controller
 {
@@ -28,21 +27,13 @@ class ProjectController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(ProjectRequest $request)
     {
         $validated = $request->validated();
         $this->project_repository->create($validated);
-        return redirect()->route('projects.index')->with('status','Project created successfully');
+        return redirect()->route('projects.index')->with('success','Project created successfully');
     }
 
     /**
@@ -55,20 +46,13 @@ class ProjectController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
-    public function update(ProjectRequest $request, Project $project): void
+    public function update(ProjectRequest $request, Project $project): RedirectResponse
     {
         $validated = $request->validated();
         $this->project_repository->update($validated, $project);
+        return redirect()->route('projects.index')->with('success', 'Project Updated successfully');
     }
 
     /**

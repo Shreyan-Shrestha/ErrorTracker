@@ -31,6 +31,6 @@ class ProblemRepository implements ProblemRepositoryInterface
 
     public function destroy(Problem $problem) : void
     {
-        $problem->delete;
+        $problem->delete();
     }
 }

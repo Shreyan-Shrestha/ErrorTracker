@@ -2,18 +2,18 @@
 
 namespace App\Repositories\Api;
 
-use App\Models\Application;
 use App\Models\Category;
 use App\Repositories\Interfaces\CategoryRepositoryInterface;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Override;
+
 
 class CategoryRepository implements CategoryRepositoryInterface
 {
-    public function getAll(): LengthAwarePaginator
+    public function getAll(): Collection
     {
-        return Category::latest()->paginate(10);
+        return Category::latest()->get();
     }
 
     public function show(int $id): Category
@@ -30,9 +30,8 @@ class CategoryRepository implements CategoryRepositoryInterface
         $category->update($data);
     }
 
-    public function delete(int $id): void
+    public function delete(Category $category): void
     {
-        $category = Category::findOrFail($id);
         $category->delete();
     }
 }

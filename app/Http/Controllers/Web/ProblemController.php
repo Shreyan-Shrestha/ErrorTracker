@@ -3,40 +3,41 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\Api\ProblemRequest;
+use App\Models\Problem;
+use App\Repositories\Interfaces\CategoryRepositoryInterface;
 use App\Repositories\Interfaces\ProblemRepositoryInterface;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class ProblemController extends Controller
 {
     protected ProblemRepositoryInterface $problem_repository;
+    protected CategoryRepositoryInterface $category_repository;
 
-    public function __construct(ProblemRepositoryInterface $problem_repository)
+    public function __construct(ProblemRepositoryInterface $problem_repository, CategoryRepositoryInterface $category_repository)
     {
         $this->problem_repository = $problem_repository;
+        $this->category_repository = $category_repository;
     }
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View
     {
         $problems = $this->problem_repository->getAll();
-        return view('problems.index', compact('problems'));
+        $categories = $this->category_repository->getAll();
+        return view('problems.index', compact('problems', 'categories'));
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
+   
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ProblemRequest $request): RedirectResponse
     {
-        //
+        $validated = $request->validated();
+        $this->problem_repository->create($validated);
+        return redirect()->route('problems.index')->with(['status', 'Problem created successfully']);
     }
 
     /**
@@ -48,26 +49,21 @@ class ProblemController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ProblemRequest $request, Problem $problem): RedirectResponse
     {
-        //
+        $validated = $request->validated();
+        $this->problem_repository->update($validated, $problem);
+        return redirect()->route('problems.index')->with('success', 'Problem record edited successfully');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Problem $problem): RedirectResponse
     {
-        //
+        $this->problem_repository->destroy($problem);
+        return redirect()->route('problems.index')->with('success', 'Problem record deleted successfully');
     }
 }
