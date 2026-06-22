@@ -1,6 +1,6 @@
 @props([
-'headers',
-'title'
+'headers' => null,
+'title' => null
 ])
 
 <div class="overflow-x-auto border border-gray-400 rounded-box mt-6 shadow-md sm:rounded-lg bg-white">

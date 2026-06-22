@@ -14,12 +14,31 @@
 
         <div class="drawer-content">
             @include('partials.navbar')
-
+            <x-alert />
             @yield('content')
         </div>
-        
+
         @include('partials.sidebar')
     </div>
+
+    <script>
+        function OpenCreateModal(action, modalId = 'modal_create') {
+            document.getElementById('create_form_' + modalId).action = action;
+            document.getElementById(modalId).showModal();
+        }
+
+        function OpenEditModal(btn) {
+    const modalId = btn.dataset.modal;
+    document.getElementById('create_form_' + modalId).action = btn.dataset.action;
+    document.getElementById(modalId).showModal();
+
+    // populate fields from data attributes
+    Object.entries(btn.dataset).forEach(([key, value]) => {
+        const field = document.querySelector('#' + modalId + ' [name="' + key + '"]');
+        if (field) field.value = value;
+    });
+}
+    </script>
     @stack('scripts')
 </body>
 
