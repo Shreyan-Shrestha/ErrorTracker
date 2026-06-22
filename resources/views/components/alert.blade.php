@@ -1,0 +1,28 @@
+@if(session('success'))
+<div role="alert" class="alert alert-success mb-4 px-6" id="alert-success">
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+  </svg>
+  <span>{{session('success')}}</span>
+  <button class="btn btn-sm btn-ghost btn-circle" onclick="document.getElementById('alert-success').remove()">X</button>
+</div>
+@endif
+
+@if(session('error'))
+<div role="alert" class="alert alert-error px-6">
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+  </svg>
+  <span>Error! Task failed successfully.</span>
+  <button class="btn btn-sm btn-ghost btn-circle" onclick="document.getElementById('alert-success').remove()">X</button>
+</div>
+@endif
+
+@push('scripts')
+<script>
+    ['alert-success', 'alert-error'].forEach(id=> {
+        const btn = document.getElementById(id);
+        if (btn) setTimeout(() => btn.remove(), 4000);
+    });
+</script>
+@endpush
