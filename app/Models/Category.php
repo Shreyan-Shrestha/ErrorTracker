@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
 {
-    protected $table = 'category';
-    protected $fillable = ['name', ' severity'];
+    protected $table = 'categories';
+    protected $fillable = ['name', 'severity'];
+
+    protected $casts = [
+        'severity' => \App\Enums\ErrorSeverity::class,
+    ];
 }
