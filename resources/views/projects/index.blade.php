@@ -73,9 +73,16 @@
             <td> {{ $project->updated_at }}</td>
             <td>
                 <div class="flex gap-4 items-center-safe justify-center-safe">
-                    <a href="{{ route('projects.edit', $project->id)}}" class="link">
+                    <button class="link" data-action="{{route('projects.edit', $project)}}"
+                        onclick="OpenEditModal(this)" 
+                        data-modal="modal_edit_project"
+                        data-project_name="{{$project->project_name}}"
+                        data-gitlab_id="{{$project->gitlab_id}}" 
+                        data-status="{{$project->status->value}}"
+                        data-description="{{$project->description}}">
                         Edit
-                    </a>
+                    </button>
+
                     <button class="link hover:text-warning-content delete-btn"
                         data-action="{{ route('projects.delete', $project->id) }}">
                         Delete
@@ -108,7 +115,7 @@
                 <select class="select" required name="status">
                     <option value="" disabled selected>Current Project Status</option>
                     @foreach(App\Enums\ProjectStatus::cases() as $status)
-                        <option value="{{ $status->value }}"> {{ $status->label() }} </option>
+                    <option value="{{ $status->value }}"> {{ $status->label() }} </option>
                     @endforeach
                 </select>
                 <p class="validator-hint hidden">Required</p>
@@ -121,6 +128,40 @@
             </label>
         </div>
     </x-modal.create>
+
+    <x-modal.create id="modal_edit_project" creating="Edit Project" methodPatch="true">
+        <div class="p-3 px-6 grid gap-4">
+            <label class="fieldset">
+                <span class="label">PROJECT NAME</span>
+                <input type="text" id="edit_project_project_name" class="input input-sm sm:input-md validator" required name="project_name" placeholder="Enter Project Name">
+                <p class="validator-hint hidden">Required</p>
+            </label>
+
+            <label class="fieldset">
+                <span class="label">GITLAB ID</span>
+                <input type="number" id="edit_project_gitlab_id" class="input input-sm sm:input-md validator" required name="gitlab_id" placeholder="Enter Project Gitlab Id">
+                <p class="validator-hint hidden">Enter a valid gitlab id. Required</p>
+            </label>
+
+            <label class="fieldset">
+                <span class="label">STATUS</span>
+                <select class="select" required name="status">
+                    <option value="" disabled selected>Current Project Status</option>
+                    @foreach(App\Enums\ProjectStatus::cases() as $status)
+                    <option value="{{ $status->value }}"> {{ $status->label() }} </option>
+                    @endforeach
+                </select>
+                <p class="validator-hint hidden">Required</p>
+            </label>
+
+            <label class="fieldset">
+                <span class="label">PROJECT DESCRIPTION</span>
+                <textarea class="textarea" id="edit_project_description" name="description" placeholder="Enter Project Infomation"></textarea>
+                <p class="validator-hint"></p>
+            </label>
+        </div>
+    </x-modal.create>
+
     <x-modal.delete toDelete="Project"></x-modal.delete>
 </div>
 @endsection
