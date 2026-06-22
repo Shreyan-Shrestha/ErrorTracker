@@ -7,12 +7,14 @@ use App\Repositories\Api\ApplicationRepository as ApiApplicationRepository;
 use App\Repositories\Api\CategoryRepository;
 use App\Repositories\Api\ErrorTrackerRepository;
 use App\Repositories\Api\ProblemRepository;
+use App\Repositories\Api\UserRecordRepository;
 use App\Repositories\Interfaces\ApplicationRepositoryInterface;
 use App\Repositories\Interfaces\CategoryRepositoryInterface;
 use App\Repositories\Interfaces\ErrorTrackerRepositoryInterface;
 use App\Repositories\Interfaces\ProblemRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 use App\Repositories\Interfaces\ProjectRepositoryInterface;
+use App\Repositories\Interfaces\UserRecordRepositoryInterface;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -26,6 +28,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(ErrorTrackerRepositoryInterface::class, ErrorTrackerRepository::class);
         $this->app->bind(ProblemRepositoryInterface::class, ProblemRepository::class);
         $this->app->bind(CategoryRepositoryInterface::class, CategoryRepository::class);
+        $this->app->bind(UserRecordRepositoryInterface::class, UserRecordRepository::class);
     }
 
     /**
