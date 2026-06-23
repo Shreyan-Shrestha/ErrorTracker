@@ -1,5 +1,6 @@
-<x-layout class="justify-content-center align-items-center dflex">
-    <x-navbar></x-navbar>
+@extends('partials.layout')
+
+@section('content')
     <div class="p-3 container mx-auto mt-5 gap-x-2">
        
         <h1 class="text-center text-4xl text-amber-700">Applications:</h1>
@@ -12,4 +13,4 @@
         @endforeach
         @endif
     </div>
-</x-layout>
+@endsection

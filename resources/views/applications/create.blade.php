@@ -1,6 +1,6 @@
-<x-layout class="flex-column justify-center-safe items-center min-h-screen">
-<x-navbar></x-navbar>
+@extends('partials.layout')
 
+@section('content')
 <div class="container w-98 p-3 mt-5 mx-auto">
     <h1 class="text-2xl text-center">Add new Application</h3>
     <form class="form grid grid-cols-1 justify-items-center gap-4">
@@ -13,4 +13,4 @@
         </label>
     </form>
 </div>
-</x-layout>
+@endsection
