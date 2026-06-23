@@ -9,6 +9,7 @@ use App\Http\Controllers\Web\CategoryController;
 use App\Http\Controllers\Web\ErrorTrackerController;
 use App\Http\Controllers\Web\ProblemController;
 use App\Http\Controllers\Web\ProjectController;
+use App\Http\Controllers\Web\UserRecordsController;
 use App\Models\Category;
 
 Route::get('/', [ErrorTrackerController::class, 'index']);
@@ -45,12 +46,18 @@ Route::middleware('login')->group(function () {
 
     Route::prefix('category')->name('category.')->group( function(){
         Route::post('/', [CategoryController::class, 'store'])->name('create');
+        Route::patch('/{category}', [CategoryController::class, 'update'])->name('update');
         Route::delete('/delete/{category}', [CategoryController::class, 'destroy'])->name('delete');
     });
 
-    Route::get('/users', function () {
-        return view('users/index');
+    Route::prefix('users')->name('users.')->group(function(){
+        Route::get('/', [UserRecordsController::class, 'index'])->name('index');
+        Route::post('/', [UserRecordsController::class, 'store'])->name('create');
+        Route::get('/{user}', [UserRecordsController::class, 'show'])->name('show');
+        Route::patch('/{user}', [UserRecordsController::class, 'update'])->name('update');
+        Route::delete('delete/{user}',[UserRecordsController::class, 'delete'])->name('delete');
     });
+    
 });
 
 
