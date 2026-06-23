@@ -34,7 +34,7 @@ class CategoryController extends Controller
     {
         $validated = $request->validated();
         $this->category_repository->create($validated);
-        return redirect()->route('problems.index')->with('status', 'Problem Category Added Successfully.');
+        return back()->with('success', 'Problem Category Added Successfully.');
     }
 
     /**
@@ -60,6 +60,6 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         $this->category_repository->delete($category);
-        return redirect()->route('problems.index')->with('status', 'Problem Category Removed Successfully.');
+        return back()->with('success', 'Problem Category Removed Successfully.');
     }
 }

@@ -33,7 +33,7 @@ class ProjectController extends Controller
     {
         $validated = $request->validated();
         $this->project_repository->create($validated);
-        return redirect()->route('projects.index')->with('success','Project created successfully');
+        return back()->with('success','Project created successfully');
     }
 
     /**
@@ -52,7 +52,7 @@ class ProjectController extends Controller
     {
         $validated = $request->validated();
         $this->project_repository->update($validated, $project);
-        return redirect()->route('projects.index')->with('success', 'Project Updated successfully');
+        return back()->with('success', 'Project Updated successfully');
     }
 
     /**
@@ -61,6 +61,6 @@ class ProjectController extends Controller
     public function destroy(Project $project): RedirectResponse
     {
         $this->project_repository->delete($project);
-        return redirect()->route('projects.index')->with('success','Project deleted successfully');
+        return back()->with('success','Project deleted successfully');
     }
 }

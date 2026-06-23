@@ -37,7 +37,7 @@ class ProblemController extends Controller
     {
         $validated = $request->validated();
         $this->problem_repository->create($validated);
-        return redirect()->route('problems.index')->with(['status', 'Problem created successfully']);
+        return back()->with(['success', 'Problem created successfully']);
     }
 
     /**
@@ -55,7 +55,7 @@ class ProblemController extends Controller
     {
         $validated = $request->validated();
         $this->problem_repository->update($validated, $problem);
-        return redirect()->route('problems.index')->with('success', 'Problem record edited successfully');
+        return back()->with('success', 'Problem record edited successfully');
     }
 
     /**
@@ -64,6 +64,6 @@ class ProblemController extends Controller
     public function destroy(Problem $problem): RedirectResponse
     {
         $this->problem_repository->destroy($problem);
-        return redirect()->route('problems.index')->with('success', 'Problem record deleted successfully');
+        return back()->with('success', 'Problem record deleted successfully');
     }
 }

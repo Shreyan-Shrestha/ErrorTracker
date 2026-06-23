@@ -41,7 +41,7 @@ class ErrorTrackerController extends Controller
     public function store(ErrorTrackerRequest $request) : RedirectResponse
     {
        $this->error_tracker_repository->create($request);
-        return redirect()->route('errors.index')->with('status', 'Error reported succesfully');
+        return back()->with('success', 'Error reported succesfully');
     }
 
     /**
@@ -66,7 +66,7 @@ class ErrorTrackerController extends Controller
     public function update(ErrorTrackerRequest $request, ErrorTracker $error)
     {
         $this->error_tracker_repository->update($request, $error);
-        return redirect()->route('errors.index')->with('status', 'Error Report updated sucessfully');
+        return back()->with('success', 'Error Report updated sucessfully');
     }
 
     /**
@@ -75,6 +75,6 @@ class ErrorTrackerController extends Controller
     public function destroy(ErrorTracker $error)
     {
         $this->error_tracker_repository->delete($error);
-        return redirect()->route('errors.index')->with('status','Error record deleted successfully');
+        return back()->with('success','Error record deleted successfully');
     }
 }
