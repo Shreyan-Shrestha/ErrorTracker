@@ -59,7 +59,7 @@
     $count=count($headers);
     @endphp
     <x-table :headers="$headers" title="Error Log">
-        @if(empty($errorsdata))
+        @if($errorsdata->isEmpty())
         <tr class="bg-white hover:bg-base-300 p-4">
             <td colspan="{{ $count }}" class="px-4 py-3 text-center text-gray-500">
                 No Error reported yet.
@@ -91,5 +91,9 @@
 
     <x-modal.create creating="Report Error"></x-modal.create>
     <x-modal.delete></x-modal.delete>
+
+    @if($errors->any())
+    <div id="modal-error-target" data-modal="{{ session('modal_id', 'modal_create') }}" class="hidden"></div>
+    @endif
 </div>
 @endsection

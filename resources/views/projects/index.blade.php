@@ -52,7 +52,7 @@
     @endphp
 
     <x-table :headers="$headers" title='Current Projects'>
-        @if(empty($projects))
+        @if($projects->isEmpty())
         <tr class="bg-white hover:bg:base-300 p-4">
             <td colspan="{{ $count }}" class="px-4 py-3 text-center text-gray-500">
                 No projects added yet.
@@ -74,10 +74,10 @@
             <td>
                 <div class="flex gap-4 items-center-safe justify-center-safe">
                     <button class="link" data-action="{{route('projects.edit', $project)}}"
-                        onclick="OpenEditModal(this)" 
+                        onclick="OpenEditModal(this)"
                         data-modal="modal_edit_project"
                         data-project_name="{{$project->project_name}}"
-                        data-gitlab_id="{{$project->gitlab_id}}" 
+                        data-gitlab_id="{{$project->gitlab_id}}"
                         data-status="{{$project->status->value}}"
                         data-description="{{$project->description}}">
                         Edit
@@ -163,5 +163,9 @@
     </x-modal.create>
 
     <x-modal.delete toDelete="Project"></x-modal.delete>
+
+    @if($errors->any())
+    <div id="modal-error-target" data-modal="{{ session('modal_id', 'modal_create') }}" class="hidden"></div>
+    @endif
 </div>
 @endsection

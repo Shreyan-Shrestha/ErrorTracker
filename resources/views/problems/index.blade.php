@@ -97,11 +97,11 @@
                     <td></td>
                     <td>
                         <div class="flex gap-4 items-center-safe justify-center-safe">
-                            <button class="link" 
-                            data-modal="modal_edit_problem" 
-                            data-action="{{route('problems.edit', $problem)}}" 
-                            onclick="OpenEditModal(this)" 
-                            data-name="{{ $problem->name }}">
+                            <button class="link"
+                                data-modal="modal_edit_problem"
+                                data-action="{{route('problems.edit', $problem)}}"
+                                onclick="OpenEditModal(this)"
+                                data-name="{{ $problem->name }}">
                                 Edit
                             </button>
 
@@ -160,5 +160,9 @@
         </div>
     </x-modal.create>
     <x-modal.delete toDelete="Problem"></x-modal.delete>
+
+    @if($errors->any())
+    <div id="modal-error-target" data-modal="{{ session('modal_id', 'modal_create') }}" class="hidden"></div>
+    @endif
 </div>
 @endsection
