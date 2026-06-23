@@ -29,14 +29,3 @@
         <button>close</button>
     </form>
 </dialog>
-
-@push('scripts')
-<script>
-    document.querySelectorAll('.delete-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            document.getElementById('delete_form').action = this.dataset.action;
-            modal_delete.showModal();
-        });
-    });
-</script>
-@endpush

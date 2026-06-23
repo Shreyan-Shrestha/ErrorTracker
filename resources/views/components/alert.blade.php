@@ -17,12 +17,3 @@
   <button class="btn btn-sm btn-ghost btn-circle" onclick="document.getElementById('alert-success').remove()">X</button>
 </div>
 @endif
-
-@push('scripts')
-<script>
-    ['alert-success', 'alert-error'].forEach(id=> {
-        const btn = document.getElementById(id);
-        if (btn) setTimeout(() => btn.remove(), 4000);
-    });
-</script>
-@endpush
