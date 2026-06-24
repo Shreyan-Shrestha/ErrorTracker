@@ -18,7 +18,8 @@ Route::get('/', [ErrorTrackerController::class, 'index']);
 Route::view('/login', 'auth.login')->name('login');
 Route::post('/login', WebLogin::class)->name('user.login');
 Route::view('/register', 'auth.register')->name('register');
-Route::get('/registerform', [UserAuthenticationController::class, 'registerForm'])->name('registerform');
+Route::post('/register', [UserAuthenticationController::class, 'register'])->name('user.register');
+Route::get('/registerform', [UserAuthenticationController::class, 'registerForm'])->name('user.registerform');
 Route::post('/logout', Logout::class)->name('logout')->middleware('login');
 
 Route::middleware('login')->group(function () {
@@ -46,7 +47,7 @@ Route::middleware('login')->group(function () {
 
     Route::prefix('category')->name('category.')->group( function(){
         Route::post('/', [CategoryController::class, 'store'])->name('create');
-        Route::patch('/{category}', [CategoryController::class, 'update'])->name('update');
+        Route::patch('/{category}', [CategoryController::class, 'update'])->name('edit');
         Route::delete('/delete/{category}', [CategoryController::class, 'destroy'])->name('delete');
     });
 
@@ -54,8 +55,8 @@ Route::middleware('login')->group(function () {
         Route::get('/', [UserRecordsController::class, 'index'])->name('index');
         Route::post('/', [UserRecordsController::class, 'store'])->name('create');
         Route::get('/{user}', [UserRecordsController::class, 'show'])->name('show');
-        Route::patch('/{user}', [UserRecordsController::class, 'update'])->name('update');
-        Route::delete('delete/{user}',[UserRecordsController::class, 'delete'])->name('delete');
+        Route::patch('/{user}', [UserRecordsController::class, 'update'])->name('edit');
+        Route::delete('/delete/{user}',[UserRecordsController::class, 'destroy'])->name('delete');
     });
     
 });

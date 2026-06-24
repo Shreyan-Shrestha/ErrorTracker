@@ -3,47 +3,44 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use App\Models\UserRecords;
+use App\Http\Requests\Api\UserRecordRequest;
+use App\Models\UserRecord;
+use App\Repositories\Interfaces\UserRecordRepositoryInterface;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class UserRecordsController extends Controller
 {
+    protected UserRecordRepositoryInterface $user_record_repository;
+
+    public function __construct(UserRecordRepositoryInterface $user_record_repository)
+    {
+        $this->user_record_repository = $user_record_repository;
+    }
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $userrecords = $this->user_record_repository->getAll();
+        return view('userrecords.index', compact('userrecords'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(UserRecordRequest $request): RedirectResponse
     {
-        //
+        $validated = $request->validated();
+        $this->user_record_repository->create($validated);
+        return back()->with('success', 'User Added Successfully');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(UserRecords $userRecords)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(UserRecords $userRecords)
+    public function show(UserRecord $userRecord)
     {
         //
     }
@@ -51,16 +48,19 @@ class UserRecordsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, UserRecords $userRecords)
+    public function update(UserRecordRequest $request, UserRecord $user): RedirectResponse
     {
-        //
+        $validated = $request->validated();
+        $this->user_record_repository->update($validated, $user);
+        return back()->with('success', 'User Record Updated Successfully');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(UserRecords $userRecords)
+    public function destroy(UserRecord $user): RedirectResponse
     {
-        //
+        $this->user_record_repository->destroy($user);
+        return back()->with('success', 'User Removed Successfully');
     }
 }
