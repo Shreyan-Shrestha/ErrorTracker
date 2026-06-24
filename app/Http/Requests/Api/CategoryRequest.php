@@ -29,4 +29,21 @@ class CategoryRequest extends FormRequest
             'severity' => ['required', Rule::enum(ErrorSeverity::class)],
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'name.required' => 'Please provide a valid Category Name',
+            'name.string' => 'Category Name can only be characters',
+            'name.max' => 'Category Name must be under 100 characters',
+            'severity.required' => 'Please select a Severity level',
+            'severity.rule' => 'Invalid Category Severity ',
+        ];
+    }
+
+    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    {
+        session()->flash('modal_id', 'modal_create');
+        parent::failedValidation($validator);
+    }
 }

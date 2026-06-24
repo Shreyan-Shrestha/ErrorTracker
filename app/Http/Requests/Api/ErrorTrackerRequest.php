@@ -24,14 +24,15 @@ class ErrorTrackerRequest extends FormRequest
      */
     public function rules(): array
     {
-        return match(true){
+        return match (true) {
             $this->routeIs('error.create') => $this->storeRules(),
             $this->routeIs('error.update') => $this->updateRules(),
             $this->routeIs('error.markfixed') => $this->markfixedRules(),
         };
     }
 
-    private function storeRules(){
+    private function storeRules()
+    {
         return [
             "region"             => ['required', 'string', 'max:25'],
             "branch"             => ['required', 'string', 'max:30'],
@@ -42,12 +43,13 @@ class ErrorTrackerRequest extends FormRequest
             "start_time"         => ['required', 'string'],
             "issue_triggered_by" => ['sometimes', 'string', 'max:500'],
             "error_message"      => ['sometimes', 'string', 'max:200'],
-            "severity"           => ['required', Rule::enum(ErrorSeverity::class) ]
+            "severity"           => ['required', Rule::enum(ErrorSeverity::class)]
         ];
     }
 
-    private function updateRules(){
-       return [
+    private function updateRules()
+    {
+        return [
             "region"             => ['sometimees', 'string', 'max:25'],
             "branch"             => ['sometimes', 'string', 'max:30'],
             "application_id"     => ['sometimes', 'int'],
@@ -57,11 +59,20 @@ class ErrorTrackerRequest extends FormRequest
             "start_time"         => ['sometimes', 'string'],
             "issue_triggered_by" => ['sometimes', 'string', 'max:500'],
             "error_message"      => ['sometimes', 'string', 'max:200'],
-            "severity"           => ['sometimes', Rule::enum(ErrorSeverity::class) ]
+            "severity"           => ['sometimes', Rule::enum(ErrorSeverity::class)]
         ];
     }
 
-    private function markfixedRules() : void {
-        
+    private function markfixedRules(): void {}
+
+    public function messages(): array
+    {
+        return [];
+    }
+
+    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    {
+        session()->flash('modal_id', 'modal_create');
+        parent::failedValidation($validator);
     }
 }

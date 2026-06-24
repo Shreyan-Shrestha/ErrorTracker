@@ -23,7 +23,22 @@ class ProblemRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required','string', 'max:100']
+            'name' => ['required', 'string', 'max:100']
         ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'Problem Name is Required',
+            'name.string' => 'Problem Name must have only characters',
+            'name.max' => 'Problem Name Must Be Less Than 100 Characters',
+        ];
+    }
+
+    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    {
+        session()->flash('modal_id', 'modal_create');
+        parent::failedValidation($validator);
     }
 }
