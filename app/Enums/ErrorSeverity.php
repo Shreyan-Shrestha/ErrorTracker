@@ -38,4 +38,14 @@ enum ErrorSeverity : string
         };    
     
     }
+
+    public function impact(): int
+    {
+        return match($this){
+            ErrorSeverity::Critical => 8,
+            ErrorSeverity::High => 5,
+            ErrorSeverity::Medium => 3,
+            ErrorSeverity::Low => 1
+        };
+    }
 }
