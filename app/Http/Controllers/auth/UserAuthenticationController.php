@@ -10,6 +10,11 @@ use Illuminate\Support\Facades\Hash;
 
 class UserAuthenticationController extends Controller
 {
+    public function registerForm()
+    {
+        return view('auth.register');
+    }
+
     public function register(UserAuthenticationRequest $request) : RedirectResponse
     {
         $validated = $request->validated();

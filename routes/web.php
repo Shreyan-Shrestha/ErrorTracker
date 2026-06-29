@@ -26,6 +26,7 @@ Route::middleware('login')->group(function () {
 
     Route::prefix('errors')->name('errors.')->group(function () {
         Route::get('/', [ErrorTrackerController::class, 'index'])->name('index');
+        Route::get('/report',[ErrorTrackerController::class, 'create'])->name('add');
         Route::post('/', [ErrorTrackerController::class, 'store'])->name('create');
         Route::delete('/delete/{error}', [ErrorTrackerController::class, 'destroy'])->name('delete');
     });
