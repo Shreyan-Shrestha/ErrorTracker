@@ -45,23 +45,23 @@
         @else
         @foreach($userrecords as $user)
         <tr class="bg-white hover:bg-base-300 p-4">
-            <td class="px-4 py-3 text-center text-gray-500">{{$user->first_name }} {{$user->last_name}}</td>
+            <td class="px-4 py-3 text-sm md:text-lg  text-gray-500">{{$user->first_name }} {{$user->last_name}}</td>
 
-            <td class="px-4 py-3 text-center text-gray-500">{{$user->email}}</td>
+            <td class="px-4 py-3 text-sm md:text-lg text-gray-500">{{$user->email}}</td>
 
-            <td class="px-4 py-3 text-center text-gray-500">{{$user->role->label()}}</td>
+            <td class="px-4 py-3 text-sm md:text-lg text-gray-500">{{$user->role->label()}}</td>
 
-            <td class="px-4 py-3 text-center text-gray-500">{{$user->region}}</td>
+            <td class="px-4 py-3 text-sm md:text-lg text-gray-500">{{$user->region}}</td>
 
-            <td class="px-4 py-3 text-center text-gray-500">{{$user->branch}}</td>
+            <td class="px-4 py-3 text-sm md:text-lg text-gray-500">{{$user->branch}}</td>
 
-            <td class="px-4 py-3 text-center text-gray-500"></td>
+            <td class="px-4 py-3 text-sm md:text-lg text-gray-500"></td>
 
-            <td class="px-4 py-3 text-center text-gray-500"></td>
+            <td class="px-4 py-3 text-sm md:text-lg text-gray-500"></td>
 
             <td class="px-4 py-3 text-center text-gray-500">
                 <div class="flex gap-4 items-center-safe justify-center-safe">
-                    <button class="link"
+                    <button class="btn btn-md btn-ghost"
                         data-action="{{route('users.edit', $user)}}"
                         data-modal="modal_edit_user"
                         data-first_name="{{$user->first_name}}"
@@ -74,7 +74,7 @@
                         Edit
                     </button>
 
-                    <button class="link hover:text-warning-content delete-btn"
+                    <button class="btn btn-ghost btn-md hover:btn-error hover:text-white delete-btn"
                         data-action="{{ route('users.delete', $user->id) }}">
                         Delete
                     </button>
@@ -86,7 +86,7 @@
     </x-table>
 
     <x-modal.create creating="Add User">
-        <x-error-alert/>
+        <x-error-alert />
 
         <div class="p-3 px-6 grid gap-4">
             <div class="grid md:grid-cols-2 gap-2 sm:gap-4">
@@ -138,28 +138,28 @@
 
     <x-modal.create id="modal_edit_user" creating="Edit User Details" methodPatch="true">
         <x-error-alert />
-        
+
         <div class="p-3 px-6 grid gap-4">
             <div class="grid md:grid-cols-2 gap-2 sm:gap-4">
                 <label class="fieldset">
                     <span class="label">FIRST NAME</span>
-                    <input type="text" required name="first_name" class="input input-sm validator" 
-                    value="{{old('first_name')}}" placeholder="Enter First Name">
+                    <input type="text" required name="first_name" class="input input-sm validator"
+                        value="{{old('first_name')}}" placeholder="Enter First Name">
                     <p class="validator-hint hidden">Required.</p>
                 </label>
 
                 <label class="fieldset">
                     <span class="label">LAST NAME</span>
-                    <input type="text" required name="last_name" class="input input-sm validator" 
-                    value="{{old('last_name')}}" placeholder="Enter Last Name">
+                    <input type="text" required name="last_name" class="input input-sm validator"
+                        value="{{old('last_name')}}" placeholder="Enter Last Name">
                     <p class="validator-hint hidden">Required.</p>
                 </label>
             </div>
 
             <label class="fieldset">
                 <span class="label">EMAIL ADDRESS</span>
-                <input type="email" required name="email" class=" input input-sm sm:input-md validator" 
-                value="{{old('email')}}" placeholder="Enter valid email address">
+                <input type="email" required name="email" class=" input input-sm sm:input-md validator"
+                    value="{{old('email')}}" placeholder="Enter valid email address">
                 <p class="validator-hint hidden">Required.</p>
             </label>
 

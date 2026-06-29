@@ -9,7 +9,7 @@
 </head>
 
 <body class="flex min-h-screen flex-col bg-base-200 @yield('bodyClass')">
-    <div class="drawer lg:drawer-open">
+    <div class="drawer drawer-open">
         <input id="my-drawer-4" type="checkbox" class="drawer-toggle" />
 
         <div class="drawer-content">

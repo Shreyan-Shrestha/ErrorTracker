@@ -18,3 +18,11 @@ td{
 .modal-box{
     padding:0% !important;
 }
+
+thead tr, tr.pagination{
+    background-color: #F2F3FF !important;
+}
+
+input, select{
+    background-color: #F2F3FF !important;
+}

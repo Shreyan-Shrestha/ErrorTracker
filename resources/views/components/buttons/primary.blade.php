@@ -4,7 +4,7 @@
 ])
 
 <div class="inline-block float-end">
-    <button class="btn btn-sm sm:btn-sm md:btn-md pe-5 md:pe-6 bg-blue-700 text-white hover:bg-blue-800 active:bg-blue-900 gap-0.5" 
+    <button class="btn btn-sm sm:btn-sm md:btn-md pe-5 md:pe-6 rounded-full bg-blue-700 shadow-sm md:shadow-md shadow-blue-200 text-white hover:bg-blue-800 active:bg-blue-900 gap-0.5" 
     onclick="{{ $onClick }}" data-action="{{ $dataAction }}">
         <span>
             <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus size-6" viewBox="0 0 16 16">

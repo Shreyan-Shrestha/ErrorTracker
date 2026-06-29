@@ -13,7 +13,7 @@
 
     </div>
 
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-6 mt-6">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-6 mt-6 p-4 lg:p-6">
         <x-stat-card class="border-s-4 border-s-primary" title="Active Problems" value="24" change="+4 this week" desc="open issues" iconColor="text-primary" iconBg="bg-blue-100">
             <x-slot:icon>
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person-vcard" viewBox="0 0 16 16">
@@ -59,7 +59,7 @@
         </div>
     </div>
 
-    <div class="grid gird-cols-1 md:grid-cols-3 gap-6 mt-6">
+    <div class="grid gird-cols-1 md:grid-cols-3 gap-6 mt-6 p-4 lg:p-6">
         <div class="col-1 rounded-box border border-gray-400 mt-6 p-2 md:p-4">
             <p class="text-3xl">Problem Categories</p>
             <div class="px-6">
@@ -78,7 +78,7 @@
         </div>
 
         @php
-        $headers = ['Name', 'Severity', 'Status', 'Actions'];
+        $headers = ['Name', 'Impact Score', 'Severity', 'Status', 'Actions'];
         $count = count($headers);
         @endphp
         <div class="col-1 md:col-span-2">
@@ -93,6 +93,9 @@
                 @foreach( $problems as $problem )
                 <tr class="bg-white hover:bg-base-300 p-4">
                     <td> {{ $problem->name }}</td>
+                    <td>
+                        <progress class="progress w-32 progress-error" value="8" max="10"></progress>
+                    </td>
                     <td></td>
                     <td></td>
                     <td>
@@ -119,26 +122,28 @@
     </div>
 
     <x-modal.create id="modal_problem" creating="Add Problem">
+        <x-error-alert />
         <div class="p-3 px-6 grid gap-4">
             <label class="fieldset">
                 <span class="label">PROBLEM NAME</span>
-                <input type="text" class="input input-sm sm:input-md validator" required name="name" placeholder="Enter Problem Name">
+                <input type="text" class="input input-sm sm:input-md validator" value="{{old('name')}}" required name="name" placeholder="Enter Problem Name">
                 <p class="validator-hint hidden">Required</p>
             </label>
         </div>
     </x-modal.create>
 
     <x-modal.create id="modal_category" creating="Add Problem Category">
+        <x-error-alert />
         <div class="p-3 px-6 grid gap-4">
             <label class="fieldset">
                 <span class="label">Category Name</span>
-                <input type="text" class="input input-sm sm:input-md validator" name="name"
-                    validator required placeholder="Enter Problem Name">
+                <input type="text" class="input input-sm sm:input-md validator" value="{{old('name')}}" 
+                name="name" validator required placeholder="Enter Problem Name">
                 <div class="validator-hint hidden">Required</div>
             </label>
             <label class="fieldset">
                 <span class="label">SEVERITY</span>
-                <select class="select" required name="severity">
+                <select class="select" required name="severity" value="{{old('severity')}}">
                     <option value="" disabled selected>Category Severity</option>
                     @foreach(App\Enums\ErrorSeverity::cases() as $severity)
                     <option value="{{$severity->value}}"> {{ $severity->label() }} </option>
@@ -150,11 +155,13 @@
     </x-modal.create>
 
     <x-modal.create id="modal_edit_problem" creating="Edit Problem" methodPatch="true">
+        <x-error-alert />
         <div class="p-3 px-6 grid gap-4">
             <input type="hidden" name="problem_id" id="edit_problem_id">
             <label class="fieldset">
                 <span class="label">PROBLEM NAME</span>
-                <input type="text" class="input input-sm sm:input-md validator" required name="name" id="edit_problem_name" placeholder="Enter Problem Name">
+                <input type="text" class="input input-sm sm:input-md validator" required value=" {{old('name')}} "
+                name="name" id="edit_problem_name" placeholder="Enter Problem Name">
                 <p class="validator-hint hidden">Required</p>
             </label>
         </div>
