@@ -36,7 +36,7 @@ class UserRecordRequest extends FormRequest
         return [
             'first_name' => ['required', 'string', 'max:50'],
             'last_name' => ['required', 'string', 'max:20'],
-            'email' => ['required', 'email:rfc,dns', 'unique:users,user_records'],
+            'email' => ['required', 'email:rfc,dns', 'unique:user_records,email'],
             'role' => ['required', Rule::enum(UserRole::class)],
             'region' => ['required', 'string'],
             'branch' => ['required', 'string']
@@ -48,7 +48,11 @@ class UserRecordRequest extends FormRequest
         return [
             'first_name' => ['sometimes', 'string', 'max:50'],
             'last_name' => ['sometimes', 'string', 'max:20'],
-            'email' => ['sometimes', 'email:rfc,dns'],
+            'email' => [
+                'sometimes',
+                'email:rfc,dns',
+                Rule::unique('user_records', 'email')->ignore($this->route('user')->id ?? null),
+            ],
             'role' => ['sometimes', Rule::enum(UserRole::class)],
             'region' => ['sometimes', 'string'],
             'branch' => ['sometimes', 'string']
@@ -65,6 +69,7 @@ class UserRecordRequest extends FormRequest
             "region.required" => "Region is required.",
             "branch.required" => "Branch is required.",
             "email.required" => "Email is required.",
+            "email.unique" => "Email is already linked to an existing User.",
             "first_name.string" => "Please Enter a valid First Name.",
             "last_name.string" => "Please Enter a valid Last Name.",
             "email.email:rfc,dns" => "Please Enter a valid Email Address",
