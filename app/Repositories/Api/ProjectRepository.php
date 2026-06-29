@@ -3,17 +3,23 @@
 namespace App\Repositories\Api;
 
 use App\Enums\ProjectStatus;
-use App\Http\Requests\Api\ProjectRequest;
 use App\Models\Project;
 use App\Repositories\Interfaces\ProjectRepositoryInterface;
-use Illuminate\Http\Response;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
+
 
 class ProjectRepository implements ProjectRepositoryInterface
 {
     public function getAll(): LengthAwarePaginator
     {
-        return Project::latest()->paginate(2);
+        return Project::latest()->paginate(5);
+    }
+
+    public function getProjects(): Collection
+    {
+        return Project::orderBy('project_name', 'asc')
+        ->get(['id', 'project_name']);
     }
 
     public function create(array $data): void
@@ -39,5 +45,31 @@ class ProjectRepository implements ProjectRepositoryInterface
     public function delete(Project $project): void
     {
         $project->delete();
+    }
+
+    public function getStats(): array
+    {
+        return [
+            "active" => $this->getActive(),
+            "completion" => $this->getCompletion(),
+            "review" => $this->getReview()
+        ];
+    }
+
+    public function getActive(): int
+    {
+        return Project::where('status', ProjectStatus::Ongoing)->count();        
+    }
+
+    public function getCompletion(): int
+    {
+        $completed = count(Project::where('status', ProjectStatus::Completed)->get()->toArray());
+        $count = count(Project::all()->toArray());
+        return ($completed/$count)*100;
+    }
+
+    public function getReview(): int
+    {
+        return count(Project::where('status', ProjectStatus::In_Review)->get());
     }
 }

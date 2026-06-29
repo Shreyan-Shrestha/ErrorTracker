@@ -6,6 +6,7 @@ use App\Repositories\Interfaces\ProjectRepositoryInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\ProjectRequest;
 use App\Models\Project;
+use App\Models\UserRecord;
 use Illuminate\Http\RedirectResponse;
 
 
@@ -23,7 +24,11 @@ class ProjectController extends Controller
     public function index()
     {
         $projects = $this->project_repository->getAll();
-        return view('projects/index', compact('projects'));
+        $users= UserRecord::select('id', 'first_name', 'last_name')
+        ->orderBy('first_name', 'asc')
+        ->get();
+        $stats = $this->project_repository->getStats();
+        return view('projects/index', compact('projects', 'users', 'stats'));
     }
 
     /**

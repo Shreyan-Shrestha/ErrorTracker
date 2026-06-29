@@ -1,14 +1,14 @@
 @extends('partials.layout', ['title', 'WorldLink ErrorTracker | Projects'])
 
 @section('content')
-<div class="w-full p-6">
+<div class="w-full p-4 lg:p-6">
     <x-buttons.primary onClick="OpenCreateModal(this.dataset.action)" dataAction="{{ route('projects.create')}}">
         Add Project
     </x-buttons.primary>
     <p class="text-2xl lg:text-4xl font-bold">Projects</p>
 
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-6">
-        <x-stat-card title="Active Projects" value="42" change=" +8%" iconBg="bg-blue-100" iconColor="text-primary">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-16 mt-6 lg:px-6">
+        <x-stat-card title="Active Projects" value="{{$stats['active']}}" change=" +8%" iconBg="bg-blue-100" iconColor="text-primary">
             <x-slot:icon>
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-rocket-takeoff" viewBox="0 0 16 16">
                     <path d="M9.752 6.193c.599.6 1.73.437 2.528-.362s.96-1.932.362-2.531c-.599-.6-1.73-.438-2.528.361-.798.8-.96 1.933-.362 2.532" />
@@ -18,7 +18,7 @@
             </x-slot:icon>
         </x-stat-card>
 
-        <x-stat-card title="In Review" value="12" change="Pending" iconColor="text-neutral" iconBg="bg-base-300">
+        <x-stat-card title="In Review" value="{{$stats['review']}}" change="Pending" iconColor="text-neutral" iconBg="bg-base-300">
             <x-slot:icon>
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-left-text" viewBox="0 0 16 16">
                     <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
@@ -36,7 +36,7 @@
             </x-slot:icon>
         </x-stat-card>
 
-        <x-stat-card title="Completion Rate" value="94%" change="Stable" iconColor="text-neutral" iconBg="bg-base-300">
+        <x-stat-card title="Completion Rate" value="{{$stats['completion']}}%" change="Stable" iconColor="text-neutral" iconBg="bg-base-300">
             <x-slot:icon>
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle" viewBox="0 0 16 16">
                     <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
@@ -47,56 +47,64 @@
     </div>
 
     @php
-    $headers = ['Project Name', 'Assigned To', 'Gitlab Id', 'Status', 'Last Updated' ,'Actions'];
+    $headers = ['Project', 'Assigned To', 'Gitlab Id', 'Status', 'Last Updated' ,'Actions'];
+    $headerClasses = ['', '', '', '','hidden md:table-cell', ''];
     $count = count($headers);
     @endphp
 
-    <x-table :headers="$headers" title='Current Projects'>
-        @if($projects->isEmpty())
-        <tr class="bg-white hover:bg:base-300 p-4">
-            <td colspan="{{ $count }}" class="px-4 py-3 text-center text-gray-500">
-                No projects added yet.
-            </td>
-        </tr>
-        @else
-        @foreach($projects as $project)
-        <tr class=" bg-white hover:bg-base-300 p-4 border-b-2 border-gray-400">
-            <td class="text-left justify-center text-primary font-semibold font-sans text-xl"> {{ $project->project_name }}</td>
-            <td></td>
-            <td> {{ $project->gitlab_id }}</td>
-            <td>
-                <div class="badge capitalize badge-outline {{ $project->status->color() }}">
-                    <div aria-label="status" class="status {{ $project->status->status() }}"></div>
-                    {{ $project->status->label() }}
-                </div>
-            </td>
-            <td> {{ $project->updated_at }}</td>
-            <td>
-                <div class="flex gap-4 items-center-safe justify-center-safe">
-                    <button class="link" data-action="{{route('projects.edit', $project)}}"
-                        onclick="OpenEditModal(this)"
-                        data-modal="modal_edit_project"
-                        data-project_name="{{$project->project_name}}"
-                        data-gitlab_id="{{$project->gitlab_id}}"
-                        data-status="{{$project->status->value}}"
-                        data-description="{{$project->description}}">
-                        Edit
-                    </button>
+    <div class="lg:px-6">
+        <x-table :headers="$headers" :headerClasses="$headerClasses" title='Current Projects'>
+            @if($projects->isEmpty())
+            <tr class="bg-white hover:bg:base-300 p-4">
+                <td colspan="{{ $count }}" class="px-4 py-3 text-center md:text-2xl text-gray-500">
+                    No projects added yet.
+                </td>
+            </tr>
+            @else
+            @foreach($projects as $project)
+            <tr class=" bg-white hover:bg-base-300 p-4">
+                <td class="justify-center text-blue-600 font-semibold font-sans text-left text-md sm:text-xl"> {{ $project->project_name }}</td>
+                <td class="text-sm md:text-lg"> {{ $project->user->first_name}} {{ $project->user->last_name }}</td>
+                <td class="text-sm md:text-lg"> {{ $project->gitlab_id }}</td>
+                <td class="text-sm md:text-lg">
+                    <div class="rounded-full badge badge-soft badge-sm sm:badge-lg capitalize {{ $project->status->color() }}">
+                        <div aria-label="status" class="status {{ $project->status->status() }}"></div>
+                        <span class="hidden sm:inline font-semibold">{{ $project->status->label() }}</span>
+                    </div>
+                </td>
+                <td class="md:text-lg hidden lg:table-cell text-gray-500"> {{ \App\Helpers\NepaliDate\src\NepaliDate::fromAd($project->updated_at->toDateTime())->format('F d, y g:i A') }}</td>
+                <td>
+                    <div class="flex gap-2 lg:gap-6 items-center-safe justify-center-safe">
+                        <button class="btn btn-sm md:btn-md btn-ghost md:button-lg text-gray-500" data-action="{{route('projects.edit', $project)}}"
+                            onclick="OpenEditModal(this)"
+                            data-modal="modal_edit_project"
+                            data-project_name="{{$project->project_name}}"
+                            data-gitlab_id="{{$project->gitlab_id}}"
+                            data-user_record_id="{{$project->user_record_id}}"
+                            data-status="{{$project->status->value}}"
+                            data-description="{{$project->description}}">
+                            Update
+                        </button>
 
-                    <button class="link hover:text-warning-content delete-btn"
-                        data-action="{{ route('projects.delete', $project->id) }}">
-                        Delete
-                    </button>
-                </div>
-            </td>
-        </tr>
-        @endforeach
-        @endif
-        <tr class="bg-base-300">
-            <td colspan="{{ $count }}">{{ $projects->links() }} </td>
-        </tr>
-    </x-table>
+                        <button class="btn btn-sm btn-ghost text-gray-500 hover:btn-error hover:text-white lg:btn-md delete-btn"
+                            data-action="{{ route('projects.delete', $project->id) }}">
+                            Delete
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            @endforeach
+            @endif
+            @if(! $projects->links()->isEmpty)
+            <tr class="bg-base-300 pagination">
+                <td colspan="{{ $count }}">{{ $projects->links() }} </td>
+            </tr>
+            @endif
+        </x-table>
+    </div>
+
     <x-modal.create creating="Add Project">
+        <x-error-alert />
         <div class="p-3 px-6 grid gap-4">
             <label class="fieldset">
                 <span class="label">PROJECT NAME</span>
@@ -108,6 +116,17 @@
                 <span class="label">GITLAB ID</span>
                 <input type="number" class="input input-sm sm:input-md validator" required name="gitlab_id" placeholder="Enter Project Gitlab Id">
                 <p class="validator-hint hidden">Enter a valid gitlab id. Required</p>
+            </label>
+
+            <label class="fieldset">
+                <span class="label">ASSIGNED TO</span>
+                <select required name="user_record_id" class="select validator">
+                    <option value="" selected disabled>Project Assigned To</option>
+                    @foreach($users as $user)
+                    <option value="{{$user->id}}">{{ $user->first_name }} {{ $user->last_name }}</option>
+                    @endforeach
+                </select>
+                <p class="validator-hint hidden">Required</p>
             </label>
 
             <label class="fieldset">
@@ -130,22 +149,38 @@
     </x-modal.create>
 
     <x-modal.create id="modal_edit_project" creating="Edit Project" methodPatch="true">
+        <x-error-alert />
+
         <div class="p-3 px-6 grid gap-4">
             <label class="fieldset">
                 <span class="label">PROJECT NAME</span>
-                <input type="text" id="edit_project_project_name" class="input input-sm sm:input-md validator" required name="project_name" placeholder="Enter Project Name">
+                <input type="text" id="edit_project_project_name" class="input input-sm sm:input-md validator"
+                    value="{{old('name')}}" required name="project_name" placeholder="Enter Project Name">
                 <p class="validator-hint hidden">Required</p>
             </label>
 
             <label class="fieldset">
                 <span class="label">GITLAB ID</span>
-                <input type="number" id="edit_project_gitlab_id" class="input input-sm sm:input-md validator" required name="gitlab_id" placeholder="Enter Project Gitlab Id">
+                <input type="number" id="edit_project_gitlab_id" class="input input-sm sm:input-md validator"
+                    value="{{old('gitlab_id')}}" required name="gitlab_id" placeholder="Enter Project Gitlab Id">
                 <p class="validator-hint hidden">Enter a valid gitlab id. Required</p>
             </label>
 
             <label class="fieldset">
+                <span class="label">ASSIGNED TO</span>
+                <select required name="user_record_id" class="select validator"
+                    value="{{old('user_record_id')}}">
+                    <option value="" selected disabled>Project Assigned To</option>
+                    @foreach($users as $user)
+                    <option value="{{ $user->id }}">{{ $user->first_name }} {{ $user->last_name }}</option>
+                    @endforeach
+                </select>
+                <p class="validator-hint hidden">Required</p>
+            </label>
+
+            <label class="fieldset">
                 <span class="label">STATUS</span>
-                <select class="select" required name="status">
+                <select class="select" required name="status" value="{{old('status')}}">
                     <option value="" disabled selected>Current Project Status</option>
                     @foreach(App\Enums\ProjectStatus::cases() as $status)
                     <option value="{{ $status->value }}"> {{ $status->label() }} </option>
@@ -156,7 +191,8 @@
 
             <label class="fieldset">
                 <span class="label">PROJECT DESCRIPTION</span>
-                <textarea class="textarea" id="edit_project_description" name="description" placeholder="Enter Project Infomation"></textarea>
+                <textarea class="textarea" id="edit_project_description" name="description"
+                    value="{{old('description')}}" placeholder="Enter Project Infomation"></textarea>
                 <p class="validator-hint"></p>
             </label>
         </div>
