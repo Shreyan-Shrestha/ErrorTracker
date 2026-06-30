@@ -19,10 +19,6 @@ td{
     padding:0% !important;
 }
 
-thead tr, tr.pagination{
-    background-color: #F2F3FF !important;
-}
-
-input, select{
+thead tr, tr.pagination, input, select, textarea{
     background-color: #F2F3FF !important;
 }

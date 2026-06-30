@@ -1,6 +1,6 @@
 <div class="drawer-side is-drawer-close:overflow-visible">
     <label for="my-drawer-4" aria-label="close sidebar" class="drawer-overlay"></label>
-    <div class="flex min-h-full flex-col items-start bg-blue-100 is-drawer-close:w-12 md:is-drawer-close:w-15 is-drawer-open:w-36 lg:is-drawer-open:w-64">
+    <div class="flex min-h-full flex-col items-start bg-blue-100 is-drawer-close:w-12 md:is-drawer-close:w-15 is-drawer-open:w-40 lg:is-drawer-open:w-64">
         <!-- Sidebar content here -->
         <ul class="menu w-full grow is-drawer-close:ps-0 md:is-drawer-close:ps-1  is-drawer-open:ps-0 md:is-drawer-open:px-4">
             <!-- List item -->

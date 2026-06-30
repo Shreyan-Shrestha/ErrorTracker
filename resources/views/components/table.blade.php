@@ -13,7 +13,7 @@
         <thead>
             <tr class="p-4">
                 @foreach($headers as $index => $header)
-                <th scope="col" class="px-4 py-3 uppercase font-semibold text-gray-500 lg:text-xl {{ $headerClasses[$index] ?? '' }}">
+                <th scope="col" class="px-4 py-3 uppercase font-semibold text-gray-500 {{ $headerClasses[$index] ?? '' }}">
                     {{ $header }}
                 </th>
                 @endforeach
