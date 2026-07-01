@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\ApplicationController;
-use App\Http\Controllers\Api\V1\ErrorTrackerController;
+use App\Http\Controllers\Api\V1\ErrorReportController;
 use App\Http\Controllers\Api\V1\ProblemController;
 use App\Http\Controllers\Api\V1\ProjectController;
 use App\Http\Controllers\Auth\api\Login;
@@ -32,12 +32,12 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
     });
 
     Route::prefix('error')->name('error.')->group(function () {
-        Route::get('/', [ErrorTrackerController::class, 'index'])->name('index');
-        Route::post('/', [ErrorTrackerController::class, 'store'])->name('store');
-        Route::get('/{id}', [ErrorTrackerController::class, 'show'])->name('show');
-        Route::patch('/{id}', [ErrorTrackerController::class, 'update'])->name('update');
-        Route::delete('/{id}', [ErrorTrackerController::class, 'delete'])->name('delete');
-        Route::post('/markfixed/{id}', [ErrorTrackerController::class, 'markFixed'])->name('markfixed');
+        Route::get('/', [ErrorReportController::class, 'index'])->name('index');
+        Route::post('/', [ErrorReportController::class, 'store'])->name('store');
+        Route::get('/{id}', [ErrorReportController::class, 'show'])->name('show');
+        Route::patch('/{id}', [ErrorReportController::class, 'update'])->name('update');
+        Route::delete('/{id}', [ErrorReportController::class, 'delete'])->name('delete');
+        Route::post('/markfixed/{id}', [ErrorReportController::class, 'markFixed'])->name('markfixed');
     });
 
     Route::prefix('problem')->name('problem.')->group(function () {

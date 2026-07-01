@@ -6,13 +6,12 @@ use App\Http\Controllers\Auth\Logout;
 use App\Http\Controllers\auth\UserAuthenticationController;
 use App\Http\Controllers\Auth\WebLogin;
 use App\Http\Controllers\Web\CategoryController;
-use App\Http\Controllers\Web\ErrorTrackerController;
+use App\Http\Controllers\Web\ErrorReportController;
 use App\Http\Controllers\Web\ProblemController;
 use App\Http\Controllers\Web\ProjectController;
 use App\Http\Controllers\Web\UserRecordsController;
-use App\Models\Category;
 
-Route::get('/', [ErrorTrackerController::class, 'index']);
+Route::get('/', [ErrorReportController::class, 'index']);
 
 
 Route::view('/login', 'auth.login')->name('login');
@@ -25,10 +24,10 @@ Route::post('/logout', Logout::class)->name('logout')->middleware('login');
 Route::middleware('login')->group(function () {
 
     Route::prefix('errors')->name('errors.')->group(function () {
-        Route::get('/', [ErrorTrackerController::class, 'index'])->name('index');
-        Route::get('/report',[ErrorTrackerController::class, 'create'])->name('add');
-        Route::post('/', [ErrorTrackerController::class, 'store'])->name('create');
-        Route::delete('/delete/{error}', [ErrorTrackerController::class, 'destroy'])->name('delete');
+        Route::get('/', [ErrorReportController::class, 'index'])->name('index');
+        Route::get('/report',[ErrorReportController::class, 'create'])->name('add');
+        Route::post('/', [ErrorReportController::class, 'store'])->name('create');
+        Route::delete('/delete/{error}', [ErrorReportController::class, 'destroy'])->name('delete');
     });
 
     Route::prefix('projects')->name('projects.')->group(function () {

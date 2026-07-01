@@ -2,33 +2,32 @@
 
 namespace App\Repositories\Api;
 
-use App\Models\ErrorTracker;
-use App\Repositories\Interfaces\ErrorTrackerRepositoryInterface;
+use App\Models\ErrorReport;
+use App\Repositories\Interfaces\ErrorReportRepositoryInterface;
 use App\Helpers\DateHelper;
-
 use App\Helpers\NepaliDate\src\NepaliDate;
-use App\Http\Requests\ErrorTrackerRequest;
+use App\Http\Requests\Api\ErrorReportRequest;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-class ErrorTrackerRepository implements ErrorTrackerRepositoryInterface
+class ErrorReportRepository implements ErrorReportRepositoryInterface
 {
     public function getall(): LengthAwarePaginator
     {
-        return ErrorTracker::latest()->paginate();
+        return ErrorReport::latest()->paginate();
     }
 
-    public function show(int $id): ErrorTracker
+    public function show(int $id): ErrorReport
     {
-        return ErrorTracker::findorfail($id);
+        return ErrorReport::findorfail($id);
     }
 
-    public function create(ErrorTrackerRequest $request): void
+    public function create(ErrorReportRequest $request): void
     {
         $validated = $request->validated();
-        ErrorTracker::create($validated);
+        ErrorReport::create($validated);
     }
 
-    public function update(ErrorTrackerRequest $request, ErrorTracker $error): void
+    public function update(ErrorReportRequest $request, ErrorReport $error): void
     {
         $validated = $request->validated();
         $error->update($validated);
@@ -36,7 +35,7 @@ class ErrorTrackerRepository implements ErrorTrackerRepositoryInterface
 
     public function markFixed(int $id): void
     {
-        $err = ErrorTracker::findorfail($id);
+        $err = ErrorReport::findorfail($id);
         $end_time = NepaliDate::now();
         $start_time = NepaliDate::createFromFormat(NepaliDate::FORMAT_DATETIME_12_SHORT, $err->start_time);
 
@@ -49,7 +48,7 @@ class ErrorTrackerRepository implements ErrorTrackerRepositoryInterface
         ]);
     }
 
-    public function delete(ErrorTracker $error): void
+    public function delete(ErrorReport $error): void
     {
         $error->delete();
     }
