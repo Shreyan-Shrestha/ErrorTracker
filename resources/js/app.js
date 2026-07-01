@@ -25,9 +25,9 @@ document.querySelectorAll('.delete-btn').forEach(btn => {
 });
 
 // Auto dismiss Alert 
-['alert-success', 'alert-error'].forEach(id => {
+['alert-success', 'alert-error', 'alert-form-error'].forEach(id => {
     const btn = document.getElementById(id);
-    if (btn) setTimeout(() => btn.remove(), 4000);
+    if (btn) setTimeout(() => btn.remove(), 5000);
   });
 
 // Auto Opens create modal if Validation Error occurs
