@@ -5,7 +5,6 @@ namespace App\Repositories\Api;
 use App\Enums\ProjectStatus;
 use App\Models\Project;
 use App\Repositories\Interfaces\ProjectRepositoryInterface;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 
@@ -14,12 +13,6 @@ class ProjectRepository implements ProjectRepositoryInterface
     public function getAll(): LengthAwarePaginator
     {
         return Project::latest()->paginate(5);
-    }
-
-    public function getProjects(): Collection
-    {
-        return Project::orderBy('project_name', 'asc')
-        ->get(['id', 'project_name']);
     }
 
     public function create(array $data): void
@@ -56,20 +49,22 @@ class ProjectRepository implements ProjectRepositoryInterface
         ];
     }
 
-    public function getActive(): int
+    private function getActive(): int
     {
         return Project::where('status', ProjectStatus::Ongoing)->count();        
     }
 
-    public function getCompletion(): int
+    private function getCompletion(): int
     {
-        $completed = count(Project::where('status', ProjectStatus::Completed)->get()->toArray());
-        $count = count(Project::all()->toArray());
-        return ($completed/$count)*100;
+        $count = Project::count();
+        if($count === 0) return 0;
+
+        $completed = Project::where('status', ProjectStatus::Completed)->count();
+        return round(($completed/$count)*100, 0);
     }
 
-    public function getReview(): int
+    private function getReview(): int
     {
-        return count(Project::where('status', ProjectStatus::In_Review)->get());
+        return Project::where('status', ProjectStatus::In_Review)->count();
     }
 }

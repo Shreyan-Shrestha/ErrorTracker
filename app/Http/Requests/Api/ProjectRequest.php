@@ -16,7 +16,7 @@ class ProjectRequest extends FormRequest
     {
         return true;
     }
-    
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -24,36 +24,30 @@ class ProjectRequest extends FormRequest
      */
     public function rules(): array
     {
-        return match(true){
+        return match (true) {
             $this->routeIs('project.store') => $this->storeRules(),
-            $this->routeIs('project.update') => $this->updateRules(),
+            $this->routeIs('project.update') => $this->storeRules(),
             $this->routeIs('project.updateStatus') => $this->updateStatusRules(),
             default => $this->storeRules()
         };
     }
 
-    private function storeRules() : array
+    private function storeRules(): array
     {
         return [
-            "gitlab_id" => "required|int",
-            "project_name" => "required|string|max:100",
-            "status" => "required", Rule::enum(ProjectStatus::class),
+            "gitlab_id" => "required|int|min:1|unique:projects,gitlab_id",
+            "project_name" => "required|string|min:4|max:50",
+            "user_record_id" => "required|int|min:1",
+            "status" => "required",
+            Rule::enum(ProjectStatus::class),
         ];
     }
 
-    private function updateRules() : array
+    private function updateStatusRules(): array
     {
         return [
-            "gitlab_id" => "sometimes|int",
-            "project_name" => "sometimes|string|max:100",
-            "status" => "sometimes|", Rule::enum(ProjectStatus::class),
-        ];
-    }
-
-    private function updateStatusRules() : array
-    {
-        return [
-            "status" => "required", Rule::enum(ProjectStatus::class),
+            "status" => "required",
+            Rule::enum(ProjectStatus::class),
         ];
     }
 
@@ -68,5 +62,11 @@ class ProjectRequest extends FormRequest
             "status.enum" => "Status must be one of ['completed', 'ongoing', 'abandoned']",
             "status.required" => "Status is required",
         ];
+    }
+
+    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    {
+        session()->flash('modal_id', 'modal_create');
+        parent::failedValidation($validator);
     }
 }

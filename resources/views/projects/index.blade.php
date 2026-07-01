@@ -75,7 +75,7 @@
                 <td class="md:text-lg hidden lg:table-cell text-gray-500"> {{ \App\Helpers\NepaliDate\src\NepaliDate::fromAd($project->updated_at->toDateTime())->format('F d, y g:i A') }}</td>
                 <td>
                     <div class="flex gap-2 lg:gap-6 items-center-safe justify-center-safe">
-                        <button class="btn btn-sm md:btn-md btn-ghost md:button-lg text-gray-500" data-action="{{route('projects.edit', $project)}}"
+                        <button class="btn btn-primary btn-soft btn-sm md:btn-md md:button-lg" data-action="{{route('projects.edit', $project)}}"
                             onclick="OpenEditModal(this)"
                             data-modal="modal_edit_project"
                             data-project_name="{{$project->project_name}}"
@@ -86,7 +86,7 @@
                             Update
                         </button>
 
-                        <button class="btn btn-sm btn-ghost text-gray-500 hover:btn-error hover:text-white lg:btn-md delete-btn"
+                        <button class="btn btn-sm btn-error btn-soft hover:text-white lg:btn-md delete-btn"
                             data-action="{{ route('projects.delete', $project->id) }}">
                             Delete
                         </button>
@@ -106,44 +106,46 @@
     <x-modal.create creating="Add Project">
         <x-error-alert />
         <div class="p-3 px-6 grid gap-4">
-            <label class="fieldset">
-                <span class="label">PROJECT NAME</span>
-                <input type="text" class="input input-sm sm:input-md validator" required name="project_name" placeholder="Enter Project Name">
-                <p class="validator-hint hidden">Required</p>
+            <label class="fieldset" for="project_name">
+                <span class="label">PROJECT NAME *</span>
+                <input type="text" class="input input-sm sm:input-md validator w-full" required minlength="4" maxlength="50"
+                    name="project_name" id="project_name" placeholder="Enter Project Name">
+                <p class="validator-hint hidden">Please, Enter a valid name of atleast 4 and maximum 50 characters. Required.</p>
             </label>
 
-            <label class="fieldset">
-                <span class="label">GITLAB ID</span>
-                <input type="number" class="input input-sm sm:input-md validator" required name="gitlab_id" placeholder="Enter Project Gitlab Id">
-                <p class="validator-hint hidden">Enter a valid gitlab id. Required</p>
+            <label class="fieldset" for="gitlab_id">
+                <span class="label">GITLAB ID *</span>
+                <input type="number" class="input input-sm sm:input-md validator w-full" required min="1" name="gitlab_id"
+                    id="gitlab_id" placeholder="Enter Project Gitlab Id">
+                <p class="validator-hint hidden">Please, Enter a valid gitlab id. Required</p>
             </label>
 
-            <label class="fieldset">
-                <span class="label">ASSIGNED TO</span>
-                <select required name="user_record_id" class="select validator">
+            <label class="fieldset" for="user_record_id">
+                <span class="label">ASSIGNED TO *</span>
+                <select required name="user_record_id" id="user_record_id" class="select validator w-full">
                     <option value="" selected disabled>Project Assigned To</option>
                     @foreach($users as $user)
                     <option value="{{$user->id}}">{{ $user->first_name }} {{ $user->last_name }}</option>
                     @endforeach
                 </select>
-                <p class="validator-hint hidden">Required</p>
+                <p class="validator-hint hidden">Please, Assign the project to a user. Required</p>
             </label>
 
-            <label class="fieldset">
-                <span class="label">STATUS</span>
-                <select class="select" required name="status">
+            <label class="fieldset" for="status">
+                <span class="label">STATUS *</span>
+                <select class="select validator w-full" id="status" required name="status">
                     <option value="" disabled selected>Current Project Status</option>
                     @foreach(App\Enums\ProjectStatus::cases() as $status)
                     <option value="{{ $status->value }}"> {{ $status->label() }} </option>
                     @endforeach
                 </select>
-                <p class="validator-hint hidden">Required</p>
+                <p class="validator-hint hidden">Please, Assign the Project's Status. Required</p>
             </label>
 
-            <label class="fieldset">
+            <label class="fieldset" for="description">
                 <span class="label">PROJECT DESCRIPTION</span>
-                <textarea class="textarea" name="description" placeholder="Enter Project Infomation"></textarea>
-                <p class="validator-hint"></p>
+                <textarea class="textarea w-full" name="description" id="description"
+                    placeholder="Enter Project Infomation"></textarea>
             </label>
         </div>
     </x-modal.create>
@@ -152,23 +154,24 @@
         <x-error-alert />
 
         <div class="p-3 px-6 grid gap-4">
-            <label class="fieldset">
-                <span class="label">PROJECT NAME</span>
-                <input type="text" id="edit_project_project_name" class="input input-sm sm:input-md validator"
-                    value="{{old('name')}}" required name="project_name" placeholder="Enter Project Name">
+            <label class="fieldset" for="project_name">
+                <span class="label">PROJECT NAME * </span>
+                <input type="text" class="input input-sm sm:input-md validator"
+                    value="{{old('name')}}" required name="project_name" id="project_name" minlength="4" maxlength="50"
+                    placeholder="Enter Project Name">
                 <p class="validator-hint hidden">Required</p>
             </label>
 
-            <label class="fieldset">
-                <span class="label">GITLAB ID</span>
-                <input type="number" id="edit_project_gitlab_id" class="input input-sm sm:input-md validator"
-                    value="{{old('gitlab_id')}}" required name="gitlab_id" placeholder="Enter Project Gitlab Id">
+            <label class="fieldset" for="gitlab_id">
+                <span class="label">GITLAB ID *</span>
+                <input type="number" name="gitlab_id" id="gitlab_id0" class="input input-sm sm:input-md validator"
+                    value="{{old('gitlab_id')}}" required min="1" placeholder="Enter Project Gitlab Id">
                 <p class="validator-hint hidden">Enter a valid gitlab id. Required</p>
             </label>
 
-            <label class="fieldset">
+            <label class="fieldset" for="user_record_id">
                 <span class="label">ASSIGNED TO</span>
-                <select required name="user_record_id" class="select validator"
+                <select required name="user_record_id" id="user_record_id" class="select validator"
                     value="{{old('user_record_id')}}">
                     <option value="" selected disabled>Project Assigned To</option>
                     @foreach($users as $user)
@@ -178,9 +181,9 @@
                 <p class="validator-hint hidden">Required</p>
             </label>
 
-            <label class="fieldset">
+            <label class="fieldset" for="status">
                 <span class="label">STATUS</span>
-                <select class="select" required name="status" value="{{old('status')}}">
+                <select class="select" required name="status" id="status" value="{{old('status')}}">
                     <option value="" disabled selected>Current Project Status</option>
                     @foreach(App\Enums\ProjectStatus::cases() as $status)
                     <option value="{{ $status->value }}"> {{ $status->label() }} </option>
@@ -189,9 +192,9 @@
                 <p class="validator-hint hidden">Required</p>
             </label>
 
-            <label class="fieldset">
+            <label class="fieldset" for="description">
                 <span class="label">PROJECT DESCRIPTION</span>
-                <textarea class="textarea" id="edit_project_description" name="description"
+                <textarea class="textarea" name="description" id="description"
                     value="{{old('description')}}" placeholder="Enter Project Infomation"></textarea>
                 <p class="validator-hint"></p>
             </label>
