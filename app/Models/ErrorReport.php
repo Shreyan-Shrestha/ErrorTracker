@@ -10,9 +10,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class ErrorReport extends Model
 {
   use SoftDeletes;
-  protected $table = 'error_trackers';
+  protected $table = 'error_reports';
   protected $fillable = [
-    'reporter',
+    'user_record_id',
     'region',
     'branch',
     'project_id',
@@ -21,9 +21,10 @@ class ErrorReport extends Model
     'impact',
     'root_cause',
     'trigger',
-    'message', 
+    'message',
     'start_time',
     'end_time',
+    'estimated_down',
   ];
 
   public $casts = [
@@ -38,5 +39,15 @@ class ErrorReport extends Model
   public function problem(): BelongsTo
   {
     return $this->belongsTo(Problem::class);
+  }
+
+  public function category(): BelongsTo
+  {
+    return $this->belongsTo(Category::class);
+  }
+
+  public function user(): BelongsTo
+  {
+    return $this->belongsTo(UserRecord::class);
   }
 }

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('error_reports', function (Blueprint $table) {
             $table->id();
-            $table->string('reporter');
+            $table->foreignId('user_record_id');
             $table->string('region');
             $table->string('branch');
             $table->foreignId('project_id');
@@ -22,11 +22,10 @@ return new class extends Migration
             $table->string('impact')->nullable();
             $table->text('root_cause')->nullable();    
             $table->text('trigger')->nullable();
-            $table->string('error_message')->nullable();
+            $table->string('message')->nullable();
             $table->string('start_time')->nullable();
             $table->string('end_time')->nullable();     
-            $table->string('estimated_down')->nullable();      
-            $table->string('severity');
+            $table->string('estimated_down')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -37,6 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('error_trackers');
+        Schema::dropIfExists('error_reports');
     }
 };

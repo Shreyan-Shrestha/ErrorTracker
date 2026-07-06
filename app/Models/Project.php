@@ -5,7 +5,9 @@ namespace App\Models;
 use App\Enums\ProjectStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Override;
 
 class Project extends Model
 {
@@ -20,5 +22,10 @@ class Project extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(UserRecord::class, 'user_record_id');
+    }
+
+    public function errors(): HasMany
+    {
+        return $this->hasMany(ErrorReport::class);
     }
 }

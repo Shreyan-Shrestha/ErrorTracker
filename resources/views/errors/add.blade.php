@@ -3,13 +3,16 @@
 @section('content')
 <div class="w-full p-6">
     <p class="text-3xl">Report Error</p>
-    <div class="p-3 lg:p-6  lg:w-6xl mx-auto">
+    <div class="p-3 lg:p-6 lg:w-6xl mx-auto">
         <form action="{{route('errors.create')}}" class="grid gap-2 md:gap-4 px-6" method="POST">
             @csrf
+
+            <x-error-alert />
+
             <label class="fieldset">
                 <legend class="fieldset-legend md:text-lg">Reported By *</legend>
-                <input type="text" class="input input-sm md:input-md validator w-full" validator required
-                    value="{{old('reporter')}}" name="" placeholder="Enter Your Full Name">
+                <input type="text" name="reporter" class="input input-sm md:input-md validator w-full" validator 
+                required minlength="5" maxlength="30" value="{{old('reporter')}}" placeholder="Enter Your Full Name">
                 <p class="hidden validator-hint">Required.</p>
             </label>
 
@@ -17,21 +20,22 @@
             <label class="fieldset grid grid-cols-1 lg:grid-cols-3 gap-10">
                 <div class="grid gap-1">
                     <legend class="fieldset-legend md:text-lg">Region *</legend>
-                    <input type="text" class="input input-sm md:input-md validator w-full" validator required
-                        value="{{old('')}}" name="region" placeholder="Enter Your Region">
+                    <input type="text" name="region" class="input input-sm md:input-md validator w-full" validator required
+                    minlength="3" maxlength="25"    value="{{old('')}}" placeholder="Enter Your Region">
                     <p class="hidden validator-hint">Required.</p>
                 </div>
 
                 <div class="grid gap-1">
                     <legend class="fieldset-legend md:text-lg">Branch *</legend>
-                    <input type="text" class="input input-sm md:input-md validator w-full" validator required
-                        value="{{old('')}}" name="branch" placeholder="Enter your Branch">
+                    <input type="text" name="branch" class="input input-sm md:input-md validator w-full" validator required
+                    minlength="3" maxlength="30"    value="{{old('')}}" placeholder="Enter your Branch">
                     <p class="hidden validator-hint">Required.</p>
                 </div>
 
                 <div class="grid gap-1">
                     <legend class="fieldset-legend md:text-lg">Project *</legend>
-                    <select class="select select-sm md:select-md w-full" required name="project" value="{{old('project')}}">
+                    <select name="project_id" class="select select-sm md:select-md w-full" required
+                        value="{{old('project')}}">
                         <option selected disabled>Select the Project with the Error</option>
                         @foreach($projects as $project)
                         <option value="{{$project->id}}">{{ $project->project_name }}</option>
@@ -47,7 +51,7 @@
 
                 <label class=" fieldset grid gap-1">
                     <legend class="fieldset-legend md:text-lg">Issue *</legend>
-                    <select class="select validator md:select-md w-full" name="problem" required w-full>
+                    <select name="problem_id" class="select validator md:select-md w-full" required w-full>
                         <option selected disabled>Select the Issue</option>
                         @foreach($problems as $problem)
                         <option value="{{$problem->id}}"> {{$problem->name}} </option>
@@ -58,7 +62,7 @@
 
                 <label class="fieldset grid gap-1">
                     <legend class="fieldset-legend md:text-lg">Issue Category *</legend>
-                    <select class="select validator md:select-md w-full" required name="category">
+                    <select name="category_id" class="select validator md:select-md w-full" required>
                         <option selected disabled>Select the Issue Category</option>
                         @foreach($categories as $category)
                         <option value=" {{$category->id}} "> {{$category->name}}</option>
@@ -69,29 +73,29 @@
 
                 <label class="fieldset grid gap-1">
                     <span class="label md:text-lg">Impact</span>
-                    <input type="text" class="input input-sm md:input-md validator w-full" name="impact" 
-                    placeholder="Describe who/what is affected" required value="{{old('impact')}}">
+                    <input type="text" name="impact" class="input input-sm md:input-md validator w-full"
+                    minlength="5" maxlength="150" placeholder="Describe who/what is affected" required value="{{old('impact')}}">
                     <p class="validator-hint hidden"></p>
                 </label>
 
                 <label class="fieldset grid gap-1">
                     <span class="label md:text-lg">Root Cause</span>
-                    <input type="text" class="input input-sm md:input-md validator w-full" name="root_cause"
-                    placeholder="Describe the indentified/possible root cause" value="{{old('root_cause')}}">
+                    <input type="text" name="root_cause" class="input input-sm md:input-md validator w-full"
+                    minlength="5" maxlength="150" placeholder="Describe the indentified/possible root cause" value="{{old('root_cause')}}">
                     <p class="validator-hint hidden">Optional</p>
                 </label>
 
                 <label class="fieldset col-span-2 grid gap-1">
                     <legend class="fieldset-legend md:text-lg">Issue Triggered By</legend>
                     <input type="text" class="input input-sm md:input-md w-full" name="trigger" value="{{old('trigger')}}"
-                    placeholder="eg. scheduled update, manual action, unknown....">
+                    minlength="5" maxlength="150" placeholder="eg. scheduled update, manual action, unknown....">
                     <p class="validator-hint hidden"></p>
                 </label>
 
                 <label class="fieldset col-span-2 grid gap-1">
                     <span class="label md:text-lg">Error Message</span>
                     <input type="text" class="input input-sm md:input-md validator w-full" name="message" value="{{old('message')}}"
-                    placeholder="Past the Error Message here">
+                    minlength="5" maxlength="150" placeholder="Past the Error Message here">
                     <p class="validator-hint hidden">Optional</p>
                 </label>
             </fieldset>
@@ -102,14 +106,14 @@
                 <label class="fieldset grid gap-1">
                     <span class="label md:text-lg">Start Time *</span>
                     <input type="datetime" class="nepali-datepicker input input-sm md:input-md validator w-full" required name="start_time" value="{{old('start_time')}}"
-                    placeholder="dd/mm/yyyy hh:mm">
+                        placeholder="dd/mm/yyyy hh:mm">
                     <p class="validator-hint hidden"></p>
                 </label>
 
                 <label class="fieldset grid gap-1">
                     <span class="label text-lg">End Time *</span>
                     <input type="datetime" class="nepali-datepicker input input-sm md:input-md validator w-full" required name="start_time" value="{{old('start_time')}}"
-                    placeholder="dd/mm/yyyy hh:mm">
+                        placeholder="dd/mm/yyyy hh:mm">
                     <p class="validator-hint hidden"></p>
                 </label>
             </fieldset>
@@ -139,14 +143,14 @@
 @push('scripts')
 <script>
     window.onload = function() {
-            var miniEnglishDatesInput = document.getElementsByClassName(
-                "nepali-datepicker"
-            );
-            miniEnglishDatesInput.NepaliDatePicker({
-                "language": "english",
-                "dateFormat": "DD/MM/YY",
-                "disableDaysAfter": 1,
-            });
-        };
+        var miniEnglishDatesInput = document.getElementsByClassName(
+            "nepali-datepicker"
+        );
+        miniEnglishDatesInput.NepaliDatePicker({
+            "language": "english",
+            "dateFormat": "DD/MM/YY",
+            "disableDaysAfter": 1,
+        });
+    };
 </script>
 @endpush
