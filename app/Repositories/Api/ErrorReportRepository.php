@@ -8,12 +8,13 @@ use App\Helpers\DateHelper;
 use App\Helpers\NepaliDate\src\NepaliDate;
 use App\Http\Requests\Api\ErrorReportRequest;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Override;
 
 class ErrorReportRepository implements ErrorReportRepositoryInterface
 {
     public function getall(): LengthAwarePaginator
     {
-        return ErrorReport::latest()->paginate();
+        return ErrorReport::orderBy('updated_at', 'desc')->paginate(10);
     }
 
     public function show(int $id): ErrorReport
@@ -21,31 +22,59 @@ class ErrorReportRepository implements ErrorReportRepositoryInterface
         return ErrorReport::findorfail($id);
     }
 
-    public function create(ErrorReportRequest $request): void
+    public function create(array $data): void
     {
-        $validated = $request->validated();
-        ErrorReport::create($validated);
+        if(array_key_exists('end_time', $data) && !is_null($data['end_time']))
+        {
+            $start_time = NepaliDate::createFromFormat(NepaliDate::FORMAT_DATETIME_12_SHORT_SLASH_DMY,$data['start_time']);
+            $end_time = NepaliDate::createFromFormat(NepaliDate::FORMAT_DATETIME_12_SHORT_SLASH_DMY,$data['end_time']);
+            $interval = $start_time->diffAsDateInterval($end_time);
+            $estimated_down = DateHelper::formatDateInterval($interval);
+            $data['estimated_down'] = $estimated_down;
+        }
+
+        ErrorReport::create($data);
     }
 
-    public function update(ErrorReportRequest $request, ErrorReport $error): void
+    public function update(array $data, ErrorReport $error): void
     {
-        $validated = $request->validated();
-        $error->update($validated);
+        if(array_key_exists('end_time', $data) && !is_null($data['end_time']))
+        {
+            $start_time = NepaliDate::createFromFormat(NepaliDate::FORMAT_DATETIME_12_SHORT_SLASH_DMY,$data['start_time']);
+            $end_time = NepaliDate::createFromFormat(NepaliDate::FORMAT_DATETIME_12_SHORT_SLASH_DMY,$data['end_time']);
+            $interval = $start_time->diffAsDateInterval($end_time);
+            $estimated_down = DateHelper::formatDateInterval($interval);
+            $data['estimated_down'] = $estimated_down;
+        }
+
+        if(array_key_exists('end_time', $data) && is_null($data['end_time']) && !is_null($error->estimated_down))
+        {
+            $data['estimated_down'] = null;
+        }
+
+        $error->update($data);
     }
 
-    public function markFixed(int $id): void
+    public function analysis(array $data, ErrorReport $error): void
     {
-        $err = ErrorReport::findorfail($id);
+        $error->update($data);
+    }
+
+    public function markFixed(ErrorReport $error): void
+    {
+        $start_time = NepaliDate::createFromFormat(NepaliDate::FORMAT_DATETIME_12_SHORT_SLASH_DMY,$error->start_time);
+
         $end_time = NepaliDate::now();
-        $start_time = NepaliDate::createFromFormat(NepaliDate::FORMAT_DATETIME_12_SHORT, $err->start_time);
 
-        $interval = $end_time->diffAsDateInterval($start_time);
+        $interval = $start_time->diffAsDateInterval($end_time);
         $estimated_down = DateHelper::formatDateInterval($interval);
 
-        $err->update([
-            'end_time' => $end_time->toDateTimeString(),
-            'estimated_down' => $estimated_down,
-        ]);
+        $data = [  
+        'end_time' => $end_time->toDateString(),
+        'estimated_down' => $estimated_down,
+        ];
+
+        $error->update($data);
     }
 
     public function delete(ErrorReport $error): void

@@ -26,7 +26,11 @@ Route::middleware('login')->group(function () {
     Route::prefix('errors')->name('errors.')->group(function () {
         Route::get('/', [ErrorReportController::class, 'index'])->name('index');
         Route::get('/report',[ErrorReportController::class, 'create'])->name('add');
+        Route::get('/edit/{error}', [ErrorReportController::class, 'edit'])->name('edit');
+        Route::patch('/rootCauseAnalysis/{error}',[ErrorReportController::class,'analysis'])->name('analysis');
+        Route::patch('/edit/{error}', [ErrorReportController::class, 'update'])->name('update');
         Route::post('/', [ErrorReportController::class, 'store'])->name('create');
+        Route::patch('/markFixed/{error}', [ErrorReportController::class, 'markFixed'])->name('markFixed');
         Route::delete('/delete/{error}', [ErrorReportController::class, 'destroy'])->name('delete');
     });
 

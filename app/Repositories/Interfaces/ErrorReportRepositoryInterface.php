@@ -9,9 +9,10 @@ use Illuminate\Pagination\LengthAwarePaginator;
 interface ErrorReportRepositoryInterface
 {
     public function getall(): LengthAwarePaginator;
-    public function create(ErrorReportRequest $request): void;
+    public function create(array $data): void;
     public function show(int $id): ErrorReport;
-    public function update(ErrorReportRequest $request, ErrorReport $error): void;
-    public function markFixed(int $id): void;
+    public function update(array $data, ErrorReport $error): void;
+    public function analysis(array $data, ErrorReport $error): void;
+    public function markFixed(ErrorReport $error): void;
     public function delete(ErrorReport $error): void;
 }
