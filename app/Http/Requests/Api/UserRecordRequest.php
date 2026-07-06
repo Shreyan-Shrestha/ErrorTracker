@@ -26,8 +26,7 @@ class UserRecordRequest extends FormRequest
     public function rules(): array
     {
         return match(true) {
-            $this->routeIs('users.create') => $this->storeRules(),
-            $this->routeIs('users.edit') => $this->updateRules()
+            default =>$this->storeRules()
         };
     }
 
@@ -43,21 +42,6 @@ class UserRecordRequest extends FormRequest
         ];
     }
 
-    private function updateRules(): array
-    {
-        return [
-            'first_name' => ['sometimes', 'string', 'max:50'],
-            'last_name' => ['sometimes', 'string', 'max:20'],
-            'email' => [
-                'sometimes',
-                'email:rfc,dns',
-                Rule::unique('user_records', 'email')->ignore($this->route('user')->id ?? null),
-            ],
-            'role' => ['sometimes', Rule::enum(UserRole::class)],
-            'region' => ['sometimes', 'string'],
-            'branch' => ['sometimes', 'string']
-        ];
-    }
 
     public function messages(): array
     {
