@@ -11,20 +11,20 @@ enum ErrorSeverity : string
 
     public function label(){
         return match($this){
-            ErrorSeverity::Critical => 'critical',
-            ErrorSeverity::High     => 'high',
-            ErrorSeverity::Medium   => 'medium',
-            ErrorSeverity::Low      => 'low',
+            ErrorSeverity::Critical => 'CRITICAL',
+            ErrorSeverity::High     => 'HIGH',
+            ErrorSeverity::Medium   => 'MEDIUM',
+            ErrorSeverity::Low      => 'LOW',
         };
     }
 
     public function color(): string
     {
         return match($this){
-            ErrorSeverity::Critical => 'py-2 rounded-box bg-red-100 text-error-content',
-            ErrorSeverity::High => 'py-2 rounded-box bg-orange-100 text-warning-content',
-            ErrorSeverity::Medium => 'py-2 rounded-box bg-yellow-100 text-yellow-500',
-            ErrorSeverity::Low => 'py-2 roundedbox bg-cyan-100 text-info-content'
+            ErrorSeverity::Critical => 'py-2 rounded-box bg-red-200 text-error-content',
+            ErrorSeverity::High => 'py-2 rounded-box bg-orange-200 text-warning-content',
+            ErrorSeverity::Medium => 'py-2 rounded-box bg-yellow-200 text-yellow-800',
+            ErrorSeverity::Low => 'py-2 roundedbox bg-blue-200 text-info-content'
         };
     }
 
