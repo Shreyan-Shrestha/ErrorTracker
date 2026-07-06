@@ -143,7 +143,7 @@
             </label>
             <label class="fieldset">
                 <span class="label">SEVERITY</span>
-                <select class="select" required name="severity" value="{{old('severity')}}">
+                <select class="select validator" required name="severity" value="{{old('severity')}}">
                     <option value="" disabled selected>Category Severity</option>
                     @foreach(App\Enums\ErrorSeverity::cases() as $severity)
                     <option value="{{$severity->value}}"> {{ $severity->label() }} </option>
