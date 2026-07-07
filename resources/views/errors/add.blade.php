@@ -39,7 +39,7 @@
                 <div class="grid gap-1">
                     <legend class="fieldset-legend md:text-lg">Project *</legend>
                     <select name="project_id" class="select select-sm md:select-md w-full validator" required>
-                        <option selected disabled>Select the Project with the Error</option>
+                        <option selected disabled>Assign the Project with the Error</option>
                         @foreach($projects as $project)
                         <option value="{{$project->id}}" @selected(old('project_id')==$project->id)>{{ $project->project_name }}</option>
                         @endforeach
@@ -55,7 +55,7 @@
                 <label class=" fieldset grid gap-1">
                     <legend class="fieldset-legend md:text-lg">Issue *</legend>
                     <select name="problem_id" class="select validator md:select-md w-full" required w-full>
-                        <option selected disabled>Select the Issue</option>
+                        <option selected disabled>Assign the Issue </option>
                         @foreach($problems as $problem)
                         <option value="{{$problem->id}}" @selected(old('problem_id')==$problem->id)> {{$problem->name}} </option>
                         @endforeach
@@ -66,26 +66,12 @@
                 <label class="fieldset grid gap-1">
                     <legend class="fieldset-legend md:text-lg">Issue Category *</legend>
                     <select name="category_id" class="select validator md:select-md w-full" required>
-                        <option selected disabled>Select the Issue Category</option>
+                        <option selected disabled>Assign the Issue Category</option>
                         @foreach($categories as $category)
                         <option value="{{$category->id}}" @selected(old('category_id')==$category->id)> {{$category->name}}</option>
                         @endforeach
                     </select>
                     <p class="validator-hint">*Required</p>
-                </label>
-
-                <label class="fieldset grid gap-1">
-                    <span class="label md:text-lg">Impact</span>
-                    <input type="text" name="impact" class="input input-sm md:input-md validator w-full"
-                        minlength="5" maxlength="150" placeholder="Describe who/what is affected" required value="{{old('impact')}}">
-                    <p class="validator-hint hidden"></p>
-                </label>
-
-                <label class="fieldset grid gap-1">
-                    <span class="label md:text-lg">Root Cause</span>
-                    <input type="text" name="root_cause" class="input input-sm md:input-md validator w-full"
-                        minlength="5" maxlength="150" placeholder="Describe the indentified/possible root cause" value="{{old('root_cause')}}">
-                    <p class="validator-hint hidden">Optional</p>
                 </label>
 
                 <label class="fieldset col-span-2 grid gap-1">
@@ -101,6 +87,23 @@
                         minlength="5" maxlength="150" placeholder="Past the Error Message here">
                     <p class="validator-hint hidden">Optional</p>
                 </label>
+
+                <label class="fieldset col-span-2 grid gap-1">
+                    <span class="label md:text-lg">Impact</span>
+                    <input type="text" name="impact" class="input input-sm md:input-md validator w-full"
+                        minlength="5" maxlength="150" placeholder="Describe who/what is affected" required value="{{old('impact')}}">
+                    <p class="validator-hint hidden"></p>
+                </label>
+
+                <label class="fieldset grid gap-1">
+                    <span class="label md:text-lg">Root Cause Analysis:</span>
+                    <textarea name="root_cause" class="input input-sm md:input-md validator w-full"
+                    minlength="10" maxlength="1500" placeholder="Write the Root Cause Analysis for the Issue." value="{{old('root_cause')}}">
+                    </textarea>
+                    <p class="validator-hint hidden">Optional. ( 10-1500 characters limit)</p>
+                </label>
+
+                
             </fieldset>
 
             <fieldset class="p-3 md:px-6 fieldset grid grid-cols-1 md:grid-cols-2 gap-10 gap-y-4 rounded-box border-2 bg-base-200 border-gray-300">
