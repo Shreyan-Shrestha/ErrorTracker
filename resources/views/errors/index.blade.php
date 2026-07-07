@@ -58,9 +58,10 @@
 
     @php
     $headers = ['Error', 'Severity', 'Reported At', 'Cause', 'Start Time', 'Impact', 'Action'];
+    $headerClasses = ['','','','','hidden md:table-cell','',''];
     $count=count($headers);
     @endphp
-    <x-table :headers="$headers" title="Error Log">
+    <x-table :headers="$headers" :headerClasses="$headerClasses" title="Error Log">
         @if($errorsdata->isEmpty())
         <tr class="bg-white hover:bg-base-300 p-4">
             <td colspan="{{ $count }}" class="px-4 py-3 text-center text-gray-500">
@@ -72,19 +73,19 @@
         <tr class=" bg-white hover:bg-base-300 text-gray-600 text-sm md:text-lg">
             <td>
                 <div class="grid gap-1">
-                    <p class="text-primary text-xl font-semibold">{{ $errordata->problem->name }}</p>
-                    <p class="text-grey-400">{{ $errordata->category->name }}</p>
+                    <p class="text-primary text-xl font-bold tracking-wide">{{ $errordata->problem->name }}</p>
+                    <p class="text-grey-400 font-semibold">{{ $errordata->category->name }}</p>
                 </div>
             </td>
-            <td>
+            <td class="text-center md:text-left">
                 <div class="rounded-full badge badege-soft badge-sm md:badge-md {{$errordata->category->severity->color()}}">
                     <div aria-label="severity" class="status {{$errordata->category->severity->status()}}"></div>
                     <span class="hidden md:inline font-semibold">{{ $errordata->category->severity->label() }}</span>
                 </div>
             </td>
-            <td> {{ $errordata->created_at }} </td>
+            <td class="text-sm md:text"> {{App\Helpers\DateHelper::formatTimestampToString($errordata->created_at)}} </td>
             <td> {{ $errordata->root_cause }} </td>
-            <td> {{ $errordata->start_time }}</td>
+            <td class="hidden md:table-cell text-sm md:text"> {{App\Helpers\DateHelper::formatDateString($errordata->start_time)}}</td>
             <td> {{ $errordata->impact }} </td>
 
             <td>

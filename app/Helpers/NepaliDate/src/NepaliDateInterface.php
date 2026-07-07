@@ -188,6 +188,8 @@ interface NepaliDateInterface
     // Readable Formats
     public const FORMAT_READABLE_DATE = 'l, F j, Y';       // Saturday, Ashwin 25, 2082
 
+    public const FORMAT_READABLE_DATE_SHORT = 'F j, Y'; // Ashwin 25, 2082
+
     public const FORMAT_READABLE_DATETIME = 'l, F j, Y g:i A'; // Saturday, Ashwin 25, 2082 11:45 PM
 
     public const FORMAT_READABLE_DATETIME2 = 'D, d M Y H:i:s';  // Wed, 29 Asw 2082 12:50:05
