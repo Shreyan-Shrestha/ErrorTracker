@@ -23,6 +23,7 @@ return new class extends Migration
             $table->text('root_cause')->nullable();    
             $table->text('trigger')->nullable();
             $table->string('message')->nullable();
+            $table->string('status')->nullable();
             $table->string('start_time')->nullable();
             $table->string('end_time')->nullable();     
             $table->string('estimated_down')->nullable();

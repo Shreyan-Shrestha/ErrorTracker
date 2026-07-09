@@ -25,9 +25,9 @@ class ProblemController extends Controller
      */
     public function index(): View
     {
-        $problems = $this->problem_repository->getAll();
+        $errorReports = $this->problem_repository->getAll();
         $categories = $this->category_repository->getAll();
-        return view('problems.index', compact('problems', 'categories'));
+        return view('problems.index', compact('errorReports', 'categories'));
     }
    
     /**

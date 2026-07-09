@@ -2,13 +2,14 @@
 
 namespace App\Repositories\Api;
 
+use App\Enums\ErrorStatus;
 use App\Models\ErrorReport;
 use App\Repositories\Interfaces\ErrorReportRepositoryInterface;
 use App\Helpers\DateHelper;
 use App\Helpers\NepaliDate\src\NepaliDate;
-use App\Http\Requests\Api\ErrorReportRequest;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Override;
+
 
 class ErrorReportRepository implements ErrorReportRepositoryInterface
 {
@@ -24,31 +25,27 @@ class ErrorReportRepository implements ErrorReportRepositoryInterface
 
     public function create(array $data): void
     {
-        if(array_key_exists('end_time', $data) && !is_null($data['end_time']))
-        {
-            $start_time = NepaliDate::createFromFormat(NepaliDate::FORMAT_DATETIME_12_SHORT_SLASH_DMY,$data['start_time']);
-            $end_time = NepaliDate::createFromFormat(NepaliDate::FORMAT_DATETIME_12_SHORT_SLASH_DMY,$data['end_time']);
+        if (array_key_exists('end_time', $data) && !is_null($data['end_time'])) {
+            $start_time = NepaliDate::createFromFormat(NepaliDate::FORMAT_DATETIME_12_SHORT_SLASH_DMY, $data['start_time']);
+            $end_time = NepaliDate::createFromFormat(NepaliDate::FORMAT_DATETIME_12_SHORT_SLASH_DMY, $data['end_time']);
             $interval = $start_time->diffAsDateInterval($end_time);
-            $estimated_down = DateHelper::formatDateInterval($interval);
-            $data['estimated_down'] = $estimated_down;
+            $data['estimated_down'] = DateHelper::formatDateInterval($interval);
+            $data['status'] = ErrorStatus::Fixed->value;
         }
-
+        
         ErrorReport::create($data);
     }
 
     public function update(array $data, ErrorReport $error): void
     {
-        if(array_key_exists('end_time', $data) && !is_null($data['end_time']))
-        {
-            $start_time = NepaliDate::createFromFormat(NepaliDate::FORMAT_DATETIME_12_SHORT_SLASH_DMY,$data['start_time']);
-            $end_time = NepaliDate::createFromFormat(NepaliDate::FORMAT_DATETIME_12_SHORT_SLASH_DMY,$data['end_time']);
+        if (!empty($data['end_time'])) {
+            $start_time = NepaliDate::createFromFormat(NepaliDate::FORMAT_DATETIME_12_SHORT_SLASH_DMY, $data['start_time']);
+            $end_time = NepaliDate::createFromFormat(NepaliDate::FORMAT_DATETIME_12_SHORT_SLASH_DMY, $data['end_time']);
             $interval = $start_time->diffAsDateInterval($end_time);
             $estimated_down = DateHelper::formatDateInterval($interval);
             $data['estimated_down'] = $estimated_down;
-        }
-
-        if(array_key_exists('end_time', $data) && is_null($data['end_time']) && !is_null($error->estimated_down))
-        {
+            $data['status'] = ErrorStatus::Fixed;
+        } elseif (array_key_exists('end_time', $data) && is_null($data['end_time']) && !is_null($error->estimated_down)) {
             $data['estimated_down'] = null;
         }
 
@@ -62,16 +59,17 @@ class ErrorReportRepository implements ErrorReportRepositoryInterface
 
     public function markFixed(ErrorReport $error): void
     {
-        $start_time = NepaliDate::createFromFormat(NepaliDate::FORMAT_DATETIME_12_SHORT_SLASH_DMY,$error->start_time);
+        $start_time = NepaliDate::createFromFormat(NepaliDate::FORMAT_DATETIME_12_SHORT_SLASH_DMY, $error->start_time);
 
         $end_time = NepaliDate::now();
 
         $interval = $start_time->diffAsDateInterval($end_time);
         $estimated_down = DateHelper::formatDateInterval($interval);
 
-        $data = [  
-        'end_time' => $end_time->toDateString(),
-        'estimated_down' => $estimated_down,
+        $data = [
+            'end_time' => $end_time->toDateString(),
+            'estimated_down' => $estimated_down,
+            'status' => ErrorStatus::Fixed
         ];
 
         $error->update($data);

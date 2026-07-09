@@ -4,6 +4,7 @@ namespace App\Repositories\Interfaces;
 
 use App\Http\Requests\Api\ErrorReportRequest;
 use App\Models\ErrorReport;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 interface ErrorReportRepositoryInterface

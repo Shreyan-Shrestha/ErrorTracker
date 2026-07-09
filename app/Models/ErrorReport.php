@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Enums\ErrorSeverity;
+use App\Enums\ErrorStatus;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -11,6 +13,7 @@ class ErrorReport extends Model
 {
   use SoftDeletes;
   protected $table = 'error_reports';
+
   protected $fillable = [
     'user_record_id',
     'region',
@@ -22,6 +25,7 @@ class ErrorReport extends Model
     'root_cause',
     'trigger',
     'message',
+    'status',
     'start_time',
     'end_time',
     'estimated_down',
@@ -29,6 +33,7 @@ class ErrorReport extends Model
 
   public $casts = [
     'severity' => ErrorSeverity::class,
+    'status' => ErrorStatus::class,
   ];
 
   public function project(): BelongsTo
@@ -49,5 +54,16 @@ class ErrorReport extends Model
   public function user(): BelongsTo
   {
     return $this->belongsTo(UserRecord::class);
+  }
+
+  public function scopeOrderBySeverity( Builder $query): Builder
+  {
+    return $query->oderByRaw("CASE (SELECT severity FROM categories WHERE id = error_reports.category_id)
+    WHEN 'critical' THEN 1
+    WHEN 'high' THEN 2
+    WHEN 'medium' THEN 3
+    WHEN 'low' THEN 5
+    ELSE 5 END"
+    );
   }
 }

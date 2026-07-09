@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Enums\ErrorStatus;
 use App\Http\Controllers\Controller;
 use App\Models\ErrorReport;
 use App\Http\Requests\Api\ErrorReportRequest;
@@ -83,10 +84,10 @@ class ErrorReportController extends Controller
     public function markFixed(ErrorReport $error): RedirectResponse
     {
         if(!empty($error->end_time)){
-            return back()->with('error', 'Error Report is already marked as fixed at: {{$error->end_time}}');
+            return back()->with('error', 'Error Report is already marked as fixed at:'. $error->end_time);
         }
         $this->error_tracker_repository->markFixed($error);
-        return back()->with('success', 'Error Report {{$error->problem->name}} marked as Fixed.');
+        return back()->with('success', 'Error Report'. $error->problem->name .' marked as Fixed.');
     }
 
     /**
