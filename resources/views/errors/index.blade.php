@@ -57,8 +57,8 @@
     </div>
 
     @php
-    $headers = ['Error', 'Severity', 'Reported At', 'Cause', 'Start Time', 'Impact', 'Action'];
-    $headerClasses = ['','','','','hidden md:table-cell','',''];
+    $headers = ['Error', 'Severity', 'Reported At', 'Cause', 'Start Time', 'Impact', 'Status', 'Action'];
+    $headerClasses = ['','','','','hidden md:table-cell','','',''];
     $count=count($headers);
     @endphp
     <x-table :headers="$headers" :headerClasses="$headerClasses" title="Error Log">
@@ -87,7 +87,11 @@
             <td> {{ $errordata->root_cause }} </td>
             <td class="hidden md:table-cell text-sm md:text"> {{App\Helpers\DateHelper::formatDateString($errordata->start_time)}}</td>
             <td> {{ $errordata->impact }} </td>
-
+            <td> 
+                <div class="badge badge-soft rounded-full badge-sm md:badge-md {{$errordata->status->color()}}">
+                    <span>{{ $errordata->status->label()}}</span>
+                </div>
+            </td>
             <td>
                 <div tabindex="0" role="button" class="dropdown dropdown-end {{$loop->last || $loop->remaining < 2 ? 'dropdown-top' : 'dropdown-bottom'}} ">
                     <div tabindex="-1" class="btn btn-primary m-1 text-white">Actions 🔽</div>

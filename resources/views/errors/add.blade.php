@@ -1,7 +1,16 @@
+@php use App\Enums\ErrorStatus; @endphp
 @extends('partials.layout', ['title' => 'ErrorTracker | Report Error'])
 
 @section('content')
 <div class="w-full p-6">
+    <x-breadcrumbs>
+        <li class="font-semibold">
+            <a href="{{route('errors.index')}}">Errors</a>
+        </li>
+
+        <li class="text-primary font-semibold">Report Error</li>
+    </x-breadcrumbs>
+
     <p class="text-3xl">Report Error</p>
     <div class="p-3 lg:p-6 lg:w-6xl mx-auto">
         <form action="{{route('errors.create')}}" class="grid gap-2 md:gap-4 px-6" method="POST">
@@ -21,22 +30,26 @@
             </label>
 
             <legend class="fieldset-legend px-2 md:px-6 bg-base-300 font-bold md:text-xl">LOCATION</legend>
-            <label class="fieldset grid grid-cols-1 lg:grid-cols-3 gap-10">
-                <div class="grid gap-1">
+            <label class="fieldset grid grid-cols-1 lg:grid-cols-2 gap-10">
+                <div class="grid">
                     <legend class="fieldset-legend md:text-lg">Region *</legend>
                     <input type="text" name="region" class="input input-sm md:input-md validator w-full" validator required
                         minlength="3" maxlength="25" value="{{old('region')}}" placeholder="Enter Your Region">
                     <p class="hidden validator-hint">Required.</p>
                 </div>
 
-                <div class="grid gap-1">
+                <div class="grid">
                     <legend class="fieldset-legend md:text-lg">Branch *</legend>
                     <input type="text" name="branch" class="input input-sm md:input-md validator w-full" validator required
                         minlength="3" maxlength="30" value="{{old('branch')}}" placeholder="Enter your Branch">
                     <p class="hidden validator-hint">Required.</p>
                 </div>
+            </label>
 
-                <div class="grid gap-1">
+
+            <fieldset class="p-3 md:px-6 fieldset grid grid-cols-1 md:grid-cols-2 gap-10 gap-y-4 rounded-box border-2 bg-base-100 border-gray-300">
+                <legend class="fieldset-legend md:text-xl font-bold text-gray-600">ISSUE DETAILS</legend>
+                <label class="fieldset grid">
                     <legend class="fieldset-legend md:text-lg">Project *</legend>
                     <select name="project_id" class="select select-sm md:select-md w-full validator" required>
                         <option selected disabled>Assign the Project with the Error</option>
@@ -45,14 +58,19 @@
                         @endforeach
                     </select>
                     <p class="hidden validator-hint">*Required.</p>
-                </div>
-            </label>
+                </label>
 
+                <label class="fieldset grid">
+                    <legend class="fieldset-legend md:text-lg">Status*</legend>
+                    <select class="select md:select-md validator w-full" name="status" required>
+                        <option value="" selected disabled>Assign the Error's Current Status</option>
+                        @foreach(App\Enums\ErrorStatus::cases() as $status)
+                        <option value="{{$status->value}}" @selected(old('status') == $status->value)>{{$status->label()}}</option>
+                        @endforeach
+                    </select>
+                </label>
 
-            <fieldset class="p-3 md:px-6 fieldset grid grid-cols-1 md:grid-cols-2 gap-10 gap-y-4 rounded-box border-2 bg-base-100 border-gray-300">
-                <legend class="fieldset-legend md:text-xl font-bold text-gray-600">ISSUE DETAILS</legend>
-
-                <label class=" fieldset grid gap-1">
+                <label class=" fieldset grid">
                     <legend class="fieldset-legend md:text-lg">Issue *</legend>
                     <select name="problem_id" class="select validator md:select-md w-full" required w-full>
                         <option selected disabled>Assign the Issue </option>
@@ -63,7 +81,7 @@
                     <p class="validator-hint hidden">*Required.</p>
                 </label>
 
-                <label class="fieldset grid gap-1">
+                <label class="fieldset grid">
                     <legend class="fieldset-legend md:text-lg">Issue Category *</legend>
                     <select name="category_id" class="select validator md:select-md w-full" required>
                         <option selected disabled>Assign the Issue Category</option>
@@ -74,32 +92,31 @@
                     <p class="validator-hint">*Required</p>
                 </label>
 
-                <label class="fieldset col-span-2 grid gap-1">
+                <label class="fieldset col-span-2 grid">
                     <legend class="fieldset-legend md:text-lg">Issue Triggered By</legend>
                     <input type="text" class="input input-sm md:input-md w-full" name="trigger" value="{{old('trigger')}}"
                         minlength="5" maxlength="150" placeholder="eg. scheduled update, manual action, unknown....">
                     <p class="validator-hint hidden"></p>
                 </label>
 
-                <label class="fieldset col-span-2 grid gap-1">
+                <label class="fieldset col-span-2 grid">
                     <span class="label md:text-lg">Error Message</span>
                     <input type="text" class="input input-sm md:input-md validator w-full" name="message" value="{{old('message')}}"
                         minlength="5" maxlength="150" placeholder="Past the Error Message here">
                     <p class="validator-hint hidden">Optional</p>
                 </label>
 
-                <label class="fieldset col-span-2 grid gap-1">
+                <label class="fieldset col-span-2 grid">
                     <span class="label md:text-lg">Impact</span>
                     <input type="text" name="impact" class="input input-sm md:input-md validator w-full"
                         minlength="5" maxlength="150" placeholder="Describe who/what is affected" required value="{{old('impact')}}">
                     <p class="validator-hint hidden"></p>
                 </label>
 
-                <label class="fieldset grid gap-1">
+                <label class="fieldset grid col-span-2">
                     <span class="label md:text-lg">Root Cause Analysis:</span>
-                    <textarea name="root_cause" class="input input-sm md:input-md validator w-full"
-                    minlength="10" maxlength="1500" placeholder="Write the Root Cause Analysis for the Issue." value="{{old('root_cause')}}">
-                    </textarea>
+                    <textarea name="root_cause" class="input input-sm md:input-md validator h-16 md:h-36 w-full"
+                    minlength="10" maxlength="1500" placeholder="Write the Root Cause Analysis for the Issue." value="{{old('root_cause')}}"></textarea>
                     <p class="validator-hint hidden">Optional. ( 10-1500 characters limit)</p>
                 </label>
 
@@ -109,18 +126,18 @@
             <fieldset class="p-3 md:px-6 fieldset grid grid-cols-1 md:grid-cols-2 gap-10 gap-y-4 rounded-box border-2 bg-base-200 border-gray-300">
                 <legend class="fieldset-legend md:text-xl">TIMING</legend>
 
-                <label class="fieldset grid gap-1">
+                <label class="fieldset grid">
                     <span class="label md:text-lg">Start Time (DD/MM/YYYY) *</span>
                     <input type="text" class="nepali-datepicker input input-sm md:input-md validator w-full" id="start_time"
-                        required name="start_time" pattern="^[0-9]{2}/[0-9]{2}/[0-9]{4}\s[0-9]{2}:[0-9]{2}"
-                        value="{{old('start_time')}}" placeholder="30/05/2083 12:00">
-                    <p class="validator-hint hidden"></p>
+                        required name="start_time" pattern="^[0-9]{2}/[0-9]{2}/[0-9]{4}\s[0-9]{2}:[0-9]{2}\s[AM-PM]{2}"
+                        value="{{old('start_time')}}" placeholder="30/05/2083 10:00 AM">
+                    <p class="validator-hint hidden">Format: 30/05/2083 10:00 AM</p>
                 </label>
 
-                <label class="fieldset grid gap-1">
+                <label class="fieldset grid">
                     <span class="label text-lg">End Time (DD/MM/YYYY)*</span>
                     <input type="datetime" class="nepali-datepicker input input-sm md:input-md validator w-full" name="end_time" id="end_time"
-                        value="{{old('end_time')}}" pattern="^[0-9]{2}/[0-9]{2}/[0-9]{4}\s[0-9]{2}:[0-9]{2}" placeholder="01/06/2083 01:00">
+                        value="{{old('end_time')}}" pattern="^[0-9]{2}/[0-9]{2}/[0-9]{4}\s[0-9]{2}:[0-9]{2}\s[AM-PM]{2}" placeholder="01/06/2083 01:00">
                     <p class="validator-hint hidden"></p>
                 </label>
             </fieldset>
