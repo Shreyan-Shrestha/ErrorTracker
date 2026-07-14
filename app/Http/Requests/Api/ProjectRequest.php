@@ -34,12 +34,13 @@ class ProjectRequest extends FormRequest
 
     private function storeRules(): array
     {
+        $projectId = $this->route('project')?->id;
+
         return [
-            "gitlab_id" => "required|int|min:1|unique:projects,gitlab_id",
-            "project_name" => "required|string|min:4|max:50",
-            "user_record_id" => "required|int|min:1",
-            "status" => "required",
-            Rule::enum(ProjectStatus::class),
+            "gitlab_id" => ['required', 'int', 'min:1', Rule::unique('projects', 'gitlab_id')->ignore($projectId)],
+            "project_name" => ['required', 'string', 'min:4', 'max:50'],
+            "user_record_id" => ['required', 'int', 'min:1'],
+            "status" => ['required', Rule::enum(ProjectStatus::class)],
         ];
     }
 
@@ -66,7 +67,12 @@ class ProjectRequest extends FormRequest
 
     protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
     {
-        session()->flash('modal_id', 'modal_create');
+        $modalId = match(true){
+            $this->routeIs('projects.edit') => 'modal_edit_project',
+            default => 'modal_create',
+        };
+
+        session()->flash('modal_id', $modalId);
         parent::failedValidation($validator);
     }
 }
