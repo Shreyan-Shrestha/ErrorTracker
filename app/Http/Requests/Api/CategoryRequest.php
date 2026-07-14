@@ -43,7 +43,13 @@ class CategoryRequest extends FormRequest
 
     protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
     {
+        $modalId = match(true){
+            $this->routeIs('category.create') => 'modal_category',
+            default => 'modal_category',    
+        };
+
         session()->flash('modal_id', 'modal_create');
+        session()->flash('modal_problem', 'modal_category');
         parent::failedValidation($validator);
     }
 }
