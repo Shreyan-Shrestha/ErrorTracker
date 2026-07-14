@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Api;
 
+use App\Models\ErrorReport;
 use App\Models\Problem;
 use App\Repositories\Interfaces\ProblemRepositoryInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -10,12 +11,19 @@ class ProblemRepository implements ProblemRepositoryInterface
 {
     public function getAll() : LengthAwarePaginator
     {
-        return Problem::latest()->paginate(10);
+        return ErrorReport::with(['problem', 'category'])
+        ->orderBySeverity()
+        ->paginate(10);
+    }
+
+    public function getAllCount(): int
+    {
+        return Problem::count();
     }
 
     public function getById(int $id) : Problem
     {
-        return Problem::findOrFail($id);
+        return Problem::with('errorReports')->findOrFail($id);
     
     }
 

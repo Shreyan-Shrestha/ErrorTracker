@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Api;
 
+use App\View\Components\modal\create;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -38,7 +39,14 @@ class ProblemRequest extends FormRequest
 
     protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
     {
-        session()->flash('modal_id', 'modal_create');
+        $modalId = match(true){
+            $this->routeIs('problems.create') => 'modal_problem',
+            $this->routeIs('problems.edit') => 'modal_edit_problem',
+            default => 'modal_problem',
+        };
+
+        session()->flash('modal_id', $modalId);
+        session()->flash('error_modal', 'modal_problem');
         parent::failedValidation($validator);
     }
 }

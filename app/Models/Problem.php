@@ -10,7 +10,7 @@ class Problem extends Model
     protected $table = 'problems';
     protected $fillable = ['name'];
 
-    public function errors(): HasMany
+    public function errorReports(): HasMany
     {
         return $this->hasMany(ErrorReport::class);
     }
