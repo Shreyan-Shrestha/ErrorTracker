@@ -5,7 +5,7 @@
 ])
 
 <dialog id="{{$id}}" class="modal">
-    <div class="modal-box w-md sm:w-full">
+    <div {{ $attributes->class(['modal-box w-md sm:w-full']) }}>
         <form method="dialog">
             <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-3">✕</button>
         </form>
