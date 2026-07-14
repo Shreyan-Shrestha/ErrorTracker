@@ -22,7 +22,3 @@ td{
 thead tr, tr.pagination, input, select, textarea, .dropdown-content{
     background-color: #F2F3FF !important;
 }
-
-a{
-    text-decoration: none;
-}

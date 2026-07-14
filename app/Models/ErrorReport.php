@@ -32,7 +32,6 @@ class ErrorReport extends Model
   ];
 
   public $casts = [
-    'severity' => ErrorSeverity::class,
     'status' => ErrorStatus::class,
   ];
 
@@ -56,13 +55,14 @@ class ErrorReport extends Model
     return $this->belongsTo(UserRecord::class);
   }
 
-  public function scopeOrderBySeverity( Builder $query): Builder
+  public function scopeOrderBySeverity(Builder $query): Builder
   {
-    return $query->oderByRaw("CASE (SELECT severity FROM categories WHERE id = error_reports.category_id)
+    return $query->orderByRaw(
+    "CASE (SELECT severity FROM categories WHERE id = error_reports.category_id)
     WHEN 'critical' THEN 1
     WHEN 'high' THEN 2
     WHEN 'medium' THEN 3
-    WHEN 'low' THEN 5
+    WHEN 'low' THEN 4
     ELSE 5 END"
     );
   }

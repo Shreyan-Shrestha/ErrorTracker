@@ -1,21 +1,26 @@
-<?
+<?php
 
 namespace App\Repositories\Api;
 
+use App\Enums\ErrorSeverity;
 use App\Enums\ErrorStatus;
 use App\Models\ErrorReport;
 use App\Repositories\Interfaces\ErrorReportRepositoryInterface;
 use App\Helpers\DateHelper;
 use App\Helpers\NepaliDate\src\NepaliDate;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Pagination\LengthAwarePaginator;
-
+use Override;
 
 class ErrorReportRepository implements ErrorReportRepositoryInterface
 {
-    public function getall(): LengthAwarePaginator
+    public function getall(int $paginate): LengthAwarePaginator
     {
-        return ErrorReport::orderBy('updated_at', 'desc')->paginate(10);
+        return ErrorReport::orderBy('updated_at', 'desc')->paginate($paginate);
+    }
+
+    public function getAllCount(): int
+    {
+        return ErrorReport::count();
     }
 
     public function show(int $id): ErrorReport
@@ -32,7 +37,7 @@ class ErrorReportRepository implements ErrorReportRepositoryInterface
             $data['estimated_down'] = DateHelper::formatDateInterval($interval);
             $data['status'] = ErrorStatus::Fixed->value;
         }
-        
+
         ErrorReport::create($data);
     }
 
@@ -44,7 +49,7 @@ class ErrorReportRepository implements ErrorReportRepositoryInterface
             $interval = $start_time->diffAsDateInterval($end_time);
             $estimated_down = DateHelper::formatDateInterval($interval);
             $data['estimated_down'] = $estimated_down;
-            $data['status'] = ErrorStatus::Fixed;
+            $data['status'] = ErrorStatus::Fixed->value;
         } elseif (array_key_exists('end_time', $data) && is_null($data['end_time']) && !is_null($error->estimated_down)) {
             $data['estimated_down'] = null;
         }
@@ -69,7 +74,7 @@ class ErrorReportRepository implements ErrorReportRepositoryInterface
         $data = [
             'end_time' => $end_time->toDateString(),
             'estimated_down' => $estimated_down,
-            'status' => ErrorStatus::Fixed
+            'status' => ErrorStatus::Fixed->value
         ];
 
         $error->update($data);
@@ -78,5 +83,54 @@ class ErrorReportRepository implements ErrorReportRepositoryInterface
     public function delete(ErrorReport $error): void
     {
         $error->delete();
+    }
+
+    public function getStats(): array
+    {
+        return [
+            'reported'   => $this->getReported(),
+            'resolved'   => $this->getResolved(),
+            'unresolved' => $this->getUnresolved(),
+            'critical'   => $this->getCritical()
+        ];
+    }
+
+    private function getReported(): array
+    {
+        return [
+            'value' => $this->getAllCount(),
+            'change' => $this->getReportedChange(),
+        ];
+    }
+
+    private function getReportedChange(): int
+    {
+        $total = $this->getAllCount();
+        $count = ErrorReport::where('created_at', '>=', now()->subDay())->count();
+        return $total > 0 ? round(($count / $total) * 100, 0) : 0;
+    }
+
+    private function getResolved(): array
+    {
+        return [
+            'value' => ErrorReport::where('status', ErrorStatus::Fixed->value)->count()
+        ];
+    }
+
+    private function getUnresolved(): array
+    {
+        return [
+            'value' => ErrorReport::whereNot('status', ErrorStatus::Fixed->value)->count()
+        ];
+    }
+
+    private function getCritical(): array
+    {
+        return
+            [
+                'value' => ErrorReport::whereHas('category', function ($query) {
+                    $query->where('severity', ErrorSeverity::Critical->value);
+                })->count()
+            ];
     }
 }

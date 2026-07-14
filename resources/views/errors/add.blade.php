@@ -4,7 +4,7 @@
 @section('content')
 <div class="w-full p-6">
     <x-breadcrumbs>
-        <li class="font-semibold">
+        <li>
             <a href="{{route('errors.index')}}">Errors</a>
         </li>
 

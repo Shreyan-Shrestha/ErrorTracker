@@ -21,10 +21,10 @@ enum ErrorSeverity : string
     public function color(): string
     {
         return match($this){
-            ErrorSeverity::Critical => 'py-2 rounded-box bg-red-200 text-error-content',
-            ErrorSeverity::High => 'py-2 rounded-box bg-orange-200 text-warning-content',
-            ErrorSeverity::Medium => 'py-2 rounded-box bg-yellow-200 text-yellow-800',
-            ErrorSeverity::Low => 'py-2 roundedbox bg-blue-200 text-info-content'
+            ErrorSeverity::Critical => 'py-2 md:rounded-box md:bg-red-200 text-error-content',
+            ErrorSeverity::High     => 'py-2 md:rounded-box md:bg-orange-200 text-warning-content',
+            ErrorSeverity::Medium   => 'py-2 md:rounded-box md:bg-yellow-200 text-yellow-800',
+            ErrorSeverity::Low      => 'py-2 md:roundedbox md:bg-blue-200 text-info-content'
         };
     }
 
@@ -46,6 +46,16 @@ enum ErrorSeverity : string
             ErrorSeverity::High => 5,
             ErrorSeverity::Medium => 3,
             ErrorSeverity::Low => 1
+        };
+    }
+
+    public function impactColor(): string
+    {
+        return match($this){
+            ErrorSeverity::Critical => 'progress-error',
+            ErrorSeverity::High => 'progress-warning',
+            ErrorSeverity::Medium => 'progress-info',
+            ErrorSeverity::Low => 'progress-neutral'
         };
     }
 }

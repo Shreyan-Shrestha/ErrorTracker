@@ -9,25 +9,30 @@ use App\Http\Requests\Api\ErrorReportRequest;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use App\Repositories\Interfaces\ErrorReportRepositoryInterface;
-use App\Repositories\Interfaces\ProjectRepositoryInterface;
 
 class ErrorReportController extends Controller
 {
     protected ErrorReportRepositoryInterface $error_tracker_repository;
-    protected ProjectRepositoryInterface $project_repository;
 
-    public function __construct(ErrorReportRepositoryInterface $error_tracker_repository, ProjectRepositoryInterface $project_repository)
+    public function __construct(ErrorReportRepositoryInterface $error_tracker_repository)
     {
         $this->error_tracker_repository = $error_tracker_repository;
-        $this->project_repository = $project_repository;
     }
     /**
      * Display a listing of the resource.
      */
     public function index(): View
     {
-        $errorsdata = $this->error_tracker_repository->getall();
-        return view('errors.index', compact('errorsdata'));
+        $errorsdata = $this->error_tracker_repository->getall(4);
+        $logCount = $this->error_tracker_repository->getAllCount();
+        $stats = $this->error_tracker_repository->getStats();
+        return view('errors.index', compact('stats', 'errorsdata', 'logCount'));
+    }
+
+    public function errorLogs(): View
+    {
+        $errorsdata = $this->error_tracker_repository->getall(4);
+        return view('errors.logs', compact('errorsdata'));
     }
 
     /**
@@ -78,7 +83,7 @@ class ErrorReportController extends Controller
     {
         $validated = $request->validated();
         $this->error_tracker_repository->analysis($validated, $error);
-        return back()->with('success', 'Root Cause Analysis updated successfully');
+        return redirect()->route('errors.index')->with('success', 'Root Cause Analysis updated successfully');
     }
 
     public function markFixed(ErrorReport $error): RedirectResponse
@@ -86,8 +91,13 @@ class ErrorReportController extends Controller
         if(!empty($error->end_time)){
             return back()->with('error', 'Error Report is already marked as fixed at:'. $error->end_time);
         }
+
+        if(empty($error->root_cause)){
+            return redirect()->route('errors.index')->with('error', 'Please fill the Root Cause Analysis to mark the error as Fixed.');
+        }
+
         $this->error_tracker_repository->markFixed($error);
-        return back()->with('success', 'Error Report'. $error->problem->name .' marked as Fixed.');
+        return redirect()->route('errors.index')->with('success', 'Error Report'. $error->problem->name .' marked as Fixed.');
     }
 
     /**
@@ -96,6 +106,6 @@ class ErrorReportController extends Controller
     public function destroy(ErrorReport $error): RedirectResponse
     {
         $this->error_tracker_repository->delete($error);
-        return back()->with('success', 'Error record deleted successfully');
+        return redirect()->route('errors.index')->with('success', 'Error record deleted successfully');
     }
 }

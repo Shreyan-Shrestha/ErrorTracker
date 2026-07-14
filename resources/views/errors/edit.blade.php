@@ -3,7 +3,7 @@
 @section('content')
 <div class="w-full p-6">
     <x-breadcrumbs>
-        <li class="font-semibold">
+        <li>
             <a href="{{route('errors.index')}}">Errors</a>
         </li>
 
@@ -50,7 +50,7 @@
 
                 <label class="fieldset grid gap-1">
                     <legend class="fieldset-legend md:text-lg">Project: *</legend>
-                    <select name="project_id" class="select select-sm md:select-md w-full" required>
+                    <select name="project_id" class="select select-sm md:select-md w-full validator" required>
                         <option selected disabled>Assign the Project with the Error</option>
                         @foreach($projects as $project)
                         <option value="{{ $project->id }}" @selected(old('project_id', $error->project_id) == $project->id)>

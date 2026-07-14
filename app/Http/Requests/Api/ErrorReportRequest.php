@@ -41,21 +41,22 @@ class ErrorReportRequest extends FormRequest
             "problem_id"         => ['required', 'int'],
             "category_id"        => ['required', 'int'],
             "impact"             => ['nullable', 'string', 'min:5',  'max:150'],
-            "root_cause"         => ['nullable', 'string', 'min:10', 'max:1500'],
+            "root_cause"         => ['nullable', 'string', 'min:10', 'max:1500', Rule::requiredIf(fn() => $this->input('status') === ErrorStatus::Fixed->value)],
             "trigger"            => ['nullable', 'string', 'min:5' , 'max:150'],
             "message"            => ['nullable', 'string', 'min:5', 'max:50'],
             "status"             => ['required', Rule::enum(ErrorStatus::class)],
             "start_time"         => ['required', 'string'],
-            "end_time"           => [
-                'nullable', 'string', Rule::requiredIf(fn() => $this->input('status') === ErrorStatus::Fixed->value),
-            ],
+            "end_time"           => ['nullable', 'string',
+                                    Rule::requiredIf(fn() => $this->input('status') === ErrorStatus::Fixed->value),
+                                    Rule::prohibitedIf(fn() => $this->input('status') !== ErrorStatus::Fixed->value)
+                                    ]
         ];
     }
 
     private function analysisRules() : array 
     {
         return [
-            "root_cause" => ['required', 'string', 'min:10', 'max:1500']
+            "root_cause" => ['nullable', 'string', 'min:10', 'max:1500']
         ];    
     }
 
@@ -65,18 +66,20 @@ class ErrorReportRequest extends FormRequest
     {
         return [
             'user_record_id.required' => 'Please assign your Name from the list.',
-            'region.required' => 'Please assign the name of your Region.',
-            'branch.required' => 'Please assign the name of your Branch.',
-            'project_id.required' => 'Please assign the Project with the Error.',
-            'problem_id.required' => 'Please assign a Problem to the Error report',
-            'category_id.required' => 'Please assign a Category to the Error report',
-            'impact.min' => 'Impact field must be minimum 5 characters.',
-            'impact.max' => 'Impact field cannot exceed 150 characters',
-            'root_cause.min' => 'Root Cause Analysis field must be above 10 characters.',
-            'root_cause.max' => 'Root Cause Analysis field cannot exceed 1500 characters',
-            'trigger.min' => 'Trigerred By field must be above 5 characters.',
-            'trigger.max' => 'Trigerred By field cannot exceed 150 characters.',
-            'end_time.required' => 'Please assign a valid End Time to set the Error as Fixed',
+            'region.required'         => 'Please assign the name of your Region.',
+            'branch.required'         => 'Please assign the name of your Branch.',
+            'project_id.required'     => 'Please assign the Project with the Error.',
+            'problem_id.required'     => 'Please assign a Problem to the Error report',
+            'category_id.required'    => 'Please assign a Category to the Error report',
+            'impact.min'              => 'Impact field must be minimum 5 characters.',
+            'impact.max'              => 'Impact field cannot exceed 150 characters',
+            'root_cause.required'     => 'Root Cause Analysis must be completed to mark the Error as Fixed.',
+            'root_cause.min'          => 'Root Cause Analysis field must be above 10 characters.',
+            'root_cause.max'          => 'Root Cause Analysis field cannot exceed 1500 characters',
+            'trigger.min'             => 'Trigerred By field must be above 5 characters.',
+            'trigger.max'             => 'Trigerred By field cannot exceed 150 characters.',
+            'end_time.required'       => 'Please assign a valid End Time to set the Error as Fixed',
+            'end_time.prohibited'     => 'Please clear the End Time field to change Status from Fixed to another.'
         ];
     }
 
