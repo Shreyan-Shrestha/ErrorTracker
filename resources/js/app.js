@@ -1,3 +1,39 @@
+//For SKeleton:
+function skeletonHide() {
+    const skeletonEl = document.getElementById('skeleton');
+    const contentEl = document.getElementById('content');
+
+    if (!skeletonEl || !contentEl) return;
+
+    skeletonEl.classList.add('hidden');
+    contentEl.classList.remove('hidden');
+}
+
+function skeletonShow() {
+    const skeletonEl = document.getElementById('skeleton');
+    const contentEl = document.getElementById('content');
+
+    if (!skeletonEl || !contentEl) return;
+
+    skeletonEl.classList.remove('hidden');
+    contentEl.classList.add('hidden');
+}
+
+window.addEventListener('load', skeletonHide);
+window.addEventListener('beforeunload', skeletonShow);
+// With event delegation:
+document.addEventListener('submit', function(e) {
+    if (e.target.tagName === 'FORM') skeletonShow();
+});
+
+document.addEventListener('click', function(e) {
+    const link = e.target.closest('a:not([target="_blank"])');
+    if (link && link.href && !link.href.startsWith('#') && !link.href.startsWith('javascript')) {
+        skeletonShow();
+    }
+});
+
+
 // Opens Modal: create_modal_
 window.OpenCreateModal = function (action, modalId = 'modal_create') {
     document.getElementById('create_form_' + modalId).action = action;
