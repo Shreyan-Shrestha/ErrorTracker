@@ -2,7 +2,32 @@
 @extends('partials.layout', ['title' => 'WorldLink ErrorTracker | Problems'])
 
 @section('content')
-<div class="w-full p-2 md:p-6">
+<div id="skeleton" class="w-full p-2 md:p-6">
+    <div class="skeleton h-4 w-32 rounded-xl mb-6"></div>
+
+    <div class="mb-6 flex justify-between">
+        <div class="h-10 w-40 skeleton rounded-xl"></div>
+
+        <div class="grid justify-items-start gap-4">
+            <div class="skeleton h-12 w-48 rounded-full"></div>
+            <div class="skeleton h-12 w-48 rounded-full"></div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-16 mt-6 p-2 lg:px-6">
+        <div class="skeleton h-40"></div>
+        <div class="skeleton h-40"></div>
+        <div class="skeleton h-40"></div>
+        <div class="skeleton h-40"></div>
+    </div>
+
+    <div class="grid gird-cols-1 md:grid-cols-3 gap-6 px-4 lg:px-6">
+        <div class="col-1 skeleton rounded-box h-75 mt-6"></div>
+        <div class="col-1 skeleton md:col-span-2 h-75 mt-6"></div>
+    </div>
+</div>
+
+<div id="content" class="w-full p-2 md:p-6 hidden">
     <x-breadcrumbs>
         <li class="text-primary font-semibold">Problems</li>
     </x-breadcrumbs>
@@ -146,7 +171,7 @@
     </div>
 
     <x-modal.create id="modal_problem" creating="Add Problem">
-        @if(session('error_modal') === 'modal_problem')
+        @if(session('modal_id') === 'modal_problem')
         <x-error-alert />
         @endif
 
@@ -160,7 +185,7 @@
     </x-modal.create>
 
     <x-modal.create id="modal_category" creating="Add Problem Category">
-        @if(session('modal_problem') === 'modal_category')
+        @if(session('modal_id') === 'modal_category')
         <x-error-alert />
         @endif
 
@@ -186,7 +211,7 @@
 
     <x-modal.create id="modal_edit_problem" creating="Edit Problem" methodPatch="true">
         <div class="p-3 px-6 grid gap-4">
-            @if(session('error_modal') === 'modal_problem')
+            @if(session('modal_id') === 'modal_edit_problem')
             <x-error-alert />
             @endif
 

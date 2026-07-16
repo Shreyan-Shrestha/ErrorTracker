@@ -1,7 +1,8 @@
 @extends('partials.layout', ['title', 'WorldLink ErrorTracker | Projects'])
 
 @section('content')
-<div class="w-full p-4 lg:p-6">
+<x-skeletons.index></x-skeletons.index>
+<div id="content" class="w-full p-4 lg:p-6 hidden">
     <x-breadcrumbs>
         <li class="text-primary font-semibold">Projects</li>
     </x-breadcrumbs>

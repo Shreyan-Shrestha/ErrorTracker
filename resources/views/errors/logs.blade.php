@@ -3,8 +3,9 @@
 @extends('partials.layout', ['title' => 'Error Logs | ErrorTracker'])
 
 @section('content')
-<div class="p-6 w-full">
+<x-skeletons.logs></x-skeletons.logs>
 
+<div id="content" class="p-6 w-full">
     <x-breadcrumbs>
         <li>
             <a href="{{route('errors.index')}}">Errors</a>
