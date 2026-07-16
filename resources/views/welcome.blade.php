@@ -1,5 +1,7 @@
-<x-layout title="Homepage | ErrorTracker" class="bg-[#FDFDFC] dark:bg-[#0a0a0a] text-[#1b1b18] flex p-6 lg:p-8 items-center lg:justify-center min-h-screen flex-col">
-    <div class="flex">
+@extends('patials.layout', ['title' => 'Homepage | ErrorTracker'])
+
+@section('content')
+<div class="flex justify-center-safe">
         <h1 class="2xl text-blue-700 flex">
             <span class="text-red-500">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-flag-fill" viewBox="0 0 16 16">
@@ -50,4 +52,4 @@
             });
         };
     </script>
-</x-layout>
+@endsection

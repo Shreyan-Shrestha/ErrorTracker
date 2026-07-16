@@ -10,3 +10,15 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+td{
+    padding: 1rem;
+}
+
+.modal-box{
+    padding:0% !important;
+}
+
+thead tr, tr.pagination, input, select, textarea, .dropdown-content{
+    background-color: #F2F3FF !important;
+}

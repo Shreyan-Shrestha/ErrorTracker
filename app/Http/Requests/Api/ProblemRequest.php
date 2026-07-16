@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Api;
 
+use App\View\Components\modal\create;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -23,7 +24,28 @@ class ProblemRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required','string', 'max:100']
+            'name' => ['required', 'string', 'max:100']
         ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'Problem Name is Required',
+            'name.string' => 'Problem Name must have only characters',
+            'name.max' => 'Problem Name Must Be Less Than 100 Characters',
+        ];
+    }
+
+    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    {
+        $modalId = match(true){
+            $this->routeIs('problems.create') => 'modal_problem',
+            $this->routeIs('problems.edit') => 'modal_edit_problem',
+            default => 'modal_problem',
+        };
+
+        session()->flash('modal_id', $modalId);
+        parent::failedValidation($validator);
     }
 }

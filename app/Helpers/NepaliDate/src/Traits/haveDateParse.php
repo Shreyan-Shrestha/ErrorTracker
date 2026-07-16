@@ -32,7 +32,17 @@ trait haveDateParse
         'Y-n-d',
         'Y-m-d H:i:s',
         'Y-n-d H:i',
+        'd-m-Y H:i A',
         'Y-m-d h:i:s A',
+        'Y-m-d h:i A',
+        'Y/m/d',
+        'Y/n/d',
+        'Y/m/d H:i:s',
+        'Y/n/d H:i',
+        'Y/m/d H:i A',
+        'd/m/Y H:i A',
+        'd/m/Y',
+        'd/m/Y H:i',
         'h:i A',
         'h:i:s A',
         'H:i',
@@ -167,7 +177,7 @@ trait haveDateParse
         ];
         $regex = strtr($format, $replacements);
 
-        return '/^' . $regex . '$/iu';
+        return '#^' . $regex . '$#iu';
     }
 
     protected static function parseFromRegex(string $regex, string $date): ?static

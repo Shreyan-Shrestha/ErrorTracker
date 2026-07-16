@@ -179,12 +179,16 @@ interface NepaliDateInterface
 
     public const FORMAT_DATETIME_12_SHORT = 'Y-m-d h:i A'; // 2082-06-25 11:21 PM
 
+    public const FORMAT_DATETIME_12_SHORT_SLASH = 'Y/m/d h:i A'; // 2082/06/25 11:21 PM
+
     public const FORMAT_DATETIME_12_SHORT_DMY = 'd-m-Y h:i A'; // 25-06-2082 11:21 PM
 
     public const FORMAT_DATETIME_12_SHORT_SLASH_DMY = 'd/m/Y h:i A'; // 25/06/2082 11:21 PM
 
     // Readable Formats
     public const FORMAT_READABLE_DATE = 'l, F j, Y';       // Saturday, Ashwin 25, 2082
+
+    public const FORMAT_READABLE_DATE_SHORT = 'F j, Y'; // Ashwin 25, 2082
 
     public const FORMAT_READABLE_DATETIME = 'l, F j, Y g:i A'; // Saturday, Ashwin 25, 2082 11:45 PM
 

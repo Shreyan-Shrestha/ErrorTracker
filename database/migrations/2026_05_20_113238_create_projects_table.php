@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
             $table->integer('gitlab_id');
+            $table->foreignId('user_record_id')->constrained('user_records');
             $table->string('project_name');
             $table->string('status');
             $table->timestamps();

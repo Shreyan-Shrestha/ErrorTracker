@@ -222,9 +222,14 @@ class NepaliDate implements NepaliDateInterface
         return $date;
     }
 
+    public function toDateStringReadable(): string
+    {
+        return $this->format(NepaliDateInterface::FORMAT_READABLE_DATE_SHORT);
+    }
+
     public function toDateString(): string
     {
-        return $this->format(NepaliDateInterface::FORMAT_DATE_YMD);
+        return $this->format(NepaliDateInterface::FORMAT_DATETIME_12_SHORT_SLASH_DMY);
     }
 
     public function getTimestamp(): int
