@@ -48,8 +48,7 @@ class CategoryRequest extends FormRequest
             default => 'modal_category',    
         };
 
-        session()->flash('modal_id', 'modal_create');
-        session()->flash('modal_problem', 'modal_category');
+        session()->flash('modal_id', $modalId);
         parent::failedValidation($validator);
     }
 }

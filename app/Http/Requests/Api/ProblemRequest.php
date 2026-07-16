@@ -46,7 +46,6 @@ class ProblemRequest extends FormRequest
         };
 
         session()->flash('modal_id', $modalId);
-        session()->flash('error_modal', 'modal_problem');
         parent::failedValidation($validator);
     }
 }
