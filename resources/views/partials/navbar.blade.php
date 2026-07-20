@@ -3,8 +3,17 @@
         <input type="text" placeholder="Search... " class="input input-bordered rounded-3xl w-full bg-blue-50" />
     </div>
     <div class="navbar-end">
-        <ul class="menu menu-horizontal">
-            <li class>
+        <ul class="menu menu-horizontal gap-2">
+            <li>
+                <a class="btn btn-sm btn-primary btn-ghost" href="{{route('errors.add')}}">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus size-6" viewBox="0 0 16 16">
+                        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
+                    </svg>
+                    Report Error
+                </a>
+            </li>
+
+            <li>
                 @auth
                 <details>
                     <summary>

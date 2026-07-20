@@ -71,7 +71,7 @@
             </x-slot:icon>
         </x-stat-card>
 
-        <div class="stat border-2 border-s-6 border-red-500 text-red-500 bg-red-50 shadow rounded-xl p-2 xl:p-6">
+        <div class="stat border-2 border-s-6 border-red-500 text-red-500 bg-red-50 shadow rounded-xl p-2 lg:p-4">
             <div class="stat-figure [grid-row:1] p-2 rounded bg-red-100 text-red-800 self-start md:hidden lg:flex">
                 <span>
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-diamond" viewBox="0 0 16 16">
@@ -93,19 +93,17 @@
     <div class="grid gird-cols-1 md:grid-cols-3 gap-6 px-4 lg:px-6">
         <div class="col-1 rounded-box border border-gray-400 mt-6 p-2 md:p-4">
             <p class="text-3xl">Problem Categories</p>
-            <div class="px-6">
-                <ul class="mt-6 grid justify-center">
-                    @if($categories->isEmpty())
-                    <li>Not Added Yet</li>
-                    @else
-                    @foreach($categories as $category)
-                    <li class="font-semibold text-xl">
-                        <div aria-label="status" class="status {{ $category->severity->status() }}"></div> {{$category->name}}
-                    </li>
-                    @endforeach
-                    @endif
-                </ul>
-            </div>
+            <x-chart
+            id="categoryChart"
+            type="doughnut"
+            label="Problems"
+            :labels="$data['labels']"
+            :data="$data['data']"
+            />
+
+            @push('scripts')
+            @vite('resources/js/chart.js')
+            @endpush
         </div>
 
         @php

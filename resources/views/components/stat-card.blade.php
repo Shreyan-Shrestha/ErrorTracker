@@ -7,7 +7,7 @@
 'desc' => null,
 ])
 
-<div {{ $attributes->class(['stat border-2 border-s-6 shadow rounded-xl p-2 lg:p-6', 'bg-white']) }}>
+<div {{ $attributes->class(['stat border-2 border-s-6 shadow rounded-xl p-2 lg:p-4', 'bg-white']) }}>
     <div class="stat-figure [grid-row:1] {{ $iconColor }} p-2 {{ $iconBg }} rounded self-start md:hidden lg:flex">
         <span>
             {{ $icon }}

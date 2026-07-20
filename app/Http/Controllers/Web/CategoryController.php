@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\CategoryRequest;
 use App\Models\Category;
 use App\Repositories\Interfaces\CategoryRepositoryInterface;
-use App\Repositories\Interfaces\ProblemRepositoryInterface;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller

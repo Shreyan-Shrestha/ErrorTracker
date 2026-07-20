@@ -6,12 +6,13 @@ use App\Http\Controllers\Auth\Logout;
 use App\Http\Controllers\auth\UserAuthenticationController;
 use App\Http\Controllers\Auth\WebLogin;
 use App\Http\Controllers\Web\CategoryController;
+use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Web\ErrorReportController;
 use App\Http\Controllers\Web\ProblemController;
 use App\Http\Controllers\Web\ProjectController;
 use App\Http\Controllers\Web\UserRecordsController;
 
-Route::get('/', [ErrorReportController::class, 'index']);
+Route::get('/', [DashboardController::class, 'index']);
 
 
 Route::view('/login', 'auth.login')->name('login');

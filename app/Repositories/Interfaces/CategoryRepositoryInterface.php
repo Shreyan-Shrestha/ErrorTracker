@@ -10,6 +10,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 interface CategoryRepositoryInterface
 {
     public function getAll(): Collection;
+    public function getChart() : array;
     public function show(int $id): Category;
     public function create(array $data): void;
     public function update(array $data, Category $category): void;

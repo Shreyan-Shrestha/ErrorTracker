@@ -25,10 +25,11 @@ class ProblemController extends Controller
      */
     public function index(): View
     {
-        $errorReports = $this->problem_repository->getAll();
-        $logCount = $this->problem_repository->getAllCount();
-        $categories = $this->category_repository->getAll();
-        return view('problems.index', compact('errorReports', 'categories', 'logCount'));
+        $errorReports =  $this->problem_repository->getAll();
+        $logCount     =  $this->problem_repository->getAllCount();
+        $categories   =  $this->category_repository->getAll();
+        $data         =  $this->category_repository->getChart();
+        return view('problems.index', compact('errorReports', 'categories', 'logCount', 'data'));
     }
 
     public function problemLogs(): View
