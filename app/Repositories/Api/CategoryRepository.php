@@ -3,17 +3,31 @@
 namespace App\Repositories\Api;
 
 use App\Models\Category;
+use App\Models\ErrorReport;
 use App\Repositories\Interfaces\CategoryRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Http\Response;
-use Illuminate\Pagination\LengthAwarePaginator;
-
+use Illuminate\Support\Facades\DB;
 
 class CategoryRepository implements CategoryRepositoryInterface
 {
     public function getAll(): Collection
     {
         return Category::latest()->get();
+    }
+
+    public function getChart(): array
+    {
+        $results = ErrorReport::select('category_id', DB::raw('COUNT(*) as count'))
+            ->with('category')
+            ->groupBy('category_id')
+            ->orderBy('count')
+            ->limit(4)
+            ->get();
+
+        return [
+            'labels' => $results->map(fn($r) => $r->category->name)->toArray(),
+            'data'   => $results->map(fn($r) => $r->count)->toArray(),
+        ];
     }
 
     public function show(int $id): Category
