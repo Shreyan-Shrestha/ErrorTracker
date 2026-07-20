@@ -46,7 +46,7 @@
             </x-slot:icon>
         </x-stat-card>
 
-        <div class="stat border-2 border-s-6 border-red-500 text-red-500 bg-red-50 shadow rounded-xl p-2 xl:p-6">
+        <div class="stat border-2 border-s-6 border-red-500 text-red-500 bg-red-50 shadow rounded-xl p-2 lg:p-4">
             <div class="stat-figure [grid-row:1] p-2 rounded bg-red-100 text-red-800">
                 <span>
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-exclamation-diamond" viewBox="0 0 16 16">

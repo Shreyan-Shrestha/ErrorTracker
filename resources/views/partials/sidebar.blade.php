@@ -1,11 +1,11 @@
 <div class="drawer-side is-drawer-close:overflow-visible">
-    <label for="my-drawer-4" aria-label="close sidebar" class="drawer-overlay"></label>
-    <div class="flex min-h-full flex-col items-start bg-blue-100 is-drawer-close:w-12 md:is-drawer-close:w-15 is-drawer-open:w-40 lg:is-drawer-open:w-64">
+    <label for="sidebar" aria-label="close sidebar" class="drawer-overlay"></label>
+    <div class="flex min-h-full flex-col items-start bg-blue-100 is-drawer-close:w-12 md:is-drawer-close:w-15 is-drawer-open:w-40 lg:is-drawer-open:w-50">
         <!-- Sidebar content here -->
         <ul class="menu w-full grow is-drawer-close:ps-0 md:is-drawer-close:ps-1  is-drawer-open:ps-0 md:is-drawer-open:px-4">
             <!-- List item -->
             <li class="mt-3 items-center is-drawer-open:items-end-safe">
-                <label for="my-drawer-4" aria-label="open sidebar" class="btn btn-square btn-ghost" data-tip="Sidebar Toggle">
+                <label for="sidebar" aria-label="open sidebar" class="btn btn-square btn-ghost" data-tip="Sidebar Toggle">
                     <!-- Icon when sidebar is OPEN: slide left (close) -->
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-linejoin="round" stroke-linecap="round" stroke-width="2" fill="none" stroke="currentColor" class="my-1.5 size-6 inline-block is-drawer-close:hidden">
                         <path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"></path>
@@ -25,18 +25,18 @@
                 <h1><span class="is-drawer-close:hidden text-3xl strong text-blue-600">WorldLink</span></h1>
             </li>
             <li class="mt-6">
-                <button class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Homepage">
-                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="size-6" viewBox="0 0 24 24" fill="currentColor">
-                        <path fill="none" stroke="currentColor" stroke-width="1.5" d="M4 5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm10 0a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1zM4 16a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm10-3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1z"></path>
+                <a href="/" class="is-drawer-close:tooltip is-drawer-close:tooltip-right" role="button" data-tip="Homepage">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-columns-gap size-5" viewBox="0 0 16 16">
+                        <path d="M6 1v3H1V1zM1 0a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1zm14 12v3h-5v-3zm-5-1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1zM6 8v7H1V8zM1 7a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1zm14-6v7h-5V1zm-5-1a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1z" />
                     </svg>
                     <span class="is-drawer-close:hidden md:text-xl">Dashboard</span>
-                </button>
+                </a>
             </li>
 
             <li class="mt-3">
                 <a href="/users" class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Users">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-people size-6" viewBox="0 0 16 16">
+                        <path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1zm-7.978-1L7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002-.014.002zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0M6.936 9.28a6 6 0 0 0-1.23-.247A7 7 0 0 0 5 9c-4 0-5 3-5 4q0 1 1 1h4.216A2.24 2.24 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816M4.92 10A5.5 5.5 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275ZM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0m3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4" />
                     </svg>
                     <span class="is-drawer-close:hidden md:text-xl">Users</span>
                 </a>
@@ -44,8 +44,8 @@
 
             <li class="mt-3">
                 <a href="/projects" class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Projects">
-                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" stroke-width="1" role="img" class="size-7" viewBox="0 0 16 16" fill="currentColor">
-                        <g transform="rotate(-90 8 8)">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-diagram-2 size-7" viewBox="0 0 16 16">
+                        <g transform="rotate(-90 6 8)">
                             <path fill-rule="evenodd" d="M6 3.5A1.5 1.5 0 0 1 7.5 2h1A1.5 1.5 0 0 1 10 3.5v1A1.5 1.5 0 0 1 8.5 6v1H11a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0V8h-5v.5a.5.5 0 0 1-1 0v-1A.5.5 0 0 1 5 7h2.5V6A1.5 1.5 0 0 1 6 4.5zM8.5 5a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5zM3 11.5A1.5 1.5 0 0 1 4.5 10h1A1.5 1.5 0 0 1 7 11.5v1A1.5 1.5 0 0 1 5.5 14h-1A1.5 1.5 0 0 1 3 12.5zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm4.5.5a1.5 1.5 0 0 1 1.5-1.5h1a1.5 1.5 0 0 1 1.5 1.5v1a1.5 1.5 0 0 1-1.5 1.5h-1A1.5 1.5 0 0 1 9 12.5zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5z" />
                         </g>
                     </svg>
@@ -75,8 +75,10 @@
 
             <li class="mt-3">
                 <button class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Reports">
-                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="26" height="26" viewBox="0 0 2048 2048" fill="currentColor">
-                        <path fill="currentColor" d="m910 1664l-64 128H256V0h1536v1179l-128-256V128H384v1536zM640 896H512V768h128zm654 0H768V768h590zm-782 256h128v128H512zm256 0h398l-64 128H768zM640 512H512V384h128zm896 0H768V384h768zm0 896v320h-128v-320zm-128 384h128v128h-128zm640 256H896l576-1152zm-971-112h790l-395-790z"></path>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-clipboard-data size-6" viewBox="0 0 16 16">
+                        <path d="M4 11a1 1 0 1 1 2 0v1a1 1 0 1 1-2 0zm6-4a1 1 0 1 1 2 0v5a1 1 0 1 1-2 0zM7 9a1 1 0 0 1 2 0v3a1 1 0 1 1-2 0z" />
+                        <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z" />
+                        <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z" />
                     </svg>
                     <span class="is-drawer-close:hidden md:text-xl">Reports</span>
                 </button>
