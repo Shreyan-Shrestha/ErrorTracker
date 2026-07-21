@@ -170,5 +170,9 @@
     @if($errors->any())
     <div id="modal-error-target" data-modal="{{ session('modal_id', 'modal_create') }}" class="hidden"></div>
     @endif
+
+    @push('scripts')
+        @vite('resources/js/modal.js')
+    @endpush
 </div>
 @endsection
