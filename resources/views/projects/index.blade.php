@@ -1,8 +1,8 @@
-@extends('partials.layout', ['title', 'WorldLink ErrorTracker | Projects'])
+@extends('partials.layout', ['title' => 'WorldLink ErrorTracker | Projects'])
 
 @section('content')
 <x-skeletons.index></x-skeletons.index>
-<div id="content" class="w-full p-4 lg:p-6 hidden">
+<div id="content" class="w-full p-2 lg:p-6 hidden">
     <x-breadcrumbs>
         <li class="text-primary font-semibold">Projects</li>
     </x-breadcrumbs>
@@ -72,7 +72,7 @@
                 <td class="text-sm md:text-lg"> {{ $project->user->first_name}} {{ $project->user->last_name }}</td>
                 <td class="text-sm md:text-lg"> {{ $project->gitlab_id }}</td>
                 <td class="text-sm md:text-lg">
-                    <div class="rounded-full badge badge-soft badge-sm md:badge-lg capitalize {{ $project->status->color() }}">
+                    <div class="rounded-full badge badge-soft badge-sm md:badge-md capitalize {{ $project->status->color() }}">
                         <div aria-label="status" class="status {{ $project->status->status() }}"></div>
                         <span class="hidden sm:inline font-semibold">{{ $project->status->label() }}</span>
                     </div>
@@ -83,9 +83,11 @@
                         <button class="btn btn-primary btn-soft btn-sm md:btn-md md:button-lg" data-action="{{route('projects.edit', $project)}}"
                             onclick="OpenEditModal(this)"
                             data-modal="modal_edit_project"
+                            data-id="{{($project->id)}}"
                             data-project_name="{{$project->project_name}}"
                             data-gitlab_id="{{$project->gitlab_id}}"
                             data-user_record_id="{{$project->user_record_id}}"
+                            data-sub_projects="{{ json_encode($project->subProjects->pluck('id')->toArray()) }}"
                             data-status="{{$project->status->value}}"
                             data-description="{{$project->description}}">
                             Update
@@ -100,7 +102,7 @@
             </tr>
             @endforeach
             @endif
-            @if(! $projects->links()->isEmpty)
+            @if($projects->lastPage() > 1)
             <tr class="bg-base-300 pagination">
                 <td colspan="{{ $count }}">{{ $projects->links() }} </td>
             </tr>
@@ -108,103 +110,9 @@
         </x-table>
     </div>
 
-    <x-modal.create creating="Add Project">
-        <x-error-alert />
-        <div class="p-3 px-6 grid gap-4">
-            <label class="fieldset" for="project_name">
-                <span class="label">PROJECT NAME *</span>
-                <input type="text" class="input input-sm sm:input-md validator w-full" required minlength="4" maxlength="50"
-                    name="project_name" id="project_name" placeholder="Enter Project Name">
-                <p class="validator-hint hidden">Please, Enter a valid name of atleast 4 and maximum 50 characters. Required.</p>
-            </label>
+    @include('projects.create')
 
-            <label class="fieldset" for="gitlab_id">
-                <span class="label">GITLAB ID *</span>
-                <input type="number" class="input input-sm sm:input-md validator w-full" required min="1" name="gitlab_id"
-                    id="gitlab_id" placeholder="Enter Project Gitlab Id">
-                <p class="validator-hint hidden">Please, Enter a valid gitlab id. Required</p>
-            </label>
-
-            <label class="fieldset" for="user_record_id">
-                <span class="label">ASSIGNED TO *</span>
-                <select required name="user_record_id" id="user_record_id" class="select validator w-full">
-                    <option value="" selected disabled>Project Assigned To</option>
-                    @foreach($users as $user)
-                    <option value="{{$user->id}}">{{ $user->first_name }} {{ $user->last_name }}</option>
-                    @endforeach
-                </select>
-                <p class="validator-hint hidden">Please, Assign the project to a user. Required</p>
-            </label>
-
-            <label class="fieldset" for="status">
-                <span class="label">STATUS *</span>
-                <select class="select validator w-full" id="status" required name="status">
-                    <option value="" disabled selected>Current Project Status</option>
-                    @foreach(App\Enums\ProjectStatus::cases() as $status)
-                    <option value="{{ $status->value }}"> {{ $status->label() }} </option>
-                    @endforeach
-                </select>
-                <p class="validator-hint hidden">Please, Assign the Project's Status. Required</p>
-            </label>
-
-            <label class="fieldset" for="description">
-                <span class="label">PROJECT DESCRIPTION</span>
-                <textarea class="textarea w-full" name="description" id="description"
-                    placeholder="Enter Project Infomation"></textarea>
-            </label>
-        </div>
-    </x-modal.create>
-
-    <x-modal.create id="modal_edit_project" creating="Edit Project" methodPatch="true">
-        <x-error-alert />
-
-        <div class="p-3 px-6 grid gap-4">
-            <label class="fieldset" for="project_name">
-                <span class="label">PROJECT NAME * </span>
-                <input type="text" class="input input-sm sm:input-md validator"
-                    value="{{old('name', $project->project_name)}}" required name="project_name" id="project_name" minlength="4" maxlength="50"
-                    placeholder="Enter Project Name">
-                <p class="validator-hint hidden">Required</p>
-            </label>
-
-            <label class="fieldset" for="gitlab_id">
-                <span class="label">GITLAB ID *</span>
-                <input type="number" name="gitlab_id" id="gitlab_id0" class="input input-sm sm:input-md validator"
-                    value="{{old('gitlab_id', $project->gitlab_id)}}" required min="1" placeholder="Enter Project Gitlab Id">
-                <p class="validator-hint hidden">Enter a valid gitlab id. Required</p>
-            </label>
-
-            <label class="fieldset" for="user_record_id">
-                <span class="label">ASSIGNED TO</span>
-                <select required name="user_record_id" id="user_record_id" class="select validator"
-                    value="{{old('user_record_id', $project->user_record_id)}}">
-                    <option value="" selected disabled>Project Assigned To</option>
-                    @foreach($users as $user)
-                    <option value="{{ $user->id }}">{{ $user->first_name }} {{ $user->last_name }}</option>
-                    @endforeach
-                </select>
-                <p class="validator-hint hidden">Required</p>
-            </label>
-
-            <label class="fieldset" for="status">
-                <span class="label">STATUS</span>
-                <select class="select" required name="status" id="status" value="{{old('status')}}">
-                    <option value="" disabled selected>Current Project Status</option>
-                    @foreach(App\Enums\ProjectStatus::cases() as $status)
-                    <option value="{{ $status->value }}" @selected( old('status', $project->status->value) === $status->value)> {{ $status->label() }} </option>
-                    @endforeach
-                </select>
-                <p class="validator-hint hidden">Required</p>
-            </label>
-
-            <label class="fieldset" for="description">
-                <span class="label">PROJECT DESCRIPTION</span>
-                <textarea class="textarea" name="description" id="description"
-                    value="{{old('description',)}}" placeholder="Enter Project Infomation"></textarea>
-                <p class="validator-hint"></p>
-            </label>
-        </div>
-    </x-modal.create>
+    @include('projects.edit')
 
     <x-modal.delete toDelete="Project"></x-modal.delete>
 
@@ -213,7 +121,7 @@
     @endif
 
     @push('scripts')
-    @vite('resources/js/chart.js')
+    @vite(['resources/js/chart.js', 'resources/js/modal.js'])
     @endpush
 </div>
 @endsection
