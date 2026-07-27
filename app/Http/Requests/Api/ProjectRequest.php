@@ -25,30 +25,49 @@ class ProjectRequest extends FormRequest
     public function rules(): array
     {
         return match (true) {
-            $this->routeIs('project.store') => $this->storeRules(),
-            $this->routeIs('project.update') => $this->storeRules(),
-            $this->routeIs('project.updateStatus') => $this->updateStatusRules(),
+            $this->routeIs('projects.create') => $this->storeRules(),
+            $this->routeIs('projects.edit') => $this->updateRules(),
+            $this->routeIs('projects.updateStatus') => $this->updateStatusRules(),
             default => $this->storeRules()
         };
     }
 
     private function storeRules(): array
     {
-        $projectId = $this->route('project')?->id;
+        return [
+            "gitlab_id"      => ['required', 'integer', 'min:1', Rule::unique('projects', 'gitlab_id')],
+            "project_name"   => ['required', 'string', 'min:4', 'max:50'],
+            "user_record_id" => ['required', 'integer', 'min:1'],
+            "status"         => ['required', Rule::enum(ProjectStatus::class)],
+            "sub_projects"   => ['nullable', 'array'],
+            "sub_projects.*" => ['integer', 'exists:projects,id'],
+            "description"    => ['nullable', 'string', 'min:10', 'max:600'],
+        ];
+    }
+
+    private function updateRules(): array
+    {
+        $project = $this->route('project');
+        $projectId = $project instanceof \App\Models\Project
+            ? $project->id
+            : (int) $project;
 
         return [
-            "gitlab_id" => ['required', 'int', 'min:1', Rule::unique('projects', 'gitlab_id')->ignore($projectId)],
-            "project_name" => ['required', 'string', 'min:4', 'max:50'],
-            "user_record_id" => ['required', 'int', 'min:1'],
-            "status" => ['required', Rule::enum(ProjectStatus::class)],
+            "gitlab_id"      => ['required', 'integer', 'min:1', Rule::unique('projects', 'gitlab_id')->ignore($projectId)],
+            "project_name"   => ['required', 'string', 'min:4', 'max:50'],
+            "user_record_id" => ['required', 'integer', 'min:1'],
+            "status"         => ['required', Rule::enum(ProjectStatus::class)],
+            "sub_projects"   => ['nullable', 'array'],
+            "sub_projects.*" => ['integer', 'exists:projects,id', Rule::notIn([$projectId])],
+            "description"    => ['nullable', 'string', 'min:10', 'max:600'],
         ];
     }
 
     private function updateStatusRules(): array
     {
         return [
-            "status" => "required",
-            Rule::enum(ProjectStatus::class),
+            'status'       => ['required', Rule::enum(ProjectStatus::class)],
+            'sub_projects' => 'array'
         ];
     }
 
@@ -67,7 +86,7 @@ class ProjectRequest extends FormRequest
 
     protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
     {
-        $modalId = match(true){
+        $modalId = match (true) {
             $this->routeIs('projects.edit') => 'modal_edit_project',
             default => 'modal_create',
         };
