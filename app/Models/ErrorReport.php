@@ -53,7 +53,7 @@ class ErrorReport extends Model
     return $this->belongsTo(Category::class);
   }
 
-  public function user(): BelongsTo
+  public function reportingUser(): BelongsTo
   {
     return $this->belongsTo(UserRecord::class);
   }
