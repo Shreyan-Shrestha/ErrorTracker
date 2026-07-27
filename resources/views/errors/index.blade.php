@@ -66,7 +66,7 @@
     </div>
 
     @php
-    $headers = ['Error', 'Severity', 'Reported At', 'Cause', 'Start Time', 'Impact', 'Status', 'Action'];
+    $headers = ['Error', 'Severity', 'Reported At', 'Root Cause Analysis', 'Start Time', 'Impact', 'Status', 'Action'];
     $headerClasses = ['','','','','hidden md:table-cell','','',''];
     $count=count($headers);
     @endphp
@@ -74,7 +74,11 @@
         @if($errorsdata->isEmpty())
         <tr class="bg-white hover:bg-base-300 p-4">
             <td colspan="{{ $count }}" class="px-4 py-3 text-center text-gray-500">
-                No Error reported yet.
+                No Errors Reported Yet.
+
+                <a class="link link-primary link-hover" href="{{route('errors.add')}}">
+                    Report An Error
+                </a>
             </td>
         </tr>
         @else
@@ -82,8 +86,8 @@
         <tr class=" bg-white hover:bg-base-300 text-gray-600 text-sm md:text-lg">
             <td>
                 <div class="grid gap-1">
-                    <p class="text-primary text-xl font-bold tracking-wide">{{ $errordata->problem->name }}</p>
-                    <p class="text-grey-400 font-semibold">{{ $errordata->category->name }}</p>
+                    <p class="text-primary text-md md:text-xl font-bold tracking-wide">{{ $errordata->problem->name }}</p>
+                    <p class="text-grey-400 font-semibold text-xs md:text-md">{{ $errordata->category->name }}</p>
                 </div>
             </td>
 
@@ -172,7 +176,7 @@
     @endif
 
     @push('scripts')
-        @vite('resources/js/modal.js')
+    @vite('resources/js/modal.js')
     @endpush
 </div>
 @endsection
