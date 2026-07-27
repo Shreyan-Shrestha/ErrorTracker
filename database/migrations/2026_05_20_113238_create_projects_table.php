@@ -17,8 +17,18 @@ return new class extends Migration
             $table->foreignId('user_record_id')->constrained('user_records');
             $table->string('project_name');
             $table->string('status');
+            $table->string('description')->nullable();
             $table->timestamps();
             $table->softDeletes();
+        });
+
+        Schema::create('project_sub_project', function(Blueprint $table){
+            $table->id();
+            $table->foreignId('parent_id')->constrained('projects')->cascadeOnDelete();
+            $table->foreignId('sub_project_id')->constrained('projects')->cascadeOnDelete();
+            $table->timestamps();
+
+            $table->unique(['parent_id', 'sub_project_id']);
         });
     }
 
@@ -27,6 +37,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('project_sub_project');
         Schema::dropIfExists('projects');
     }
 };
