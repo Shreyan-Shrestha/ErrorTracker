@@ -16,6 +16,7 @@ class ErrorReport extends Model
 
   protected $fillable = [
     'user_record_id',
+    'assign_id',
     'region',
     'branch',
     'project_id',
@@ -29,6 +30,8 @@ class ErrorReport extends Model
     'start_time',
     'end_time',
     'estimated_down',
+    'document',
+    'document_path',
   ];
 
   public $casts = [
@@ -53,6 +56,11 @@ class ErrorReport extends Model
   public function user(): BelongsTo
   {
     return $this->belongsTo(UserRecord::class);
+  }
+
+  public function assignedUser(): BelongsTo
+  {
+    return $this->belongsTo(UserRecord::class, 'assign_id');
   }
 
   public function scopeOrderBySeverity(Builder $query): Builder

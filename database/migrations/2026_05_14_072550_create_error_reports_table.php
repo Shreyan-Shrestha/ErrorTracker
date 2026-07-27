@@ -14,19 +14,22 @@ return new class extends Migration
         Schema::create('error_reports', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_record_id');
+            $table->foreignId('assign_id')->nullable();
             $table->string('region');
             $table->string('branch');
             $table->foreignId('project_id');
             $table->foreignId('problem_id');
             $table->foreignId('category_id');
             $table->string('impact')->nullable();
-            $table->text('root_cause')->nullable();    
+            $table->text('root_cause')->nullable();
             $table->text('trigger')->nullable();
             $table->string('message')->nullable();
             $table->string('status')->nullable();
             $table->string('start_time')->nullable();
             $table->string('end_time')->nullable();     
             $table->string('estimated_down')->nullable();
+            $table->string('document')->nullable();
+            $table->string('document_path')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
