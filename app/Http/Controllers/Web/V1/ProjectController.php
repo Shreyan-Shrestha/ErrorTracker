@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Web;
+namespace App\Http\Controllers\Web\V1;
 
 use App\Repositories\Interfaces\ProjectRepositoryInterface;
 use App\Http\Controllers\Controller;

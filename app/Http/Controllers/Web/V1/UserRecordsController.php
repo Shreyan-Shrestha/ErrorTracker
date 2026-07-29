@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Web;
+namespace App\Http\Controllers\Web\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\UserRecordRequest;
 use App\Models\UserRecord;
 use App\Repositories\Interfaces\UserRecordRepositoryInterface;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class UserRecordsController extends Controller
