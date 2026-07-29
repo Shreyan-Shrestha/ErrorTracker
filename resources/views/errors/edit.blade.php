@@ -12,7 +12,7 @@
 
     <p class="text-3xl">Update Error Report</p>
     <div class="p-3 lg:p-6 lg:w-6xl mx-auto">
-        <form action="{{route('errors.update',$error)}}" class="grid gap-2 md:gap-4 px-6" method="POST">
+        <form action="{{route('errors.update',$error)}}" class="grid gap-2 md:gap-4 px-6" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PATCH')
             <x-error-alert />
@@ -27,6 +27,18 @@
                 </select>
                 <p class="hidden validator-hint">Required.</p>
             </label>
+
+            <label class="fieldset grid gap-1" for="assign_id">
+                    <legend class="fieldset-legend md:text-lg">Assign to:</legend>
+                    <select name="assign_id" id="assign_id" required class="select select-sm md:select-md validator w-full">
+                        <option selected disabled value="">Assign Error Resolving to:</option>
+                        <option value=""></option>
+                        @foreach($users as $user)
+                        <option value="{{$user->id}}" @selected(old('user_record_id', $error->assign_id) == $user->id)> {{$user->first_name}} {{$user->last_name}}</option>
+                        @endforeach
+                    </select>
+                    <p class="hidden validator-hint"></p>
+                </label>
 
             <legend class="fieldset-legend px-2 md:px-6 bg-base-300 font-bold md:text-xl">LOCATION</legend>
             <label class="fieldset grid grid-cols-1 md:grid-cols-2 gap-10">
@@ -121,12 +133,24 @@
                 <label class="fieldset md:col-span-2 grid gap-1">
                     <span class="label md:text-lg">Root Cause Analysis:</span>
                     <textarea name="root_cause" class="textarea validator h-16 md:h-32 w-full"
-                        minlength="5" maxlength="150" placeholder="Write the Root Cause Analysis for the Issue."
-                        value="{{old('root_cause', $error->root_cause)}}"></textarea>
+                        minlength="5" maxlength="150" placeholder="Write the Root Cause Analysis for the Issue.">
+                        {{old('root_cause', $error->root_cause)}}</textarea>
                     <p class="validator-hint hidden">Root Cause Analysis must be within 10-1500 characters.</p>
                 </label>
 
+                <label class="fieldset grid col-span-2">
+                    <span class="label md:text-lg">
+                        @if($error->document_path)
+                        Change the Uploaded Document: <a class="link link-primary" href="{{ Storage::url($error->document_path) }}" target="_blank">{{$error->document}}</a>
+                        @else
+                        Updoad Related Document:
+                        @endif
+                    </span>
+                    <input type="file" name="document" class="file-input file-input-sm md:file-input-md file-input-info w-full"
+                        accept=".pdf,.doc,.docx" max="5120" value="" />
+                    <label class="label">Upload: pdf, doc, docx file. Max file size: 5Mb</label>
 
+                </label>
             </fieldset>
 
             <fieldset class="p-3 md:px-6 fieldset grid grid-cols-1 md:grid-cols-2 gap-10 gap-y-4 rounded-box border-2 bg-base-200 border-gray-300">

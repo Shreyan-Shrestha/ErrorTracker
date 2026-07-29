@@ -13,21 +13,35 @@
 
     <p class="text-3xl">Report Error</p>
     <div class="p-3 lg:p-6 lg:w-6xl mx-auto">
-        <form action="{{route('errors.create')}}" class="grid gap-2 md:gap-4 px-6" method="POST">
+        <form action="{{route('errors.create')}}" class="grid gap-2 md:gap-4 px-6" method="POST" enctype="multipart/form-data">
             @csrf
 
             <x-error-alert />
 
-            <label class="fieldset">
-                <legend class="fieldset-legend md:text-lg">Reported By *</legend>
-                <select name="user_record_id" required class="select select-sm md:select-md validator w-full">
-                    <option selected disabled value="">Select Yourself</option>
-                    @foreach($users as $user) 
-                    <option value="{{$user->id}}" @selected(old('user_record_id') == $user->id)> {{$user->first_name}} {{$user->last_name}}</option>
-                    @endforeach
-                </select>
-                <p class="hidden validator-hint">Please select yourself. Required</p>
-            </label>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-10">
+                <label class="fieldset grid gap-1">
+                    <legend class="fieldset-legend md:text-lg">Reported By *</legend>
+                    <select name="user_record_id" required class="select select-sm md:select-md validator w-full">
+                        <option selected disabled value="">Select Yourself</option>
+                        @foreach($users as $user)
+                        <option value="{{$user->id}}" @selected(old('user_record_id')==$user->id)> {{$user->first_name}} {{$user->last_name}}</option>
+                        @endforeach
+                    </select>
+                    <p class="hidden validator-hint">Please select yourself. Required</p>
+                </label>
+
+                <label class="fieldset grid gap-1" for="assign_id">
+                    <legend class="fieldset-legend md:text-lg">Assign to:</legend>
+                    <select name="assign_id" id="assign_id" required class="select select-sm md:select-md validator w-full">
+                        <option selected disabled value="">Assign Error Resolving to:</option>
+                        <option value=""></option>
+                        @foreach($users as $user)
+                        <option value="{{$user->id}}" @selected(old('user_record_id')==$user->id)> {{$user->first_name}} {{$user->last_name}}</option>
+                        @endforeach
+                    </select>
+                    <p class="hidden validator-hint"></p>
+                </label>
+            </div>
 
             <legend class="fieldset-legend px-2 md:px-6 bg-base-300 font-bold md:text-xl">LOCATION</legend>
             <label class="fieldset grid grid-cols-1 lg:grid-cols-2 gap-10">
@@ -65,14 +79,14 @@
                     <select class="select md:select-md validator w-full" name="status" required>
                         <option value="" selected disabled>Assign the Error's Current Status</option>
                         @foreach(App\Enums\ErrorStatus::cases() as $status)
-                        <option value="{{$status->value}}" @selected(old('status') == $status->value)>{{$status->label()}}</option>
+                        <option value="{{$status->value}}" @selected(old('status')==$status->value)>{{$status->label()}}</option>
                         @endforeach
                     </select>
                 </label>
 
                 <label class=" fieldset grid">
                     <legend class="fieldset-legend md:text-lg">Issue *</legend>
-                    <select name="problem_id" class="select validator md:select-md w-full" required w-full>
+                    <select name="problem_id" class="select validator md:select-md w-full" w-full>
                         <option selected disabled>Assign the Issue </option>
                         @foreach($problems as $problem)
                         <option value="{{$problem->id}}" @selected(old('problem_id')==$problem->id)> {{$problem->name}} </option>
@@ -116,11 +130,17 @@
                 <label class="fieldset grid col-span-2">
                     <span class="label md:text-lg">Root Cause Analysis:</span>
                     <textarea name="root_cause" class="input input-sm md:input-md validator h-16 md:h-36 w-full"
-                    minlength="10" maxlength="1500" placeholder="Write the Root Cause Analysis for the Issue." value="{{old('root_cause')}}"></textarea>
+                        minlength="10" maxlength="1500" placeholder="Write the Root Cause Analysis for the Issue." value="{{old('root_cause')}}"></textarea>
                     <p class="validator-hint hidden">Optional. ( 10-1500 characters limit)</p>
                 </label>
 
-                
+                <label class="fieldset grid col-span-2">
+                    <span class="label md:text-lg">Attach Document:</span>
+                    <input type="file" name="document" class="file-input file-input-sm md:file-input-md file-input-info w-full"
+                        accept=".pdf,.doc,.docx" max="5120" />
+                    <label class="label">Upload: pdf, doc, docx file. Max file size: 5Mb</label>
+                </label>
+
             </fieldset>
 
             <fieldset class="p-3 md:px-6 fieldset grid grid-cols-1 md:grid-cols-2 gap-10 gap-y-4 rounded-box border-2 bg-base-200 border-gray-300">
