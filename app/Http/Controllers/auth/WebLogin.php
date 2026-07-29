@@ -21,7 +21,7 @@ class WebLogin extends Controller
 
         if (Auth::guard('login')->attempt($credentials, $request->boolean('remember'))){
             $request->session()->regenerate();
-            return redirect()->intended(route('applications.index'));
+            return redirect()->intended(route('dashboard.index'));
         }
         return back()->withErrors(['email' => 'Wrong email, or password.'])->onlyInput('email');
 
