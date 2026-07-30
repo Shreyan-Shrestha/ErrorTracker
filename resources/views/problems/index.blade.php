@@ -100,10 +100,6 @@
             :labels="$data['labels']"
             :data="$data['data']"
             />
-
-            @push('scripts')
-            @vite('resources/js/chart.js')
-            @endpush
         </div>
 
         @php
@@ -227,5 +223,9 @@
     @if($errors->any())
     <div id="modal-error-target" data-modal="{{ session('modal_id', 'modal_create') }}" class="hidden"></div>
     @endif
+
+    @push('scripts')
+        @vite(['resources/js/chart.js', 'resources/js/modal.js'])
+    @endpush
 </div>
 @endsection

@@ -2,12 +2,6 @@
 
 namespace App\Providers;
 
-use App\Repositories\Api\ProjectRepository as ProjectRepository;
-use App\Repositories\Api\CategoryRepository;
-use App\Repositories\Api\DashboardRepository;
-use App\Repositories\Api\ErrorReportRepository;
-use App\Repositories\Api\ProblemRepository;
-use App\Repositories\Api\UserRecordRepository;
 use App\Repositories\Interfaces\CategoryRepositoryInterface;
 use App\Repositories\Interfaces\DashboardRepositoryInterface;
 use App\Repositories\Interfaces\ErrorReportRepositoryInterface;
@@ -15,6 +9,12 @@ use App\Repositories\Interfaces\ProblemRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 use App\Repositories\Interfaces\ProjectRepositoryInterface;
 use App\Repositories\Interfaces\UserRecordRepositoryInterface;
+use App\Repositories\Web\V1\CategoryRepository;
+use App\Repositories\Web\V1\DashboardRepository;
+use App\Repositories\Web\V1\ErrorReportRepository;
+use App\Repositories\Web\V1\ProblemRepository;
+use App\Repositories\Web\V1\ProjectRepository;
+use App\Repositories\Web\V1\UserRecordRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {

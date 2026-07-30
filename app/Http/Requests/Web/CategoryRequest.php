@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Requests\Api;
+namespace App\Http\Requests\Web;
 
-use App\View\Components\modal\create;
+use App\Enums\ErrorSeverity;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class ProblemRequest extends FormRequest
+class CategoryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,25 +25,27 @@ class ProblemRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:100']
+            'name' => ['required', 'string', 'max:100'],
+            'severity' => ['required', Rule::enum(ErrorSeverity::class)],
         ];
     }
 
-    public function messages(): array
+    public function messages()
     {
         return [
-            'name.required' => 'Problem Name is Required',
-            'name.string' => 'Problem Name must have only characters',
-            'name.max' => 'Problem Name Must Be Less Than 100 Characters',
+            'name.required' => 'Please provide a valid Category Name',
+            'name.string' => 'Category Name can only be characters',
+            'name.max' => 'Category Name must be under 100 characters',
+            'severity.required' => 'Please select a Severity level',
+            'severity.rule' => 'Invalid Category Severity ',
         ];
     }
 
     protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
     {
         $modalId = match(true){
-            $this->routeIs('problems.create') => 'modal_problem',
-            $this->routeIs('problems.edit') => 'modal_edit_problem',
-            default => 'modal_problem',
+            $this->routeIs('category.create') => 'modal_category',
+            default => 'modal_category',    
         };
 
         session()->flash('modal_id', $modalId);

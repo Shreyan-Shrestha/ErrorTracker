@@ -9,11 +9,11 @@
 @endif
 
 @if(session('error'))
-<div role="alert" class="w-sm md:w-2xl mx-auto alert alert-error px-6 mb-2 mt-2">
+<div role="alert" id="alert-error" class="w-sm md:w-2xl mx-auto alert alert-error px-6 mb-2 mt-2">
   <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
   </svg>
-  <span>Error! Task failed successfully.</span>
-  <button class="btn btn-sm btn-ghost btn-circle" onclick="document.getElementById('alert-success').remove()">X</button>
+  <span>{{session('error')}}</span>
+  <button class="btn btn-sm btn-ghost btn-circle" onclick="document.getElementById('alert-error').remove()">X</button>
 </div>
 @endif

@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\Web;
+namespace App\Http\Controllers\Web\V1;
 
-use App\Enums\ErrorStatus;
 use App\Http\Controllers\Controller;
 use App\Models\ErrorReport;
-use App\Http\Requests\Api\ErrorReportRequest;
+use App\Http\Requests\Web\ErrorReportRequest;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use App\Repositories\Interfaces\ErrorReportRepositoryInterface;
+use Exception;
+use RuntimeException;
 
 class ErrorReportController extends Controller
 {
@@ -26,7 +27,8 @@ class ErrorReportController extends Controller
         $errorsdata = $this->error_tracker_repository->getall(4);
         $logCount = $this->error_tracker_repository->getAllCount();
         $stats = $this->error_tracker_repository->getStats();
-        return view('errors.index', compact('stats', 'errorsdata', 'logCount'));
+        $users = $this->error_tracker_repository->getUsers();
+        return view('errors.index', compact('stats', 'errorsdata', 'logCount', 'users'));
     }
 
     public function errorLogs(): View
@@ -49,8 +51,12 @@ class ErrorReportController extends Controller
     public function store(ErrorReportRequest $request): RedirectResponse
     {
         $validated = $request->validated();
-        $this->error_tracker_repository->create($validated);
-        return redirect()->route('errors.index')->with('success', 'Error reported succesfully');
+        try{
+            $this->error_tracker_repository->create($validated);
+            return redirect()->route('errors.index')->with('success', 'Error reported succesfully');
+        }catch(RuntimeException $e){
+            return back()->withInput()->with('error', 'Document upload failed. Please try again later.');
+        }
     }
 
     /**
@@ -75,8 +81,19 @@ class ErrorReportController extends Controller
     public function update(ErrorReportRequest $request, ErrorReport $error): RedirectResponse
     {
         $validated = $request->validated();
-        $this->error_tracker_repository->update($validated, $error);
-        return redirect()->route('errors.index')->with('success', 'Error Report updated sucessfully');
+        try{
+            $this->error_tracker_repository->update($validated, $error);
+            return redirect()->route('errors.index')->with('success', 'Error Report updated sucessfully');
+        } catch (Exception $e){
+            return back()->withInput()->with('error', 'File upload failed. Please try again later.');
+        }    
+    }
+
+    public function assign(ErrorReportRequest $request, ErrorReport $error): RedirectResponse
+    {
+        $validated = $request->validated();
+        $this->error_tracker_repository->assignError($validated, $error);
+        return redirect()->route('errors.index')->with('success', 'Error assigned to the developer');
     }
 
     public function analysis(ErrorReportRequest $request, ErrorReport $error): RedirectResponse

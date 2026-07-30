@@ -22,7 +22,12 @@ class UserRecord extends Model
         return $this->hasMany(Project::class, 'user_record_id');
     }
 
-    public function errors(): HasMany
+    public function assingedErrors(): HasMany
+    {
+        return $this->hasMany(ErrorReport::class, 'assign_id');
+    }
+
+    public function reportedErrors(): HasMany
     {
         return $this->hasMany(ErrorReport::class, 'user_record_id');
     }

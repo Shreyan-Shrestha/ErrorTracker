@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Api;
+namespace App\Http\Requests\Web;
 
 use App\Enums\ErrorStatus;
 use Illuminate\Contracts\Validation\ValidationRule;
@@ -27,6 +27,7 @@ class ErrorReportRequest extends FormRequest
         return match (true) {
             $this->routeIs('errors.analysis') => $this->analysisRules(),
             $this->routeIs('errors.markfixed') => $this->markfixedRules(),
+            $this->routeIs('errors.assign') => $this->assignRules(),
             default => $this->storeRules()
         };
     }
@@ -34,12 +35,14 @@ class ErrorReportRequest extends FormRequest
     private function storeRules()
     {
         return [
-            "user_record_id"     => ['required', 'int', 'min:1'],
+            "user_record_id"     => ['required', 'int', 'min:1', 'exists:user_records,id'],
             "region"             => ['required', 'string', 'min:3', 'max:25'],
             "branch"             => ['required', 'string', 'min:3', 'max:30'],
-            "project_id"         => ['required', 'int'],
-            "problem_id"         => ['required', 'int'],
-            "category_id"        => ['required', 'int'],
+            "assign_id"          => ['nullable', 'int', 'exists:user_records,id', 'min:1'],
+            "project_id"         => ['required', 'int', 'exists:projects,id'],
+            "problem_id"         => ['required', 'int', 'exists:problems,id'],
+            "category_id"        => ['required', 'int', 'exists:categories,id'],
+            "document"           => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:5120'],
             "impact"             => ['nullable', 'string', 'min:5',  'max:150'],
             "root_cause"         => ['nullable', 'string', 'min:10', 'max:1500', Rule::requiredIf(fn() => $this->input('status') === ErrorStatus::Fixed->value)],
             "trigger"            => ['nullable', 'string', 'min:5' , 'max:150'],
@@ -56,8 +59,15 @@ class ErrorReportRequest extends FormRequest
     private function analysisRules() : array 
     {
         return [
-            "root_cause" => ['nullable', 'string', 'min:10', 'max:1500']
+            "root_cause" => ['required', 'string', 'min:10', 'max:1500']
         ];    
+    }
+
+    private function assignRules(): array
+    {
+        return [
+            "assign_id" => ['required', 'int', 'exists:user_records,id', 'min:1']
+        ];
     }
 
     private function markfixedRules(): void {}

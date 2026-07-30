@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories\Api;
+namespace App\Repositories\Web\V1;
 
 use App\Models\UserRecord;
 use App\Repositories\Interfaces\UserRecordRepositoryInterface;

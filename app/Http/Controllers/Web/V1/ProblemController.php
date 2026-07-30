@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Web;
+namespace App\Http\Controllers\Web\V1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\ProblemRequest;
+use App\Http\Requests\Web\ProblemRequest;
 use App\Models\Problem;
 use App\Repositories\Interfaces\CategoryRepositoryInterface;
 use App\Repositories\Interfaces\ProblemRepositoryInterface;
@@ -26,7 +26,7 @@ class ProblemController extends Controller
     public function index(): View
     {
         $errorReports =  $this->problem_repository->getAll();
-        $logCount     =  $this->problem_repository->getAllCount();
+        $logCount     =  $this->problem_repository->getLogCount();
         $categories   =  $this->category_repository->getAll();
         $data         =  $this->category_repository->getChart();
         return view('problems.index', compact('errorReports', 'categories', 'logCount', 'data'));

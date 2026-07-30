@@ -37,11 +37,16 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 COPY composer.json composer.lock ./
 
 # Install PHP dependencies via Composer
-RUN composer install --no-interaction --prefer-dist --no-dev --optimize-autoloader --no-scripts
+RUN composer install --no-interaction --prefer-dist --optimize-autoloader --no-scripts
 
-# Copy Laravel project files
-COPY . .
+# Copy Laravel project files (excluding broken symlinks)
+COPY --chown=www-data:www-data . .
 
-# Set permissions for Laravel storage and bootstrap cache directories
-RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache && \
-    chmod -R 775 /var/www/storage /var/www/bootstrap/cache /var/www/storage/logs
+# Create storage link and set permissions
+RUN mkdir -p public && \
+    ln -sf ../storage/app/public public/storage 2>/dev/null || true && \
+    chmod -R 775 /var/www/storage /var/www/bootstrap/cache /var/www/storage/logs && \
+    chmod -R 755 /var/www/vendor
+
+# Switch to www-data user for runtime
+USER www-data

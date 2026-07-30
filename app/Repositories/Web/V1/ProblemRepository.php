@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories\Api;
+namespace App\Repositories\Web\V1;
 
 use App\Models\ErrorReport;
 use App\Models\Problem;
@@ -16,9 +16,9 @@ class ProblemRepository implements ProblemRepositoryInterface
         ->paginate(10);
     }
 
-    public function getAllCount(): int
+    public function getLogCount(): int
     {
-        return Problem::count();
+        return ErrorReport::count();
     }
 
     public function getById(int $id) : Problem

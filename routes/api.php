@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Api\V1\ApplicationController;
 use App\Http\Controllers\Api\V1\ErrorReportController;
 use App\Http\Controllers\Api\V1\ProblemController;
 use App\Http\Controllers\Api\V1\ProjectController;
@@ -9,18 +8,12 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\auth\api\Register;
+use App\Http\Controllers\Web\DashboardController;
 use App\Models\User;
 use Illuminate\Validation\ValidationException;
 
-Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
 
-    Route::prefix('application')->name('application.')->group(function () {
-        Route::get('/', [ApplicationController::class, 'index'])->name('index');
-        Route::post('/', [ApplicationController::class, 'store'])->name('store');
-        Route::get('/{id}', [ApplicationController::class, 'show'])->name('show');
-        Route::patch('/{id}', [ApplicationController::class, 'update'])->name('update');
-        Route::delete('/{id}', [ApplicationController::class, 'delete'])->name('delete');
-    });
+Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
 
     Route::prefix('project')->name('project.')->group(function () {
         Route::get('/', [ProjectController::class, 'index'])->name('index');

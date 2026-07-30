@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Web;
+namespace App\Http\Controllers\Web\V1;
 
 use App\Repositories\Interfaces\ProjectRepositoryInterface;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\ProjectRequest;
+use App\Http\Requests\Web\ProjectRequest;
 use App\Models\Project;
-use App\Models\UserRecord;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 
 
@@ -21,14 +21,13 @@ class ProjectController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View
     {
         $projects = $this->project_repository->getAll();
-        $users= UserRecord::select('id', 'first_name', 'last_name')
-        ->orderBy('first_name', 'asc')
-        ->get();
+        $projects_list = $this->project_repository->getProjectList();
+        $users= $this->project_repository->getUsers();
         $stats = $this->project_repository->getStats();
-        return view('projects/index', compact('projects', 'users', 'stats'));
+        return view('projects/index', compact('projects', 'users', 'stats', 'projects_list'));
     }
 
     /**

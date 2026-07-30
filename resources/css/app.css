@@ -19,6 +19,6 @@ td{
     padding:0% !important;
 }
 
-thead tr, tr.pagination, input, select, textarea, .dropdown-content{
+thead tr, tr.pagination, input, select, textarea, .dropdown-content, #sub_projects, #edit_sub-projects{
     background-color: #F2F3FF !important;
 }

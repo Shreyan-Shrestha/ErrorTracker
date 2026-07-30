@@ -66,7 +66,7 @@
     </div>
 
     @php
-    $headers = ['Error', 'Severity', 'Reported At', 'Cause', 'Start Time', 'Impact', 'Status', 'Action'];
+    $headers = ['Error', 'Severity', 'Reported At', 'Root Cause Analysis', 'Start Time', 'Impact', 'Status', 'Action'];
     $headerClasses = ['','','','','hidden md:table-cell','','',''];
     $count=count($headers);
     @endphp
@@ -74,7 +74,11 @@
         @if($errorsdata->isEmpty())
         <tr class="bg-white hover:bg-base-300 p-4">
             <td colspan="{{ $count }}" class="px-4 py-3 text-center text-gray-500">
-                No Error reported yet.
+                No Errors Reported Yet.
+
+                <a class="link link-primary link-hover" href="{{route('errors.add')}}">
+                    Report An Error
+                </a>
             </td>
         </tr>
         @else
@@ -82,8 +86,8 @@
         <tr class=" bg-white hover:bg-base-300 text-gray-600 text-sm md:text-lg">
             <td>
                 <div class="grid gap-1">
-                    <p class="text-primary text-xl font-bold tracking-wide">{{ $errordata->problem->name }}</p>
-                    <p class="text-grey-400 font-semibold">{{ $errordata->category->name }}</p>
+                    <p class="text-primary text-md md:text-xl font-bold tracking-wide">{{ $errordata->problem->name }}</p>
+                    <p class="text-grey-400 font-semibold text-xs md:text-md">{{ $errordata->category->name }}</p>
                 </div>
             </td>
 
@@ -110,12 +114,25 @@
 
             <td>
                 <div tabindex="0" role="button" class="dropdown dropdown-end {{$loop->last || $loop->remaining < 2 ? 'dropdown-top' : 'dropdown-bottom'}} ">
-                    <div tabindex="-1" role="button" class="btn btn-primary btn-outline m-1">Actions</div>
-                    <ul class="dropdown-content menu rounded-box z-1 w-32 md:w-52 p-2 shadow-sm">
-                        <li><a href="{{route('errors.edit', $errordata)}}" class="link link-hover tracking-wider font-bold"
-                                onclick="document.activeElement.blur()">Update</a></li>
+                    <div tabindex="-1" role="button" class="btn btn-sm md:btn-md btn-primary btn-outline m-1"
+                        onclick="this.closest('[tabindex=\'0\']').blur()">Actions
+                    </div>
 
-                        <li><button class="link link-hover tracking-wider font-bold" onclick="OpenEditModal(this), document.activeElement.blur()"
+                    <ul class="dropdown-content menu rounded-box z-1 w-32 md:w-52 p-2 shadow-sm">
+                        <li><a href="{{route('errors.edit', $errordata)}}" class="link link-sm link-hover tracking-wider font-bold">Update</a>
+                        </li>
+
+                        @if($errordata->status != ErrorStatus::Fixed && empty($errordata->assign_id))
+                        <li>
+                            <button class="link link-hover tracking-wider font-bold" onclick="OpenEditModal(this)"
+                                data-modal="modal_assign"
+                                data-action="{{ route('errors.assign', $errordata)}}"
+                                data-assign=" {{ $errordata->assign_id }} ">Assign Error
+                            </button>
+                        </li>
+                        @endif
+
+                        <li><button class="link link-hover tracking-wider font-bold" onclick="OpenEditModal(this)"
                                 data-modal="modal_create"
                                 data-action="{{route('errors.analysis', $errordata)}}"
                                 data-root_cause="{{$errordata->root_cause}}">
@@ -124,8 +141,7 @@
 
                         @if($errordata->status != ErrorStatus::Fixed->value && !empty($errordata->root_cause))
                         <li>
-                            <button type="submit" form="markFixed{{$errordata->id}}" onclick="document.activeElement.blur()"
-                                class="link link-hover font-bold">Mark Fixed</button>
+                            <button type="submit" form="markFixed{{$errordata->id}}" class="link link-hover font-bold">Mark Fixed</button>
 
                             <form id="markFixed{{$errordata->id}}" action="{{route('errors.markFixed', $errordata)}}" method="POST" class="hidden">
                                 @csrf
@@ -136,7 +152,6 @@
 
                         <li>
                             <button class="delete-btn link link-hover tracking-wider font-bold"
-                                onclick="document.activeElement.blur()"
                                 data-action="{{ route('errors.delete', $errordata->id) }}">
                                 Delete
                             </button>
@@ -154,6 +169,22 @@
         @endif
     </x-table>
 
+    <x-modal.create id="modal_assign" class="md:w-xl" creating="Assign Error" methodPatch="true">
+        <div class="p-3 md:p-6 grid gap-4">
+            <x-error-alert />
+            <label class="fieldset" for="assign_id">
+                <span class="label">ASSIGN ERROR</span>
+                <select name="assign_id" id="assign_id" required class="select select-sm md:select-md validator w-full">
+                    <option selected disabled value="">Assign Error Resolving to:</option>
+                    <option value=""></option>
+                    @foreach($users as $user)
+                    <option value="{{$user->id}}" @selected(old('assign_id')==$user->id)> {{$user->first_name}} {{$user->last_name}}</option>
+                    @endforeach
+                </select>
+            </label>
+        </div>
+    </x-modal.create>
+
     <x-modal.create class="md:w-xl" creating="Root Cause Analysis" methodPatch="true">
         <div class="p-3 md:p-6 grid gap-4">
             <x-error-alert />
@@ -170,5 +201,9 @@
     @if($errors->any())
     <div id="modal-error-target" data-modal="{{ session('modal_id', 'modal_create') }}" class="hidden"></div>
     @endif
+
+    @push('scripts')
+    @vite('resources/js/modal.js')
+    @endpush
 </div>
 @endsection

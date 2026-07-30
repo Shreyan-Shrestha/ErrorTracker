@@ -1,15 +1,20 @@
 <?php
 
-namespace App\Repositories\Api;
+namespace App\Repositories\Web\V1;
 
-use App\Enums\ErrorSeverity;
+use Storage;
+use Exception;
+use RuntimeException;
 use App\Enums\ErrorStatus;
-use App\Models\ErrorReport;
-use App\Repositories\Interfaces\ErrorReportRepositoryInterface;
 use App\Helpers\DateHelper;
+use App\Models\ErrorReport;
+use App\Enums\ErrorSeverity;
+use Illuminate\Http\UploadedFile;
 use App\Helpers\NepaliDate\src\NepaliDate;
+use App\Models\UserRecord;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Override;
+use App\Repositories\Interfaces\ErrorReportRepositoryInterface;
+use Illuminate\Database\Eloquent\Collection;
 
 class ErrorReportRepository implements ErrorReportRepositoryInterface
 {
@@ -21,6 +26,11 @@ class ErrorReportRepository implements ErrorReportRepositoryInterface
     public function getAllCount(): int
     {
         return ErrorReport::count();
+    }
+
+    public function getUsers(): Collection
+    {
+        return UserRecord::orderByDesc('first_name')->get(['id', 'first_name', 'last_name']);
     }
 
     public function show(int $id): ErrorReport
@@ -36,6 +46,17 @@ class ErrorReportRepository implements ErrorReportRepositoryInterface
             $interval = $start_time->diffAsDateInterval($end_time);
             $data['estimated_down'] = DateHelper::formatDateInterval($interval);
             $data['status'] = ErrorStatus::Fixed->value;
+        }
+
+        if (isset($data['document']) && $data['document'] instanceof UploadedFile) {
+            $file = $data['document'];
+
+            try {
+                $data['document'] = $file->getClientOriginalName();
+                $data['document_path'] = Storage::disk('minio')->put('uploads', $file);
+            } catch (\Exception $e) {
+                throw new RuntimeException('Document upload failed'. $e->getMessage());
+            }
         }
 
         ErrorReport::create($data);
@@ -54,7 +75,30 @@ class ErrorReportRepository implements ErrorReportRepositoryInterface
             $data['estimated_down'] = null;
         }
 
+        if (isset($data['document']) && $data['document'] instanceof UploadedFile) {
+            if ($error->document_path) {
+                Storage::disk('minio')->delete($error->document_path);
+            }
+
+            $file = $data['document'];
+
+            try {
+                $data['document'] = $file->getClientOriginalName();
+                $data['document_path'] = Storage::disk('minio')->putFile('uploads', $file);
+            } catch (Exception $e) {
+                throw new RuntimeException('Document upload failed'. $e->getMessage());
+            }
+        } else {
+            unset($data['document']);
+            unset($data['document_path']);
+        }
+
         $error->update($data);
+    }
+
+    public function assignError(array $data, ErrorReport $error): void
+    {
+        $error->update($data);   
     }
 
     public function analysis(array $data, ErrorReport $error): void
@@ -82,6 +126,9 @@ class ErrorReportRepository implements ErrorReportRepositoryInterface
 
     public function delete(ErrorReport $error): void
     {
+        if ($error->document_path) {
+            Storage::disk('minio')->delete($error->document_path);
+        }
         $error->delete();
     }
 
