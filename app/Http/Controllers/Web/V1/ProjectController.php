@@ -4,9 +4,8 @@ namespace App\Http\Controllers\Web\V1;
 
 use App\Repositories\Interfaces\ProjectRepositoryInterface;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\ProjectRequest;
+use App\Http\Requests\Web\ProjectRequest;
 use App\Models\Project;
-use App\Models\UserRecord;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 

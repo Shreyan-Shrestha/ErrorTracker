@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Web\V1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\CategoryRequest;
+use App\Http\Requests\Web\CategoryRequest;
 use App\Models\Category;
 use App\Repositories\Interfaces\CategoryRepositoryInterface;
 use Illuminate\Http\Request;

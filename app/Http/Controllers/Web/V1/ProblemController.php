@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Web\V1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\ProblemRequest;
+use App\Http\Requests\Web\ProblemRequest;
 use App\Models\Problem;
 use App\Repositories\Interfaces\CategoryRepositoryInterface;
 use App\Repositories\Interfaces\ProblemRepositoryInterface;
