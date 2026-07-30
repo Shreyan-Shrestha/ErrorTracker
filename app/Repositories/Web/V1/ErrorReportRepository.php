@@ -11,8 +11,10 @@ use App\Models\ErrorReport;
 use App\Enums\ErrorSeverity;
 use Illuminate\Http\UploadedFile;
 use App\Helpers\NepaliDate\src\NepaliDate;
+use App\Models\UserRecord;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Repositories\Interfaces\ErrorReportRepositoryInterface;
+use Illuminate\Database\Eloquent\Collection;
 
 class ErrorReportRepository implements ErrorReportRepositoryInterface
 {
@@ -24,6 +26,11 @@ class ErrorReportRepository implements ErrorReportRepositoryInterface
     public function getAllCount(): int
     {
         return ErrorReport::count();
+    }
+
+    public function getUsers(): Collection
+    {
+        return UserRecord::orderByDesc('first_name')->get(['id', 'first_name', 'last_name']);
     }
 
     public function show(int $id): ErrorReport
@@ -87,6 +94,11 @@ class ErrorReportRepository implements ErrorReportRepositoryInterface
         }
 
         $error->update($data);
+    }
+
+    public function assignError(array $data, ErrorReport $error): void
+    {
+        $error->update($data);   
     }
 
     public function analysis(array $data, ErrorReport $error): void
