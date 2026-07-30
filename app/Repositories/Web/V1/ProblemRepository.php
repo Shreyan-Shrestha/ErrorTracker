@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories\Api;
+namespace App\Repositories\Web\V1;
 
 use App\Models\ErrorReport;
 use App\Models\Problem;
