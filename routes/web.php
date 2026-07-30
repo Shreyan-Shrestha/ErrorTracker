@@ -22,11 +22,19 @@ Route::get('/registerform', [UserAuthenticationController::class, 'registerForm'
 Route::post('/logout', Logout::class)->name('logout')->middleware('login');
 
 Route::middleware('login')->group(function () {
+    Route::prefix('dashboard')->group(function () {
+        Route::get('/', [DashboardController::class, 'index'])->name('index');
+        Route::get('/errortrend', [DashboardController::class, 'getErrorTrend'])->name('errortrend');
+        Route::get('/errorbyregion', [DashboardController::class, 'getByRegion'])->name('errorbyregion');
+        Route::get('/errorbyproject', [DashboardController::class, 'getByProject'])->name('errorbyproject');
+    });
+
     Route::prefix('errors')->name('errors.')->group(function () {
         Route::get('/', [ErrorReportController::class, 'index'])->name('index');
         Route::get('/logs', [ErrorReportController::class, 'errorLogs'])->name('logs');
         Route::get('/report', [ErrorReportController::class, 'create'])->name('add');
         Route::get('/edit/{error}', [ErrorReportController::class, 'edit'])->name('edit');
+        Route::patch('/assign/{error}', [ErrorReportController::class, 'assign'])->name('assign');
         Route::patch('/rootCauseAnalysis/{error}', [ErrorReportController::class, 'analysis'])->name('analysis');
         Route::patch('/edit/{error}', [ErrorReportController::class, 'update'])->name('update');
         Route::post('/', [ErrorReportController::class, 'store'])->name('create');
